@@ -155,38 +155,79 @@
         </div>
     </section>
 
-    <!-- QUESTIONS SECTION — reveal animations added -->
-    <section class="questions-section">
-        <div class="questions-container">
-            <div class="questions-visuals reveal reveal-left">
-                <dotlottie-wc
-                    src="https://lottie.host/f70939e9-0a3f-4b1e-be94-65a620ad6d6a/NPaWjVYKO0.lottie"
-                    style="width: 300px; height: 300px"
-                    autoplay loop>
-                </dotlottie-wc>
-            </div>
-            <div class="questions-content">
-                <div class="questions-heading reveal reveal-up">
-                    <span class="still-have">Still have</span>
-                    <span class="questions-word">Questions?</span>
-                </div>
-                <div class="questions-form reveal reveal-up" style="--reveal-delay: 0.15s">
-                    <div class="field-group">
-                        <label class="field-label">Your Question</label>
-                        <textarea placeholder="What's on your mind?"></textarea>
-                    </div>
-                    <div class="field-group">
-                        <label class="field-label">Email Address</label>
-                        <input type="email" placeholder="you@example.com">
-                    </div>
-                    <div class="questions-footer">
-                        <span class="questions-note">I'll get back to you shortly.</span>
-                        <button class="submit-btn">Send</button>
-                    </div>
-                </div>
-            </div>
+<section class="questions-section" id="questions">
+    <div class="questions-container">
+
+        <div class="questions-visuals reveal reveal-left">
+            <dotlottie-wc
+                src="https://lottie.host/f70939e9-0a3f-4b1e-be94-65a620ad6d6a/NPaWjVYKO0.lottie"
+                style="width: 300px; height: 300px"
+                autoplay
+                loop>
+            </dotlottie-wc>
         </div>
-    </section>
+
+        <div class="questions-content">
+
+            <div class="questions-heading reveal reveal-up">
+                <span class="still-have">Still have</span>
+                <span class="questions-word">Questions?</span>
+            </div>
+
+            <form id="contact-form"
+                  class="questions-form reveal reveal-up"
+                  style="--reveal-delay:0.15s">
+
+                <div class="field-group">
+                    <label class="field-label" for="message">
+                        Your Question
+                    </label>
+                    <textarea
+                        id="message"
+                        name="message"
+                        placeholder="What's on your mind?"
+                        required></textarea>
+                </div>
+
+                <div class="field-group">
+                    <label class="field-label" for="name">
+                        Full Name
+                    </label>
+                    <input
+                        type="text"
+                        id="name"
+                        name="name"
+                        placeholder="John Doe"
+                        required>
+                </div>
+
+                <div class="field-group">
+                    <label class="field-label" for="email">
+                        Email Address
+                    </label>
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        placeholder="you@example.com"
+                        required>
+                </div>
+
+                <div class="questions-footer">
+                    <span class="questions-note">
+                        I'll get back to you shortly.
+                    </span>
+
+                    <button type="submit" class="submit-btn">
+                        Send
+                    </button>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+</section>
 
     <section id="Projects" class="Projects">
         <div>
@@ -197,10 +238,46 @@
         </div>
     </section>
 
-    <!-- CONTACT SECTION — reveal animations + updated heading font -->
+    <section class="kinetic-projects-container">
+        <div class="kinetic-projects-stage">
+            
+            <div class="kinetic-slide reveal reveal-up" style="--reveal-delay: 0.15s">
+                <div class="kinetic-visual-wrapper">
+                    <img src="logos/wavify.png" alt="Wavify Logo" class="kinetic-logo">
+                    <div class="hologram-glow"></div>
+                </div>
+                <div class="kinetic-info">
+                    <h2 class="kinetic-title">Wavify</h2>
+                    <div class="kinetic-divider"></div>
+                    <p class="kinetic-desc">A music streaming platform featuring a clean user interface, custom playlist creation, and seamless audio synchronization.</p>
+                    <a href="https://wavify18.netlify.app/" target="_blank" class="github-view-btn">
+                        <img src="logos/github.png" alt="GitHub" class="btn-git-icon">
+                        View Project
+                    </a>
+                </div>
+            </div>
+
+            <div class="kinetic-slide reveal reveal-up" style="--reveal-delay: 0.25s">
+                <div class="kinetic-visual-wrapper">
+                    <img src="logos/R.png" alt="Virtual Assistant Logo" class="kinetic-logo-va">
+                    <div class="hologram-glow"></div>
+                </div>
+                <div class="kinetic-info">
+                    <h2 class="kinetic-title">Virtual Bot</h2>
+                    <div class="kinetic-divider"></div>
+                    <p class="kinetic-desc">An intelligent automated system designed for task automation, voice recognition, and contextual natural language processing.</p>
+                    <a href="https://devrc891.github.io/RushoBot/" target="_blank" class="github-view-btn">
+                        <img src="logos/github.png" alt="GitHub" class="btn-git-icon">
+                        View Project
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
     <section id="contact">
         <div class="right side">
-            <!-- Updated heading: "Let's" in Caveat, "Connect" in Orbitron -->
             <h1 class="connect-heading reveal reveal-up">
                 <span class="lets-word">Let's</span>
                 <span class="connect-word">Connect</span>
