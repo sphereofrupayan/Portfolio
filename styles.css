@@ -58,8 +58,6 @@ nav ul li.nav-links a:hover {
     background: rgba(29,169,192,0.1);
 }
 
-
-/* ─────────────── COVER ─────────────── */
 .cover-section {
     position: relative;
     height: 100vh;
@@ -192,8 +190,8 @@ nav ul li.nav-links a:hover {
 
 @keyframes typewriter {
     0%   { width: 0ch; }
-    45%  { width: 23ch; }
-    75%  { width: 23ch; }
+    45%  { width: 24ch; }
+    75%  { width: 24ch; }
     100% { width: 0ch; }
 }
 
@@ -243,8 +241,6 @@ nav ul li.nav-links a:hover {
 
 #bubble-canvas { display: none; }
 
-
-/* ─────────────── SKILLS / EDUCATION ─────────────── */
 .skills-section {
     padding: clamp(48px, 8vh, 80px) clamp(20px, 6vw, 72px);
     color: #fff;
@@ -341,7 +337,6 @@ nav ul li.nav-links a:hover {
     text-shadow: 0 0 6px rgba(255,215,0,0.35);
 }
 
-/* ─────────────── TECHNOLOGIES ─────────────── */
 .tech-section {
     min-height: 100vh;
     display: flex;
@@ -466,7 +461,6 @@ nav ul li.nav-links a:hover {
     gap: 3px;
 }
 
-/* ─────────────── FOCUS ─────────────── */
 .focus-section {
     display: flex;
     align-items: center;
@@ -565,7 +559,6 @@ nav ul li.nav-links a:hover {
     100% { background-position: 300%; }
 }
 
-/* ─────────────── REVEAL SYSTEM ─────────────── */
 .reveal {
     opacity: 0;
     transition:
@@ -584,7 +577,6 @@ nav ul li.nav-links a:hover {
     transform: translate(0, 0);
 }
 
-/* ─────────────── RESUME ─────────────── */
 .resume-section {
     padding: clamp(56px, 9vh, 96px) clamp(20px, 6vw, 80px);
     position: relative;
@@ -765,7 +757,6 @@ nav ul li.nav-links a:hover {
     transform: translateY(-3px);
 }
 
-/* ─────────────── QUESTIONS SECTION ─────────────── */
 .questions-section {
     width: 100%;
     padding: 3.5rem 6% 3rem;
@@ -915,17 +906,15 @@ nav ul li.nav-links a:hover {
     }
 }
 
-/* ─────────────── PROJECTS SECTION ─────────────── */
-/* ── Projects Section Header Layout ── */
+
 .Projects {
     min-height: auto;
-    padding: 100px 20px 40px; /* Reduced bottom padding so background cuts off closely */
+    padding: 100px 20px 40px;
     text-align: center;
 }
 
-/* ── Boundless Side-By-Side Canvas Container ── */
 .kinetic-projects-container {
-    background: #111111; /* Clean break from the header background */
+    background: #111111;
     padding: 20px 20px 100px;
     width: 100%;
 }
@@ -941,7 +930,7 @@ nav ul li.nav-links a:hover {
     z-index: 2;
 }
 
-/* ── Individual Kinetic Slide Columns ── */
+
 .kinetic-slide {
     flex: 1 1 400px;
     max-width: 500px;
@@ -952,7 +941,7 @@ nav ul li.nav-links a:hover {
     padding: 30px 10px;
 }
 
-/* ── Holographic Media Positioning ── */
+
 .kinetic-visual-wrapper {
     position: relative;
     width: 120px;
@@ -963,7 +952,7 @@ nav ul li.nav-links a:hover {
     margin-bottom: 25px;
 }
 
-/* Custom dimensions tailored to your individual logos */
+
 .kinetic-logo {
     width: 75px;
     height: 75px;
@@ -985,7 +974,7 @@ nav ul li.nav-links a:hover {
     transform: scale(1.08);
 }
 
-/* Ambient Radial Backdrop Glow */
+
 .hologram-glow {
     position: absolute;
     width: 110px;
@@ -1001,7 +990,7 @@ nav ul li.nav-links a:hover {
     50% { transform: scale(1.15); opacity: 1; }
 }
 
-/* ── Typography & Rules ── */
+
 .kinetic-info {
     display: flex;
     flex-direction: column;
@@ -1038,16 +1027,13 @@ nav ul li.nav-links a:hover {
     line-height: 1.6;
     color: rgba(255, 255, 255, 0.7);
     margin-bottom: 30px;
-    min-height: 80px; /* Keeps buttons aligned even if text counts differ */
-    
-    /* Perfect Center Justification Balance */
+    min-height: 80px;
     text-align: center;
     text-justify: inter-word;
-    max-width: 520px; /* Constrains line length for elegant typographic flow */
+    max-width: 520px;
     letter-spacing: 0.5px;
 }
 
-/* ── Individual GitHub Buttons ── */
 .github-view-btn {
     display: inline-flex;
     align-items: center;
@@ -1079,13 +1065,12 @@ nav ul li.nav-links a:hover {
     width: 18px;
     height: 18px;
     object-fit: contain;
-    /* Cleaned filter string to cleanly map a black icon asset directly into high-intensity cyan (#00f7ff) */
     filter: invert(79%) sepia(58%) saturate(3015%) hue-rotate(145deg) brightness(107%) contrast(101%);
     transition: filter 0.4s ease;
 }
 
 .github-view-btn:hover .btn-git-icon {
-    filter: brightness(0) invert(0.06); /* Turns black on hover background state shift */
+    filter: brightness(0) invert(0.06); 
 }
 #Projects {
     padding: 70px 5% 40px;
@@ -1161,7 +1146,6 @@ nav ul li.nav-links a:hover {
     50%       { transform: translateY(-4px); }
 }
 
-/* ─────────────── CONTACT SECTION ─────────────── */
 #contact {
     min-height: 100vh;
     width: 100%;
@@ -1181,7 +1165,6 @@ nav ul li.nav-links a:hover {
     min-width: 320px;
 }
 
-/* ── "Let's Connect" heading ── */
 .connect-heading {
     display: flex;
     flex-direction: column;
@@ -1198,7 +1181,6 @@ nav ul li.nav-links a:hover {
     color: #a0e8f0;
     letter-spacing: 1px;
     line-height: 1.1;
-    /* subtle hand-drawn glow */
     text-shadow: 0 0 18px rgba(29,169,192,0.35);
 }
 
@@ -1213,7 +1195,6 @@ nav ul li.nav-links a:hover {
     -webkit-text-fill-color: transparent;
     background-clip: text;
     text-shadow: none;
-    /* animated shimmer */
     background-size: 200%;
     animation: connectShimmer 4s linear infinite;
 }
@@ -1300,7 +1281,7 @@ nav ul li.nav-links a:hover {
     to   { text-shadow: 0 0 25px #00f0ff, 0 0 40px #00f0ff; }
 }
 
-/* ─────────────── RESPONSIVE ─────────────── */
+
 @media (max-width: 900px) {
     .education-wrapper {
         flex-direction: column;
