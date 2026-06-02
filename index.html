@@ -18,7 +18,7 @@
                 <li class="nav-links">
                     <a href="#about">About</a>
                     <a href="#skills">Skills</a>
-                    <a href="#projects">Projects</a>
+                    <a href="#Projects">Projects</a>
                     <a href="#contact">Contact</a>
                 </li>
             </ul>
@@ -30,11 +30,11 @@
                     Hi There,<br>
                     I'm <span>Rupayan Chattaraj</span>
                 </h1>
-                <p>I am into <span class="highlight">Web Development</span></p>
+                <p>I am into <span class="highlight">Web Development & Coding</span></p>
                 <section class="socialmedia">
-                    <a href="#"><img src="logos/Gmail.png" alt="Gmail"></a>
-                    <a href="#"><img src="logos/github.png" alt="GitHub"></a>
-                    <a href="#"><img src="logos/linkedin.png" alt="LinkedIn"></a>
+                    <a href="#" onclick="copyEmail(event)"><img src="logos/Gmail.png" alt="Gmail"></a>
+                    <a href="https://github.com/DevRC891"><img src="logos/github.png" alt="GitHub"></a>
+                    <a href="https://www.linkedin.com/in/rupayanchattaraj/"><img src="logos/linkedin.png" alt="LinkedIn"></a>
                     <a href="#"><img src="logos/xtwitter.png" alt="Twitter"></a>
                 </section>
             </div>
@@ -59,7 +59,7 @@
         <hr class="cover-divider">
     </div>
 
-    <section id="skills" class="skills-section">
+    <section id="about" class="skills-section">
         <canvas id="bubble-canvas"></canvas>
         <h2 class="section-title reveal reveal-up">Education</h2>
         <div class="education-wrapper">
@@ -86,7 +86,7 @@
         </div>
     </section>
 
-    <section id="technologies" class="tech-section">
+    <section id="skills" class="tech-section">
         <div class="tech-bg-grid"></div>
 
         <div class="tech-header reveal reveal-up">
@@ -222,9 +222,7 @@
                         Send
                     </button>
                 </div>
-
             </form>
-
         </div>
     </div>
 </section>
@@ -276,36 +274,67 @@
         </div>
     </section>
 
-    <section id="contact">
-        <div class="right side">
-            <h1 class="connect-heading reveal reveal-up">
-                <span class="lets-word">Let's</span>
-                <span class="connect-word">Connect</span>
-            </h1>
-            <h3 class="reveal reveal-up" style="--reveal-delay: 0.1s">Want to Create Something Amazing websites and applications?</h3>
-            <section class="socialmedia reveal reveal-up" style="--reveal-delay: 0.2s">
-                <a href="#"><img src="logos/Gmail.png" alt="Gmail"></a>
-                <a href="#"><img src="logos/github.png" alt="GitHub"></a>
-                <a href="#"><img src="logos/linkedin.png" alt="LinkedIn"></a>
-                <a href="#"><img src="logos/xtwitter.png" alt="Twitter"></a>
-            </section>
-        </div>
-        <div class="Left side">
+<section id="contact">
+    <div class="right side">
+        <h1 class="connect-heading reveal reveal-up">
+            <span class="lets-word">Let's</span>
+            <span class="connect-word">Connect</span>
+        </h1>
+
+        <h3 class="reveal reveal-up" style="--reveal-delay: 0.1s">
+            Want to Create Something Amazing websites and applications?
+        </h3>
+
+        <section class="socialmedia reveal reveal-up" style="--reveal-delay: 0.2s">
+            <a href="#" onclick="copyEmail(event)"><img src="logos/Gmail.png" alt="Gmail"></a>
+            <a href="https://github.com/DevRC891"><img src="logos/github.png" alt="GitHub"></a>
+            <a href="https://www.linkedin.com/in/rupayanchattaraj/"><img src="logos/linkedin.png" alt="LinkedIn"></a>
+            <a href="#"><img src="logos/xtwitter.png" alt="Twitter"></a>
+        </section>
+    </div>
+
+    <div class="Left side">
+        <form id="connect-form">
+
             <div class="reveal reveal-right" style="--reveal-delay: 0.05s">
-                <label>Topic</label>
-                <input type="text" placeholder="Enter topic">
+                <label for="connect-name">Full Name</label>
+                <input
+                    type="text"
+                    id="connect-name"
+                    name="connect-name"
+                    placeholder="Enter your name"
+                    required>
             </div>
+            <br>
             <div class="reveal reveal-right" style="--reveal-delay: 0.15s">
-                <label>Description</label>
-                <textarea placeholder="Describe your project"></textarea>
+                <label for="connect-message">Description</label>
+                <textarea
+                    id="connect-message"
+                    name="connect-message"
+                    placeholder="Describe your project"
+                    required></textarea>
             </div>
+            <br>
             <div class="reveal reveal-right" style="--reveal-delay: 0.25s">
-                <label>Email to contact</label>
-                <input type="email" placeholder="Enter your email">
+                <label for="connect-email">Email to contact</label>
+                <input
+                    type="email"
+                    id="connect-email"
+                    name="connect-email"
+                    placeholder="Enter your email"
+                    required>
             </div>
-            <button class="reveal reveal-up" style="--reveal-delay: 0.35s">Submit</button>
-        </div>
-    </section>
+            <br>
+            <button
+                type="submit"
+                class="reveal reveal-up"
+                style="--reveal-delay: 0.35s">
+                Submit
+            </button>
+
+        </form>
+    </div>
+</section>
 
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
