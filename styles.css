@@ -825,7 +825,8 @@ nav ul li.nav-links a:hover {
 }
 
 .questions-form textarea,
-.questions-form input[type="email"] {
+.questions-form input[type="email"],
+.questions-form input[type="text"] {
     width: 100%;
     box-sizing: border-box;
     padding: 6px 18px 14px;
@@ -915,6 +916,177 @@ nav ul li.nav-links a:hover {
 }
 
 /* ─────────────── PROJECTS SECTION ─────────────── */
+/* ── Projects Section Header Layout ── */
+.Projects {
+    min-height: auto;
+    padding: 100px 20px 40px; /* Reduced bottom padding so background cuts off closely */
+    text-align: center;
+}
+
+/* ── Boundless Side-By-Side Canvas Container ── */
+.kinetic-projects-container {
+    background: #111111; /* Clean break from the header background */
+    padding: 20px 20px 100px;
+    width: 100%;
+}
+
+.kinetic-projects-stage {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: clamp(40px, 6vw, 80px);
+    flex-wrap: wrap;
+    z-index: 2;
+}
+
+/* ── Individual Kinetic Slide Columns ── */
+.kinetic-slide {
+    flex: 1 1 400px;
+    max-width: 500px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 30px 10px;
+}
+
+/* ── Holographic Media Positioning ── */
+.kinetic-visual-wrapper {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 25px;
+}
+
+/* Custom dimensions tailored to your individual logos */
+.kinetic-logo {
+    width: 75px;
+    height: 75px;
+    object-fit: contain;
+    z-index: 2;
+    transition: transform 0.4s ease;
+}
+
+.kinetic-logo-va {
+    width: 85px;
+    height: 85px;
+    object-fit: contain;
+    z-index: 2;
+    transition: transform 0.4s ease;
+}
+
+.kinetic-slide:hover .kinetic-logo,
+.kinetic-slide:hover .kinetic-logo-va {
+    transform: scale(1.08);
+}
+
+/* Ambient Radial Backdrop Glow */
+.hologram-glow {
+    position: absolute;
+    width: 110px;
+    height: 110px;
+    background: radial-gradient(circle, rgba(0, 247, 255, 0.15) 0%, rgba(0, 0, 0, 0) 70%);
+    border-radius: 50%;
+    z-index: 1;
+    animation: pulseAura 4s infinite ease-in-out;
+}
+
+@keyframes pulseAura {
+    0%, 100% { transform: scale(1); opacity: 0.6; }
+    50% { transform: scale(1.15); opacity: 1; }
+}
+
+/* ── Typography & Rules ── */
+.kinetic-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+.kinetic-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: 1.5px;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+}
+
+.kinetic-divider {
+    width: 120px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, #00f7ff, transparent);
+    margin-bottom: 18px;
+    transition: width 0.4s ease;
+}
+
+.kinetic-slide:hover .kinetic-divider {
+    width: 200px;
+}
+
+.kinetic-desc {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 500;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 30px;
+    min-height: 80px; /* Keeps buttons aligned even if text counts differ */
+    
+    /* Perfect Center Justification Balance */
+    text-align: center;
+    text-justify: inter-word;
+    max-width: 520px; /* Constrains line length for elegant typographic flow */
+    letter-spacing: 0.5px;
+}
+
+/* ── Individual GitHub Buttons ── */
+.github-view-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 12px 28px;
+    border-radius: 50px;
+    background: transparent;
+    border: 1px solid rgba(0, 247, 255, 0.4);
+    color: #00f7ff;
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-decoration: none;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    transition: all 0.4s ease;
+}
+
+.github-view-btn:hover {
+    border-color: #00f7ff;
+    color: #111;
+    background: #00f7ff;
+    box-shadow: 0 0 20px rgba(0, 247, 255, 0.35);
+    transform: translateY(-2px);
+}
+
+.btn-git-icon {
+    width: 18px;
+    height: 18px;
+    object-fit: contain;
+    /* Cleaned filter string to cleanly map a black icon asset directly into high-intensity cyan (#00f7ff) */
+    filter: invert(79%) sepia(58%) saturate(3015%) hue-rotate(145deg) brightness(107%) contrast(101%);
+    transition: filter 0.4s ease;
+}
+
+.github-view-btn:hover .btn-git-icon {
+    filter: brightness(0) invert(0.06); /* Turns black on hover background state shift */
+}
 #Projects {
     padding: 70px 5% 40px;
     position: relative;
