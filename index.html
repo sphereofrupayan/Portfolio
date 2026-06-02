@@ -109,7 +109,6 @@
         </div>
     </section>
 
-
     <section class="focus-section">
         <div class="right-side reveal reveal-right">
             <div class="changing-text-wrapper">
@@ -128,9 +127,8 @@
         </div>
     </section>
 
-<section class="resume-section">
+    <section class="resume-section">
         <div class="resume-card reveal reveal-up">
- 
             <div class="resume-left">
                 <p class="resume-tag">PROFESSIONAL PROFILE</p>
                 <h2 class="resume-heading">Resume &amp; Experience</h2>
@@ -138,7 +136,6 @@
                     <span class="typewriter-text"></span><span class="typewriter-cursor">|</span>
                 </p>
             </div>
- 
             <div class="resume-right">
                 <div class="resume-stats-row">
                     <div class="resume-stat reveal reveal-up" style="--reveal-delay:0.1s">
@@ -157,82 +154,88 @@
             </div>
         </div>
     </section>
-<section class="questions-section">
-    <div class="questions-container">
 
-        <div class="questions-visuals">
-            <dotlottie-wc
-  src="https://lottie.host/f70939e9-0a3f-4b1e-be94-65a620ad6d6a/NPaWjVYKO0.lottie"
-  style="width: 300px;height: 300px"
-  autoplay
-  loop
-></dotlottie-wc>
-        </div>
-        <div class="questions-content">
-            <div class="questions-heading">
-                <span class="still-have">Still have</span>
-                <span class="questions-word">Questions?</span>
+    <!-- QUESTIONS SECTION — reveal animations added -->
+    <section class="questions-section">
+        <div class="questions-container">
+            <div class="questions-visuals reveal reveal-left">
+                <dotlottie-wc
+                    src="https://lottie.host/f70939e9-0a3f-4b1e-be94-65a620ad6d6a/NPaWjVYKO0.lottie"
+                    style="width: 300px; height: 300px"
+                    autoplay loop>
+                </dotlottie-wc>
             </div>
-
-            <div class="questions-form">
-
-                <div class="field-group">
-                    <label class="field-label">Your Question</label>
-                    <textarea placeholder="What's on your mind?"></textarea>
+            <div class="questions-content">
+                <div class="questions-heading reveal reveal-up">
+                    <span class="still-have">Still have</span>
+                    <span class="questions-word">Questions?</span>
                 </div>
-
-                <div class="field-group">
-                    <label class="field-label">Email Address</label>
-                    <input type="email" placeholder="you@example.com">
-                </div>
-
-                <div class="questions-footer">
-                    <span class="questions-note">
-                        I'll get back to you shortly.
-                    </span>
-                    <button class="submit-btn">
-                        Send →
-                    </button>
+                <div class="questions-form reveal reveal-up" style="--reveal-delay: 0.15s">
+                    <div class="field-group">
+                        <label class="field-label">Your Question</label>
+                        <textarea placeholder="What's on your mind?"></textarea>
+                    </div>
+                    <div class="field-group">
+                        <label class="field-label">Email Address</label>
+                        <input type="email" placeholder="you@example.com">
+                    </div>
+                    <div class="questions-footer">
+                        <span class="questions-note">I'll get back to you shortly.</span>
+                        <button class="submit-btn">Send</button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-</section>
-<section id="contact">
+    </section>
 
-    <div class="right side">
-        <h1>Let's Connect</h1>
-        <h3>Want to Create Something Amazing websites and applications?</h3>
-        <h2>Feel free to reach out!</h2>
-    </div>
-
-    <div class="Left side">
-
+    <section id="Projects" class="Projects">
         <div>
-            <label>Topic</label>
-            <input type="text" placeholder="Enter topic">
+            <h1>
+                <span class="handwriting reveal reveal-up">Take a quick look at my</span>
+                <span class="bold reveal reveal-up" style="--reveal-delay: 0.12s">Projects!</span>
+            </h1>
         </div>
+    </section>
 
-        <div>
-            <label>Description</label>
-            <textarea placeholder="Describe your project"></textarea>
+    <!-- CONTACT SECTION — reveal animations + updated heading font -->
+    <section id="contact">
+        <div class="right side">
+            <!-- Updated heading: "Let's" in Caveat, "Connect" in Orbitron -->
+            <h1 class="connect-heading reveal reveal-up">
+                <span class="lets-word">Let's</span>
+                <span class="connect-word">Connect</span>
+            </h1>
+            <h3 class="reveal reveal-up" style="--reveal-delay: 0.1s">Want to Create Something Amazing websites and applications?</h3>
+            <section class="socialmedia reveal reveal-up" style="--reveal-delay: 0.2s">
+                <a href="#"><img src="logos/Gmail.png" alt="Gmail"></a>
+                <a href="#"><img src="logos/github.png" alt="GitHub"></a>
+                <a href="#"><img src="logos/linkedin.png" alt="LinkedIn"></a>
+                <a href="#"><img src="logos/xtwitter.png" alt="Twitter"></a>
+            </section>
         </div>
-
-        <div>
-            <label>Email to contact</label>
-            <input type="email" placeholder="Enter your email">
+        <div class="Left side">
+            <div class="reveal reveal-right" style="--reveal-delay: 0.05s">
+                <label>Topic</label>
+                <input type="text" placeholder="Enter topic">
+            </div>
+            <div class="reveal reveal-right" style="--reveal-delay: 0.15s">
+                <label>Description</label>
+                <textarea placeholder="Describe your project"></textarea>
+            </div>
+            <div class="reveal reveal-right" style="--reveal-delay: 0.25s">
+                <label>Email to contact</label>
+                <input type="email" placeholder="Enter your email">
+            </div>
+            <button class="reveal reveal-up" style="--reveal-delay: 0.35s">Submit</button>
         </div>
+    </section>
 
-        <button>Submit</button>
 
-    </div>
-
-</section>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.birds.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vanta@0.5.24/dist/vanta.rings.min.js"></script>
-    <script src="https://unpkg.com/@lottiefiles/dotlottie-wc@0.9.10/dist/dotlottie-wc.js" type="module"></script>
     <script src="https://unpkg.com/@lottiefiles/dotlottie-wc@0.9.14/dist/dotlottie-wc.js" type="module"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
