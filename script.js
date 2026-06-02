@@ -393,3 +393,57 @@ const observer = new IntersectionObserver((entries) => {
 document.querySelectorAll('.hidden').forEach(el => {
   observer.observe(el);
 });
+
+(function () {
+  emailjs.init("RmnauhFBq3Gxd7Ujo");
+})();
+
+window.addEventListener("load", () => {
+  const form = document.getElementById("contact-form");
+
+  form.addEventListener("submit", function (event) {
+    event.preventDefault();
+
+    const name = document.getElementById("name").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const message = document.getElementById("message").value.trim();
+
+    const nameRegex = /^[A-Za-z ]{5,}$/;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!nameRegex.test(name)) {
+      alert("Name must be at least 5 letters and contain only alphabets.");
+      return;
+    }
+
+    if (!emailRegex.test(email)) {
+      alert("Enter a valid email address.");
+      return;
+    }
+
+    if (message.length < 5) {
+      alert("Question must be at least 5 characters.");
+      return;
+    }
+
+    emailjs.send("service_jphufyv", "template_yfjshtq", {
+      name: name,
+      email: email,
+      message: message
+    })
+    .then(() => {
+      return emailjs.send("service_jphufyv", "template_768155o", {
+        to_email: email,
+        to_name: name
+      });
+    })
+    .then(() => {
+    alert("Message sent successfully! Please check your inbox for a confirmation email.");
+    form.reset();
+})
+    .catch((error) => {
+      console.error(error);
+      alert("Failed to send message.");
+    });
+  });
+});
