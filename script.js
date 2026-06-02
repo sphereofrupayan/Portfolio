@@ -447,3 +447,93 @@ window.addEventListener("load", () => {
     });
   });
 });
+
+const connectForm = document.getElementById("connect-form");
+
+if (connectForm) {
+  connectForm.addEventListener("submit", function (event) {
+    event.preventDefault();
+
+    const name = document
+      .getElementById("connect-name")
+      .value
+      .trim();
+
+    const email = document
+      .getElementById("connect-email")
+      .value
+      .trim();
+
+    const message = document
+      .getElementById("connect-message")
+      .value
+      .trim();
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (/\d/.test(name)) {
+      alert("Name should not contain digits.");
+      return;
+    }
+
+    if (!/^[A-Za-z ]+$/.test(name)) {
+      alert("Name should only contain alphabets and spaces.");
+      return;
+    }
+
+    if (name.length < 5) {
+      alert("Name must be at least 5 characters long.");
+      return;
+    }
+    if (!emailRegex.test(email)) {
+      alert("Please enter a valid email address.");
+      return;
+    }
+    if (message.length < 5) {
+      alert("Description must be at least 5 characters long.");
+      return;
+    }
+    emailjs.send("service_jphufyv", "template_yfjshtq", {
+      name: name,
+      email: email,
+      message: message
+    })
+    .then(() => {
+      return emailjs.send(
+        "service_jphufyv",
+        "template_768155o",
+        {
+          to_email: email,
+          to_name: name
+        }
+      );
+    })
+    .then(() => {
+      alert(
+        "Message sent successfully! Please check your inbox for a confirmation email."
+      );
+
+      connectForm.reset();
+    })
+    .catch((error) => {
+      console.error("EmailJS Error:", error);
+
+      alert(
+        "Failed to send message. Please try again."
+      );
+    });
+  });
+}
+
+function copyEmail(event) {
+    event.preventDefault();
+
+    const email = "rupayanchattaraj@gmail.com";
+
+    navigator.clipboard.writeText(email)
+        .then(() => {
+            alert("Mail copied to clipboard!");
+        })
+        .catch(err => {
+            console.error("Failed to copy email:", err);
+        });
+}
