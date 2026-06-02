@@ -190,8 +190,8 @@ nav ul li.nav-links a:hover {
 
 @keyframes typewriter {
     0%   { width: 0ch; }
-    45%  { width: 24ch; }
-    75%  { width: 24ch; }
+    45%  { width: 27ch; }
+    75%  { width: 27ch; }
     100% { width: 0ch; }
 }
 
@@ -1385,4 +1385,211 @@ nav ul li.nav-links a:hover {
 
     .connect-word { font-size: 2.2rem; letter-spacing: 1px; }
     .lets-word    { font-size: 1.6rem; }
+}
+
+.about-accent {
+    position: absolute;
+    top: -100px;
+    right: -100px;
+    width: 280px;
+    height: 280px;
+    border-radius: 50%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(255,255,255,0.08) 0%,
+            transparent 70%
+        );
+
+    animation: floatBlob 10s ease-in-out infinite;
+    pointer-events: none;
+}
+
+.about-card {
+    position: relative;
+    margin: 50px auto 0;
+    max-width: 1000px;
+    padding: 40px 50px;
+    border-radius: 32px;
+    overflow: hidden;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.about-text {
+    position: relative;
+    z-index: 2;
+
+    font-family: -apple-system, BlinkMacSystemFont,
+                 "SF Pro Display", "Inter",
+                 "Poppins", sans-serif;
+    font-size: clamp(1.1rem, 1.5vw, 1.35rem);
+    font-weight: 400;
+    line-height: 1.9;
+    letter-spacing: -0.02em;
+    color: rgba(255,255,255,0.82);
+    text-align: center;
+    max-width: 850px;     
+    animation: fadeText 1.2s ease forwards;
+}
+
+.apple-highlight {
+    position: relative;
+    font-family: "SF Pro Display",
+                 -apple-system,
+                 BlinkMacSystemFont,
+                 sans-serif;
+
+    font-weight: 700;
+    color: #ffffff;
+    letter-spacing: -0.04em;
+    transition: all 0.4s ease;
+}
+
+.apple-highlight:hover {
+    color: #f5f5f7;
+    text-shadow:
+        0 0 20px rgba(255,255,255,0.15);
+}
+
+.apple-highlight::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -6px;
+
+    width: 100%;
+    height: 1px;
+
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255,255,255,0.9),
+        transparent
+    );
+
+    transform: scaleX(0);
+    transform-origin: center;
+
+    animation: underlineReveal 2.5s ease forwards;
+}
+
+
+@keyframes fadeText {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+        filter: blur(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+        filter: blur(0);
+    }
+}
+
+
+@keyframes underlineReveal {
+    0% {
+        transform: scaleX(0);
+        opacity: 0;
+    }
+
+    100% {
+        transform: scaleX(1);
+        opacity: 1;
+    }
+}
+
+@keyframes floatBlob {
+
+    0%,100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(30px);
+    }
+}
+
+.apple-footer {
+    width: 100%;
+    padding: 28px 20px;
+    margin-top: 80px;
+
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+
+    position: relative;
+    overflow: hidden;
+}
+
+.apple-footer::before {
+    content: "";
+    position: absolute;
+    top: -80px;
+    left: 50%;
+    transform: translateX(-50%);
+
+    width: 500px;
+    height: 180px;
+
+    background: radial-gradient(
+        circle,
+        rgba(255,255,255,0.04),
+        transparent 70%
+    );
+
+    pointer-events: none;
+}
+
+.footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.footer-content p {
+    font-family: "Orbitron", sans-serif;
+
+    font-size: 0.8rem;
+    font-weight: 500;
+
+    letter-spacing: 0.35em;
+
+    text-transform: uppercase;
+
+    color: rgba(255,255,255,0.65);
+
+    transition: all 0.4s ease;
+}
+
+.footer-content p:hover {
+    color: rgba(255,255,255,0.95);
+
+    letter-spacing: 0.42em;
+
+    transform: translateY(-1px);
+
+    text-shadow:
+        0 0 20px rgba(255,255,255,0.08);
+}
+
+
+@media (max-width: 768px) {
+    .apple-footer {
+        padding: 24px 16px;
+    }
+
+    .footer-content p {
+        font-size: 0.82rem;
+    }
 }
