@@ -42,7 +42,7 @@ nav ul li.nav-links {
 }
 
 nav ul li.nav-links a {
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Orbitron', sans-serif;
     font-size: clamp(0.82rem, 1.5vw, 0.98rem);
     font-weight: 600;
     letter-spacing: 0.4px;
@@ -1592,4 +1592,169 @@ nav ul li.nav-links a:hover {
     .footer-content p {
         font-size: 0.82rem;
     }
+}
+
+
+#Testimonials {
+    padding: 160px 6% 120px;
+    position: relative;
+    overflow: hidden;
+    background: #111111;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 70vh; 
+}
+
+
+#Testimonials #below {
+    text-align: center;
+    margin-bottom: -50px; 
+    position: relative;
+    z-index: 1; 
+    pointer-events: none;
+}
+
+#Testimonials h1 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    line-height: 1;
+    gap: 12px;
+}
+
+#Testimonials .handwriting {
+    font-family: 'Playfair Display', 'Didot', 'Georgia', serif;
+    font-style: italic;
+    font-size: clamp(1.4rem, 2.8vw, 2.4rem);
+    color: #8fdfff;
+    letter-spacing: 0.05em;
+    font-weight: 400;
+    opacity: 0.85; 
+    transition: opacity 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+#Testimonials .testimonial-gradient {
+    font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: clamp(3rem, 9vw, 7.5rem);
+    font-weight: 700;
+    letter-spacing: -0.03em; 
+    background: linear-gradient(90deg, #00d2ff, #0072ff, #00c6ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    opacity: 0.12;
+    transition: opacity 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+
+#Testimonials:has(.testimonial-card.active) .handwriting {
+    opacity: 0.45;
+}
+#Testimonials:has(.testimonial-card.active) .testimonial-gradient {
+    opacity: 0.07;
+}
+
+
+.testimonials-slider-wrapper {
+    width: 100%;
+    max-width: 1050px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 2;
+}
+
+.testimonials-container {
+    width: 100%;
+    position: relative;
+    min-height: 280px; 
+}
+
+.testimonial-card {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: transparent !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    border: none !important;
+    padding: 20px 0;
+    box-sizing: border-box;
+    text-align: center;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(15px);
+    transition: 
+        opacity 0.8s cubic-bezier(0.25, 1, 0.5, 1),
+        transform 0.8s cubic-bezier(0.25, 1, 0.5, 1),
+        visibility 0.8s;
+}
+
+
+.testimonial-card.active {
+    position: relative;
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+
+.testimonial-text {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
+    font-size: clamp(1.3rem, 2.4vw, 1.9rem); 
+    font-weight: 400;
+    line-height: 1.7;
+    color: #ffffff;
+    margin-bottom: 25px;
+    letter-spacing: -0.015em;
+    text-wrap: balance;
+    text-shadow: 0 2px 15px rgba(17, 17, 17, 0.6);
+}
+
+.testimonial-author {
+    display: block;
+    font-family: 'Space Grotesk', -apple-system, sans-serif;
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: #00d2ff;
+    letter-spacing: 0.02em;
+}
+
+
+.testimonial-portfolio {
+    display: inline-block;
+    margin-top: 10px;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #8fdfff;
+    text-decoration: none;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+    border-bottom: 1px dashed rgba(143, 223, 255, 0.4);
+    padding-bottom: 2px;
+}
+
+.testimonial-portfolio:hover {
+    color: #fff;
+    border-bottom-color: #fff;
+}
+
+
+@media (max-width: 900px) {
+    #Testimonials { padding: 120px 4% 80px; min-height: unset; }
+    #Testimonials #below { margin-bottom: -20px; }
+    #Testimonials .handwriting { opacity: 0.75; }
+    #Testimonials:has(.testimonial-card.active) .handwriting { opacity: 0.35; }
+    .testimonial-card { padding: 10px 0; }
+}
+
+@media (max-width: 600px) {
+    #Testimonials { padding: 80px 4% 60px; }
+    .testimonial-text { font-size: 1.2rem; line-height: 1.6; margin-bottom: 15px; }
 }
