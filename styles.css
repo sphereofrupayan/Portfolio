@@ -1758,3 +1758,71 @@ nav ul li.nav-links a:hover {
     #Testimonials { padding: 80px 4% 60px; }
     .testimonial-text { font-size: 1.2rem; line-height: 1.6; margin-bottom: 15px; }
 }
+
+.about-carousel {
+    position: relative;
+    width: 100%;
+    margin-top: 15px;
+    padding: 0 45px; 
+}
+
+
+.about-text {
+    width: 100%;
+    margin: 0;
+    display: none;
+    opacity: 0;
+    transform: translateY(12px);
+}
+
+.about-text.active {
+    display: block; 
+    animation: smoothFadeUp 0.4s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+@keyframes smoothFadeUp {
+    0% {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+.carousel-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 2rem;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+    user-select: none;
+    line-height: 1;
+}
+
+.carousel-nav:hover {
+    background: rgba(29, 169, 192, 0.15);
+    border-color: rgba(29, 169, 192, 0.4);
+    color: #1da9c0;
+    transform: translateY(-50%) scale(1.05);
+}
+
+.carousel-nav.prev { left: 16px; }
+.carousel-nav.next { right: 16px; }
+
+@media (max-width: 600px) {
+    .about-carousel { padding: 0 20px; }
+    .carousel-nav { width: 36px; height: 36px; font-size: 1.5rem; }
+    .carousel-nav.prev { left: 4px; }
+    .carousel-nav.next { right: 4px; }
+}
