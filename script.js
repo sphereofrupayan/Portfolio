@@ -474,3 +474,28 @@ function copyEmail(event) {
     }
     setInterval(advanceAutomatedSlide, displayDuration);
 })();
+
+document.addEventListener("DOMContentLoaded", () => {
+    const aboutTexts = document.querySelectorAll(".about-carousel .about-text");
+    const prevBtn = document.querySelector(".carousel-nav.prev");
+    const nextBtn = document.querySelector(".carousel-nav.next");
+    let currentIndex = 0;
+    function updateCarousel(newIndex) {
+        if (newIndex === currentIndex) return;
+        aboutTexts[currentIndex].classList.remove("active");
+        currentIndex = newIndex;
+        aboutTexts[currentIndex].classList.add("active");
+    }
+
+    if (aboutTexts.length > 1 && prevBtn && nextBtn) {
+        nextBtn.addEventListener("click", () => {
+            const nextIndex = (currentIndex + 1) % aboutTexts.length;
+            updateCarousel(nextIndex);
+        });
+
+        prevBtn.addEventListener("click", () => {
+            const prevIndex = (currentIndex - 1 + aboutTexts.length) % aboutTexts.length;
+            updateCarousel(prevIndex);
+        });
+    }
+});
