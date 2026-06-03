@@ -42,88 +42,6 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 });
 
 
-(function () {
-    const canvas = document.createElement('canvas');
-    canvas.id = 'bubble-canvas-global';
-    canvas.style.cssText = `
-        position: fixed;
-        top: 0; left: 0;
-        width: 100%; height: 100%;
-        z-index: 0;
-        pointer-events: none;
-    `;
-    document.body.appendChild(canvas);
-    const ctx = canvas.getContext('2d');
-    let bubbles = [];
-
-    function resize() {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-    }
-
-    function randomBetween(a, b) { return a + Math.random() * (b - a); }
-
-    function createBubble() {
-        const r = randomBetween(18, 60);
-        return {
-            x: randomBetween(r, canvas.width - r),
-            y: canvas.height + r,
-            r,
-            speedY: randomBetween(0.4, 1.1),
-            speedX: randomBetween(-0.3, 0.3),
-            opacity: randomBetween(0.08, 0.22),
-            shimX: randomBetween(-0.4, 0.4),
-            shimY: randomBetween(-0.4, -0.2),
-            wobble: randomBetween(0, Math.PI * 2),
-            wobbleSpeed: randomBetween(0.008, 0.022),
-        };
-    }
-
-    function drawBubble(b) {
-        ctx.save();
-        ctx.globalAlpha = b.opacity;
-        ctx.beginPath();
-        ctx.arc(b.x, b.y, b.r, 0, Math.PI * 2);
-        ctx.strokeStyle = 'rgba(29,169,192,0.9)';
-        ctx.lineWidth = 1.2;
-        ctx.stroke();
-        const grad = ctx.createRadialGradient(
-            b.x + b.r * (b.shimX - 0.2), b.y + b.r * (b.shimY - 0.2), b.r * 0.05,
-            b.x, b.y, b.r
-        );
-        grad.addColorStop(0, 'rgba(180,240,255,0.35)');
-        grad.addColorStop(0.4, 'rgba(29,169,192,0.08)');
-        grad.addColorStop(1, 'rgba(10,60,80,0.18)');
-        ctx.beginPath();
-        ctx.arc(b.x, b.y, b.r, 0, Math.PI * 2);
-        ctx.fillStyle = grad;
-        ctx.fill();
-        ctx.restore();
-    }
-
-    function tick() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        if (bubbles.length < 28 && Math.random() < 0.04) bubbles.push(createBubble());
-        bubbles.forEach(b => {
-            b.wobble += b.wobbleSpeed;
-            b.x += b.speedX + Math.sin(b.wobble) * 0.4;
-            b.y -= b.speedY;
-            drawBubble(b);
-        });
-        bubbles = bubbles.filter(b => b.y + b.r > 0);
-        requestAnimationFrame(tick);
-    }
-
-    resize();
-    for (let i = 0; i < 18; i++) {
-        const b = createBubble();
-        b.y = randomBetween(0, canvas.height);
-        bubbles.push(b);
-    }
-    tick();
-    window.addEventListener('resize', resize);
-})();
-
 
 
 
@@ -537,3 +455,22 @@ function copyEmail(event) {
             console.error("Failed to copy email:", err);
         });
 }
+
+(function () {
+    const container = document.querySelector('.testimonials-container');
+    if (!container) return;
+
+    const cards = container.querySelectorAll('.testimonial-card');
+    if (cards.length <= 1) return; 
+
+    let currentIndex = 0;
+    const totalCards = cards.length;
+    const displayDuration = 5500;
+
+    function advanceAutomatedSlide() {
+        cards[currentIndex].classList.remove('active');
+        currentIndex = (currentIndex + 1) % totalCards;
+        cards[currentIndex].classList.add('active');
+    }
+    setInterval(advanceAutomatedSlide, displayDuration);
+})();
