@@ -1826,3 +1826,156 @@ nav ul li.nav-links a:hover {
     .carousel-nav.prev { left: 4px; }
     .carousel-nav.next { right: 4px; }
 }
+.ProfessionalSkills {
+    position: relative;
+    width: 100%;
+    max-width: 100%;
+    margin: 80px auto;
+    height: 110px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: visible;
+    z-index: 5;
+    opacity: 0;
+    transform: scale(0.96) translateY(30px);
+    filter: blur(12px);
+    transition: 
+        opacity 1.4s cubic-bezier(0.16, 1, 0.3, 1),
+        transform 1.4s cubic-bezier(0.16, 1, 0.3, 1),
+        filter 1.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.ProfessionalSkills.revealed {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+    filter: blur(0px);
+}
+
+.skills-group {
+    position: absolute;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: clamp(10px, 1.8vw, 24px); 
+    width: 100%;
+    max-width: 1200px;
+    padding: 0 40px;
+    left: 50%;
+    transform: translateX(-50%) scale(0.94) translateY(15px);
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    filter: blur(8px);
+}
+
+.ProfessionalSkills.revealed .skills-group {
+    animation: applePremiumRotation 10s infinite cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.ProfessionalSkills.revealed .skills-group:nth-child(1) {
+    animation-delay: 0s;
+}
+
+.ProfessionalSkills.revealed .skills-group:nth-child(2) {
+    animation-delay: 5s;
+}
+
+.ProfessionalSkills .skills-group div {
+    font-family: 'Orbitron', 'Rajdhani', sans-serif;
+    font-size: clamp(0.75rem, 1.35vw, 1.15rem); 
+    font-weight: 700;
+    font-style: normal;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: rgba(255, 255, 255, 0.95);
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.15);
+    border: none !important;
+    outline: none;
+    padding: 12px clamp(16px, 2vw, 32px);
+    border-radius: 40px;
+    background: rgba(255, 255, 255, 0.04);
+    backdrop-filter: blur(30px) saturate(200%);
+    -webkit-backdrop-filter: blur(30px) saturate(200%);
+    box-shadow: 
+        0 15px 45px rgba(0, 0, 0, 0.35), 
+        inset 0 1.5px 2px rgba(255, 255, 255, 0.18),
+        inset 0 -1px 1px rgba(255, 255, 255, 0.05);
+    transition: 
+        background 0.5s cubic-bezier(0.16, 1, 0.3, 1), 
+        transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), 
+        box-shadow 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+        color 0.5s ease;
+    cursor: default;
+    user-select: none;
+}
+
+.ProfessionalSkills .skills-group div:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    transform: scale(1.04) translateY(-3px);
+    box-shadow: 
+        0 25px 60px rgba(0, 0, 0, 0.55), 
+        0 0 20px rgba(255, 255, 255, 0.12),
+        inset 0 1.5px 2px rgba(255, 255, 255, 0.3);
+}
+
+@keyframes applePremiumRotation {
+    0% {
+        opacity: 0;
+        transform: translateX(-50%) scale(0.94) translateY(20px);
+        filter: blur(12px);
+        pointer-events: none;
+    }
+    4%, 46% { 
+        opacity: 1;
+        transform: translateX(-50%) scale(1) translateY(0);
+        filter: blur(0px);
+        pointer-events: auto;
+    }
+    50%, 100% { 
+        opacity: 0;
+        transform: translateX(-50%) scale(1.04) translateY(-20px);
+        filter: blur(12px);
+        pointer-events: none;
+    }
+}
+
+@media (max-width: 1024px) {
+    .skills-group {
+        padding: 0 15px;
+        gap: 12px;
+    }
+    .ProfessionalSkills .skills-group div {
+        font-size: 0.85rem;
+        padding: 10px 18px;
+        letter-spacing: 0.04em;
+    }
+}
+
+@media (max-width: 768px) {
+    .ProfessionalSkills {
+        height: 80px;
+        margin: 40px auto;
+    }
+    .skills-group {
+        justify-content: flex-start;
+        overflow-x: auto;
+        left: 0;
+        transform: none;
+        padding: 0 20px;
+        width: 100%;
+    }
+    .ProfessionalSkills.revealed .skills-group {
+        animation: mobileFadeInOut 10s infinite ease-in-out;
+    }
+    .skills-group::-webkit-scrollbar {
+        display: none;
+    }
+}
+
+@keyframes mobileFadeInOut {
+    0%, 50%, 100% { opacity: 0; pointer-events: none; }
+    4%, 46% { opacity: 1; pointer-events: auto; }
+}
