@@ -41,10 +41,6 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     });
 });
 
-
-
-
-
 (function () {
     const canvas = document.getElementById('orbit-canvas');
     if (!canvas) return;
@@ -497,5 +493,29 @@ document.addEventListener("DOMContentLoaded", () => {
             const prevIndex = (currentIndex - 1 + aboutTexts.length) % aboutTexts.length;
             updateCarousel(prevIndex);
         });
+    }
+});
+
+
+document.addEventListener("DOMContentLoaded", () => {
+    const skillsSection = document.querySelector('.ProfessionalSkills');
+    
+    const observerOptions = {
+        root: null,
+        rootMargin: '0px',
+        threshold: 0.15 
+    };
+
+    const observer = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('revealed');
+                observer.unobserve(entry.target); 
+            }
+        });
+    }, observerOptions);
+
+    if (skillsSection) {
+        observer.observe(skillsSection);
     }
 });
