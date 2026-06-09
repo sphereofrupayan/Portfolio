@@ -1831,19 +1831,16 @@ nav ul li.nav-links a:hover {
     width: 100%;
     max-width: 100%;
     margin: 80px auto;
-    height: 110px;
+    min-height: 110px;
     display: flex;
     justify-content: center;
     align-items: center;
     overflow: visible;
     z-index: 5;
-    opacity: 0;
-    transform: scale(0.96) translateY(30px);
-    filter: blur(12px);
-    transition: 
-        opacity 1.4s cubic-bezier(0.16, 1, 0.3, 1),
-        transform 1.4s cubic-bezier(0.16, 1, 0.3, 1),
-        filter 1.4s cubic-bezier(0.16, 1, 0.3, 1);
+
+    opacity: 1;
+    transform: none;
+    filter: none;
 }
 
 .ProfessionalSkills.revealed {
@@ -1955,23 +1952,39 @@ nav ul li.nav-links a:hover {
 }
 
 @media (max-width: 768px) {
+
     .ProfessionalSkills {
-        height: 80px;
+        min-height: 200px;
+        height: auto;
         margin: 40px auto;
-    }
-    .skills-group {
-        justify-content: flex-start;
-        overflow-x: auto;
-        left: 0;
+        opacity: 1;
         transform: none;
-        padding: 0 20px;
+        filter: none;
+    }
+
+    .skills-group {
+        position: static;
+        transform: none !important;
+        opacity: 1 !important;
+        filter: none !important;
+
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 12px;
+
         width: 100%;
+        padding: 0 15px;
+        white-space: normal;
     }
+
     .ProfessionalSkills.revealed .skills-group {
-        animation: mobileFadeInOut 10s infinite ease-in-out;
+        animation: none;
     }
-    .skills-group::-webkit-scrollbar {
-        display: none;
+
+    .ProfessionalSkills .skills-group div {
+        font-size: 0.8rem;
+        padding: 10px 16px;
     }
 }
 
