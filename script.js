@@ -53,7 +53,7 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         { name: 'Java',       ring: 0, color: '#1da9c0', img: 'logos/java.png' },
         { name: 'Python',     ring: 0, color: '#1da9c0', img: 'logos/Python.png' },
         { name: 'MySQL',      ring: 1, color: '#a78bfa', img: 'logos/mysql.png' },
-        { name: 'MATLAB',     ring: 1, color: '#a78bfa', img: 'logos/Matlab.png' },
+        { name: 'RENDER',     ring: 1, color: '#a78bfa', img: 'logos/render.png' },
         { name: 'HTML',       ring: 1, color: '#a78bfa', img: 'logos/HTML.png' },
         { name: 'CSS',        ring: 1, color: '#a78bfa', img: 'logos/CSS.png' },
         { name: 'JavaScript', ring: 1, color: '#a78bfa', img: 'logos/Javascript.png' },
@@ -518,4 +518,25 @@ document.addEventListener("DOMContentLoaded", () => {
     if (skillsSection) {
         observer.observe(skillsSection);
     }
+});
+
+const toggleBtn = document.getElementById("toggleSkills");
+const skillsContent = document.getElementById("skillsContent");
+
+toggleBtn.addEventListener("click", () => {
+
+    skillsContent.classList.toggle("active");
+
+    if(skillsContent.classList.contains("active")){
+        toggleBtn.innerHTML = "Hide My Tech Stack ▲";
+
+        skillsContent.scrollIntoView({
+            behavior:"smooth",
+            block:"start"
+        });
+
+    }else{
+        toggleBtn.innerHTML = "View My Tech Stack ▼";
+    }
+
 });
