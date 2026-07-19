@@ -540,3 +540,126 @@ toggleBtn.addEventListener("click", () => {
     }
 
 });
+const toggle = document.getElementById("bot-toggle");
+const windowBox = document.getElementById("bot-window");
+const closeBtn = document.getElementById("bot-close");
+const userInput = document.getElementById("user-input");
+
+function openBot() {
+    windowBox.style.display = "flex";
+    requestAnimationFrame(() => windowBox.classList.add("open"));
+}
+function closeBot() {
+    windowBox.classList.remove("open");
+    setTimeout(() => { windowBox.style.display = "none"; }, 200);
+}
+
+toggle.onclick = () => {
+    windowBox.classList.contains("open") ? closeBot() : openBot();
+};
+closeBtn.onclick = closeBot;
+
+// auto-grow textarea
+userInput.addEventListener("input", () => {
+    userInput.style.height = "auto";
+    userInput.style.height = Math.min(userInput.scrollHeight, 100) + "px";
+});
+
+// Enter to send, Shift+Enter for newline
+userInput.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+        e.preventDefault();
+        document.getElementById("send-btn").click();
+    }
+});
+function makeLinksClickable(text) {
+    const urlRegex = /(https?:\/\/[^\s]+)/g;
+
+    return text.replace(urlRegex, (url) => {
+        return `<a href="${url}" target="_blank" rel="noopener noreferrer">${url}</a>`;
+    });
+}
+// Helper to append a message bubble — call this from your existing send logic
+function appendMessage(text, sender = "bot") {
+    const chatBox = document.getElementById("chat-box");
+    const msg = document.createElement("div");
+
+    msg.className = `msg ${sender}`;
+
+    const content =
+        sender === "bot"
+            ? makeLinksClickable(text)
+            : text;
+
+    msg.innerHTML = `
+        <span class="msg-avatar">${sender === "bot" ? "🤖" : "🧑"}</span>
+        <div class="msg-bubble">${content}</div>
+    `;
+
+    chatBox.appendChild(msg);
+    chatBox.scrollTop = chatBox.scrollHeight;
+}
+const sendBtn = document.getElementById("send-btn");
+
+function updateSendButtonState() {
+    const hasText = userInput.value.trim().length > 0;
+    sendBtn.disabled = !hasText;
+}
+
+// Run on every keystroke/paste
+userInput.addEventListener("input", () => {
+    userInput.style.height = "auto";
+    userInput.style.height = Math.min(userInput.scrollHeight, 100) + "px";
+    updateSendButtonState();
+});
+
+// Set initial state on load (button starts disabled since input is empty)
+updateSendButtonState();
+
+// Optional: clear + reset button state after sending
+// Call this inside your existing send-btn click handler, after the message is sent
+function resetInputAfterSend() {
+    userInput.value = "";
+    userInput.style.height = "auto";
+    updateSendButtonState();
+    userInput.focus();
+}
+
+async function sendMessage() {
+    const message = userInput.value.trim();
+
+    if (!message) return;
+
+    appendMessage(message, "user");
+    resetInputAfterSend();
+
+    try {
+
+        const response = await fetch("/chat", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                message: message,
+                model: document.getElementById("ai-model").value
+            })
+        });
+
+        const data = await response.json();
+
+        appendMessage(data.reply || "No response", "bot");
+
+    } catch (err) {
+
+        console.error(err);
+
+        appendMessage(
+            "⚠ Unable to connect to Rusho.Bot.",
+            "bot"
+        );
+
+    }
+}
+
+sendBtn.addEventListener("click", sendMessage);
