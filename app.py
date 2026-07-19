@@ -4,19 +4,21 @@ from dotenv import load_dotenv
 import os
 from pathlib import Path
 import requests
-
+import google.generativeai as genai
 
 env_path = Path(__file__).parent / ".env"
 load_dotenv(dotenv_path=env_path)
-
+    
+genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
+gemini_model = genai.GenerativeModel("gemini-2.5-flash")
 app = Flask(__name__, static_folder=".", static_url_path="")
 
 
 client = Groq(api_key=os.getenv("GROQ_API_KEY"))
 CRICKET_API_KEY = os.getenv("CRICKET_API_KEY")
 OPENWEATHER_API_KEY = os.getenv("OPENWEATHER_API_KEY")
-
-# Load portfolio knowledge
+print("Groq key:", os.getenv("GROQ_API_KEY"))
+print("Gemini key:", os.getenv("GEMINI_API_KEY"))
 with open("knowledge.txt", "r", encoding="utf-8") as file:
     knowledge = file.read()
 @app.route("/")
@@ -108,12 +110,9 @@ def chat():
             reply = "Unable to fetch weather information."
 
         return jsonify({"reply": reply})
-    response = client.chat.completions.create(
-        model=data.get("model", "llama-3.3-70b-versatile"),
-        messages=[
-            {
-                "role": "system",
-                "content": f"""
+    
+        
+    prompt = f"""
 You are Rusho.Bot.
 
 You are the personal AI assistant of Rupayan Chattaraj.
@@ -128,17 +127,49 @@ If the answer is not present, politely say:
 Portfolio Information:
 
 {knowledge}
-"""
-            },
-            {
-                "role": "user",
-                "content": user_message
-            }
-        ],
-        temperature=0.3
-    )
 
-    answer = response.choices[0].message.content
+User Question:
+
+{user_message}
+"""
+
+
+    try:
+        # First try Groq
+        response = client.chat.completions.create(
+            model="llama-3.3-70b-versatile",
+            messages=[
+                {
+                    "role": "system",
+                    "content": prompt
+                },
+                {
+                    "role": "user",
+                    "content": user_message
+                }
+            ],
+            temperature=0.3
+        )
+
+        answer = response.choices[0].message.content
+
+
+    except Exception as e:
+
+        print("Groq failed:", e)
+
+        try:
+            
+            gemini_response = gemini_model.generate_content(prompt)
+
+            answer = gemini_response.text
+
+        except Exception as gemini_error:
+
+            print("Gemini failed:", gemini_error)
+
+            answer = "Sorry, both AI services are currently unavailable."
+
 
     return jsonify({"reply": answer})
 
