@@ -1,0 +1,308 @@
+===========================================================
+RUPAYAN CHATTERAJ - PORTFOLIO KNOWLEDGE BASE
+===========================================================
+
+PERSONAL INFORMATION
+--------------------
+Name: Rupayan Chattaraj
+
+Also Known As:
+Rupayan
+Rusho
+
+Role:
+Software Engineer
+Full Stack Developer
+Frontend Developer
+Backend Developer
+Web Developer
+Computer Science Student
+
+Current Location:
+Vellore, Tamil Nadu, India
+
+Nationality:
+Indian
+
+Email:
+rupayanchattaraj@gmail.com
+
+GitHub:
+https://github.com/DevRC891
+
+LinkedIn:
+https://www.linkedin.com/in/rupayanchattaraj/
+
+X (Twitter):
+https://x.com/rupayan_01
+
+Portfolio:
+This website is the official portfolio of Rupayan Chattaraj.
+
+-----------------------------------------------------------
+
+EDUCATION
+--------------------
+Degree:
+Bachelor of Technology (B.Tech)
+
+Branch:
+Computer Science and Engineering (CSE)
+
+University:
+Vellore Institute of Technology (VIT), Vellore
+
+Expected Graduation:
+2028
+
+School:
+DAV Model School, Durgapur
+
+Higher Secondary Completion:
+2024
+
+-----------------------------------------------------------
+
+ABOUT RUPAYAN
+--------------------
+Rupayan is a passionate Software Engineer and Full Stack Developer who enjoys creating modern, scalable and responsive web applications.
+
+He enjoys learning new technologies and solving real-world problems through software.
+
+He believes in writing clean, maintainable and efficient code.
+
+He continuously works on improving his programming, development and problem-solving skills.
+
+He enjoys building creative user interfaces with smooth animations and excellent user experience.
+
+-----------------------------------------------------------
+
+TECHNICAL SKILLS
+--------------------
+
+Programming Languages
+- Python
+- Java
+- C
+- C++
+- JavaScript
+
+Frontend
+- HTML
+- CSS
+- React
+
+Backend
+- Flask
+- Node.js
+
+Database
+- MySQL
+- Oracle Database 21c
+
+Tools
+- Git
+- GitHub
+- VS Code
+- Postman
+- Render
+- Canva
+- Figma
+
+Libraries
+- OpenCV
+- MediaPipe
+- NumPy
+- PyAutoGUI
+
+Other Technologies
+- EmailJS
+- REST APIs
+- Responsive Web Design
+
+-----------------------------------------------------------
+
+PROJECTS
+--------------------
+
+Projects:
+
+1. Wavify
+- A modern music streaming web application with a clean and responsive user interface.
+- Built using HTML, CSS, JavaScript, Python, Flask, and the Groq API.
+- Features seamless music playback, custom playlists, and an attractive UI.
+- Live Demo: https://wavify18.netlify.app/
+
+2. Rusho.Bot
+- A personal AI portfolio assistant developed for my portfolio website.
+- Built using HTML, CSS, JavaScript, Python (Flask), and the Groq API.
+- Answers questions about my education, skills, projects, achievements, and experience.
+- Supports multiple AI models, weather updates, live cricket scores, and portfolio knowledge.
+- Live Demo: https://rushobot.onrender.com/
+
+3. Eye Controlled Mouse
+- A computer vision project that allows users to control the mouse cursor using eye movements.
+- Developed using Python, OpenCV, MediaPipe, NumPy, and PyAutoGUI.
+- Includes click detection and smooth cursor tracking.
+- Download App : https://drive.google.com/file/d/1oF2B1ap2t7eguH_3mSvMo_0H1tpLOkJ0/view?usp=sharing
+
+4. Hand Gesture Control
+- A real-time hand gesture recognition system for controlling the computer.
+- Built using Python, OpenCV, MediaPipe, NumPy, and PyAutoGUI.
+- Supports mouse movement, clicking, volume control, window management, and other gesture-based actions.
+- Download App : https://drive.google.com/file/d/1hDJE7NqAKrK4h5K5YsDQqcEi_V-6ryej/view?usp=sharing
+-----------------------------------------------------------
+
+INTERESTS
+--------------------
+Web Development
+
+Artificial Intelligence
+
+Software Engineering
+
+Computer Vision
+
+Machine Learning
+
+Frontend Development
+
+Backend Development
+
+Problem Solving
+
+UI/UX Design
+
+Open Source
+
+-----------------------------------------------------------
+
+HOBBIES
+--------------------
+Learning new technologies
+
+Building software projects
+
+Designing modern websites
+
+Programming
+
+Watching technology videos
+
+Listening to music
+
+Exploring AI tools
+
+Improving coding skills
+
+-----------------------------------------------------------
+
+PERSONALITY
+--------------------
+Creative
+
+Curious
+
+Hardworking
+
+Quick Learner
+
+Problem Solver
+
+Dedicated
+
+Self Motivated
+
+Team Player
+
+Adaptable
+
+Detail Oriented
+
+Passionate about Technology
+
+-----------------------------------------------------------
+
+CAREER GOALS
+--------------------
+Become an excellent Software Engineer.
+
+Build impactful software that solves real-world problems.
+
+Work at a leading technology company.
+
+Contribute to innovative AI and software projects.
+
+Continuously learn modern technologies.
+
+Create high-quality full-stack applications.
+
+-----------------------------------------------------------
+
+FREQUENTLY ASKED QUESTIONS
+--------------------
+
+Who is Rupayan?
+Rupayan Chattaraj is a Computer Science Engineering student at VIT Vellore and a Full Stack Developer.
+
+Where does Rupayan study?
+VIT Vellore.
+
+What is Rupayan studying?
+Bachelor of Technology in Computer Science and Engineering.
+
+When will Rupayan graduate?
+Expected graduation is 2028.
+
+What programming languages does Rupayan know?
+Python, Java, C, C++, JavaScript.
+
+What frontend technologies does Rupayan know?
+HTML, CSS and React.
+
+What backend technologies does Rupayan know?
+Flask and Node.js.
+
+Which databases does Rupayan use?
+MySQL and Oracle Database.
+
+What projects has Rupayan built?
+Wavify, Rusho.Bot, Eye Controlled Mouse and Hand Gesture Control.
+
+Does Rupayan know AI?
+Yes. He has experience integrating AI APIs and building AI-powered applications.
+
+Does Rupayan know Computer Vision?
+Yes. He has built Eye Controlled Mouse and Hand Gesture Control using OpenCV and MediaPipe.
+
+Can I contact Rupayan?
+Yes.
+
+Email:
+rupayanchattaraj@gmail.com
+
+GitHub:
+https://github.com/DevRC891
+
+LinkedIn:
+https://www.linkedin.com/in/rupayanchattaraj/
+
+X:
+https://x.com/rupayan_01
+
+-----------------------------------------------------------
+
+IMPORTANT INSTRUCTIONS FOR RUSHO.BOT
+--------------------
+Always answer questions about Rupayan using only the information in this knowledge base.
+
+If multiple questions are asked, answer all of them.
+
+If someone asks about Rupayan's skills, projects, education, hobbies, interests, personality, goals, experience, technologies, social media, or contact information, provide a helpful and detailed answer.
+
+If information is unavailable, politely say:
+"I don't have that information yet."
+
+Never invent personal information that is not present in this knowledge base.
+
+Always be professional, friendly and concise.
