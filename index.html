@@ -3,614 +3,188 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rupayan Chattaraj</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Rusho.Bot - My Virtual Assistant</title>
+    <link rel="shortcut icon" type="image/x-icon" href="R.png">
+    <link rel="stylesheet" href="style.css">
 </head>
-<div id="rusho-bot">
-
-    <button id="bot-toggle" aria-label="Open Rusho.Bot">
-        <span class="bot-toggle-icon">🤖</span>
-        <span class="bot-toggle-pulse"></span>
-    </button>
-
-    <div id="bot-window">
-
-        <div class="bot-header">
-            <div class="bot-header-left">
-                <span class="bot-avatar">🤖</span>
-                <div class="bot-header-text">
-                    <span class="bot-name">Rusho.Bot</span>
-                    <span class="bot-version"><i class="status-dot"></i>v2.0 · Online</span>
-                </div>
-            </div>
-            <button id="bot-close" aria-label="Close chat">✕</button>
+<div id="toolModalOverlay" class="tool-modal-overlay">
+    <div class="tool-modal">
+        <div class="tool-modal-header">
+            <h3 id="toolModalTitle">Tool</h3>
+            <button id="toolModalClose" class="tool-modal-close">&times;</button>
         </div>
-
-        <div class="bot-model-row">
-            <span class="model-label">Model</span>
-            <select id="ai-model">
-                <option value="llama-3.3-70b-versatile">Llama 3.3 70B</option>
-                <option value="llama-3.1-8b-instant">Llama 3.1 8B</option>
-                <option value="deepseek-r1-distill-llama-70b">DeepSeek</option>
-            </select>
-        </div>
-
-        <div id="chat-box">
-            <div class="msg bot">
-                <span class="msg-avatar">🤖</span>
-                <div class="msg-bubble">Hey, I'm Rusho.Bot 👋 Ask me anything about Rupayan's projects, skills, or experience.</div>
-            </div>
-        </div>
-
-        <div class="bot-input-row">
-            <textarea id="user-input" placeholder="Ask anything..." rows="1"></textarea>
-            <button id="send-btn" aria-label="Send message">
-                <svg viewBox="0 0 24 24" width="18" height="18" fill="none">
-                    <path d="M3 11L21 3L13 21L11 13L3 11Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" stroke-linecap="round"/>
-                </svg>
-            </button>
-        </div>
-
+        <div id="toolModalBody" class="tool-modal-body"></div>
     </div>
-
 </div>
 <body>
-
-    <div class="cover-section">
-        <div id="vanta-birds"></div>
-        <div id="vanta-rings"></div>
-
-        <nav>
-            <ul>
-                <li class="brand">Rupayan Chattaraj</li>
-                <li class="nav-links">
-                    <a href="#about">About</a>
-                    <a href="#skills">Skills</a>
-                    <a href="#Projects">Projects</a>
-                    <a href="#contact">Contact Me</a>
-                </li>
-            </ul>
-        </nav>
-
-        <section class="hero">
-            <div class="hero-left">
-                <h1>
-                    Hi There,<br>
-                    I'm <span>Rupayan Chattaraj</span>
-                </h1>
-                <p>I am into <span class="highlight">Web Development & Coding</span></p>
-                <section class="socialmedia">
-                    <a href="#" onclick="copyEmail(event)"><img src="logos/Gmail.png" alt="Gmail"></a>
-                    <a href="https://github.com/DevRC891"><img src="logos/github.png" alt="GitHub"></a>
-                    <a href="https://www.linkedin.com/in/rupayanchattaraj/"><img src="logos/linkedin.png" alt="LinkedIn"></a>
-                    <a href="https://x.com/rupayan_01"><img src="logos/xtwitter.png" alt="Twitter"></a>
-                </section>
-            </div>
-        </section>
-
-        <div class="bottom-info">
-            <div class="bottom-row">
-                <section class="left corner">
-                    <p>Based in Vellore, India</p>
-                </section>
-                <section class="right corner">
-                    <p>Full Stack Developer</p>
-                    <p>Frontend &amp; Backend Development</p>
-                </section>
-            </div>
-            <section class="bottomleft">
-                <h3>Source Link</h3>
-                <a href="https://www.vantajs.com/?effect=birds" target="_blank">Vanta.js</a>
-            </section>
+    <nav>
+        <div class="left side">Rusho Bot</div>
+        <div class="right side">V 3.0</div>
+    </nav>
+    <video autoplay muted loop id="bgVideo">
+        <source src="backgroundfull.mp4" type="video/mp4">
+    </video>
+    <div id="historyPanel">
+        <img src="rushobot.png" alt="Mini Logo" class="side-mini-logo">
+        <div class="history-header">
+            <h3>Conversation History</h3>
+            <button id="clearHistoryBtn" title="Clear All History">Delete All</button>
         </div>
-
-        <hr class="cover-divider">
+        <ul id="historyList"></ul>
     </div>
-
-    <section id="about" class="skills-section">
-        <canvas id="bubble-canvas"></canvas>
-        <h2 class="section-title reveal reveal-up">Education</h2>
-        <div class="education-wrapper">
-            <div class="education-container">
-                <section class="college reveal reveal-left">
-                    <div class="edu-degree">Bachelor of Technology in Computer Science and Engineering</div>
-                    <div class="edu-institute">Vellore Institute of Technology</div>
-                    <div class="edu-location">Vellore, India</div>
-                    <span class="edu-year">Expected Graduation: 2028</span>
-                </section>
-                <section class="school reveal reveal-left" style="--reveal-delay: 0.15s">
-                    <div class="edu-degree">Higher Secondary School</div>
-                    <div class="edu-institute">DAV Model School, Durgapur</div>
-                    <div class="edu-location">Durgapur, India</div>
-                    <span class="edu-year">2024</span>
-                </section>
-            </div>
-            <div class="education-animation reveal reveal-right">
-                <dotlottie-wc
-                    src="https://lottie.host/4f5e8768-a085-4358-ad0f-57d899108396/NrJzKFa7H4.lottie"
-                    autoplay loop>
-                </dotlottie-wc>
-            </div>
-        </div>
-       <div class="about-card reveal reveal-up" style="--reveal-delay:0.25s">
-    <div class="about-accent"></div>
-    <button class="carousel-nav prev" aria-label="Previous text">‹</button>
-    <button class="carousel-nav next" aria-label="Next text">›</button>
-
-    <div class="about-carousel">
-        <p class="about-text active">
-            A passionate
-            <span class="apple-highlight">Software Engineer</span>
-            and
-            <span class="apple-highlight">Full-Stack Developer</span>
-            dedicated to building scalable, user-centric applications that combine innovative technology, efficient architecture, and exceptional user experiences.
-        </p>
-        <p class="about-text">
-            A creative and detail-oriented
-            <span class="apple-highlight">Full-Stack Developer</span>
-            who thrives on designing and developing modern web applications that balance performance, functionality, and intuitive design.
-        </p>
-        <p class="about-text">
-            A passionate
-            <span class="apple-highlight">Software Engineer</span>
-            and
-            <span class="apple-highlight">Full-Stack Developer</span>
-            with expertise in C, C++, Java, Python, and modern web technologies, dedicated to building scalable applications, solving complex problems, and creating impactful digital experiences through clean code and innovative thinking.
-        </p>
-    </div>
+    <div id="responsePanel">
+        <div class="response-header">
+    <h3>Assistant Response</h3>
+    <button id="newChatBtn" title="Start a New Chat">New Chat</button>
 </div>
-    </section>
+        <div id="responseText">Waiting for command...</div>
+    </div>
+    <img src="rushobot.png" alt="logo" id="logo">
+    <h1>
+        I'm <span id="name">Rusho.Bot</span>,
+        Your <span id="va">Virtual Assistant</span>
+    </h1>
+    <img src="voice.gif" alt="voice" id="voice">
 
-    <section id="skills" class="tech-section">
-        <div class="tech-bg-grid"></div>
-        
-        <div class="tech-header reveal reveal-up">
-            <p class="tech-eyebrow">Stack &amp; Tooling</p>
-            <h2 class="tech-title">Technologies I Work With</h2>
-            <p class="tech-sub">Languages, frameworks &amp; tools powering my projects</p>
+    <section id="toolsSection">
+    <h2 class="tools-heading">Explore Rusho.Bot Tools</h2>
+    <p class="tools-subheading">A suite of assistant modules to help you work smarter</p>
+
+    <div class="tools-grid">
+        <div class="tool-card" data-tool="chat">
+            <div class="tool-icon">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </div>
+            <h3>AI Chat</h3>
+            <p>Have natural conversations and get instant answers to your questions.</p>
         </div>
-        <div class="skills-expand">
-    <button id="toggleSkills" class="skills-btn">
-        <span>View My Tech Stack</span>
-        <svg class="btn-arrow" width="12" height="12" viewBox="0 0 12 12" fill="none">
-            <path d="M2 4L6 8L10 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
+
+        <div class="tool-card" data-tool="resume">
+            <div class="tool-icon">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M14 2v6h6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M9 13h6M9 17h6M9 9h1" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </div>
+            <h3>Resume Analyzer</h3>
+            <p>Upload your resume and get structured feedback on content and formatting.</p>
+        </div>
+
+        <div class="tool-card" data-tool="notes">
+            <div class="tool-icon">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </div>
+            <h3>Notes Summarizer</h3>
+            <p>Condense long notes or documents into clear, concise summaries.</p>
+        </div>
+
+        <div class="tool-card" data-tool="code">
+            <div class="tool-icon">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="m16 18 6-6-6-6M8 6l-6 6 6 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </div>
+            <h3>Code Reviewer</h3>
+            <p>Get suggestions on code quality, structure, and potential bugs.</p>
+        </div>
+
+        <div class="tool-card" data-tool="email">
+            <div class="tool-icon">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="2" y="4" width="20" height="16" rx="2" stroke="currentColor" stroke-width="1.6"/>
+                    <path d="m22 6-10 7L2 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </div>
+            <h3>Email Writer</h3>
+            <p>Draft professional, well-structured emails in seconds.</p>
+        </div>
+
+        <div class="tool-card" data-tool="planner">
+            <div class="tool-icon">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="3" y="4" width="18" height="18" rx="2" stroke="currentColor" stroke-width="1.6"/>
+                    <path d="M16 2v4M8 2v4M3 10h18" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                </svg>
+            </div>
+            <h3>Study Planner</h3>
+            <p>Organize your study schedule with structured, goal-based plans.</p>
+        </div>
+
+        <div class="tool-card" data-tool="quiz">
+            <div class="tool-icon">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 2-3 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M12 17h.01" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                    <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.6"/>
+                </svg>
+            </div>
+            <h3>Quiz Generator</h3>
+            <p>Generate custom quizzes from any topic or study material.</p>
+        </div>
+
+        <div class="tool-card" data-tool="pdf">
+            <div class="tool-icon">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M14 2v6h6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </div>
+            <h3>PDF Chat</h3>
+            <p>Upload a PDF and ask questions directly about its content.</p>
+        </div>
+
+        <div class="tool-card" data-tool="translator">
+            <div class="tool-icon">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M5 8h10M9 4v2M12 4v3.5c0 3-2.5 5.5-6 6.5M8 10c1 3 3 4.5 6 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="m14 21 4-9 4 9M15.2 18h5.6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </div>
+            <h3>Translator</h3>
+            <p>Translate text between languages quickly and accurately.</p>
+        </div>
+
+        <div class="tool-card" data-tool="grammar">
+            <div class="tool-icon">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M4 20h4l10.5-10.5a2.12 2.12 0 0 0-3-3L5 17v3z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="m13.5 6.5 3 3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                </svg>
+            </div>
+            <h3>Grammar Checker</h3>
+            <p>Catch grammar, spelling, and clarity issues in your writing.</p>
+        </div>
+    </div>
+</section>
+
+    <div id="textInputContainer">
+        <input type="text" id="textInput" placeholder="Type your command...">
+        <button id="sendBtn">Send</button>
+    </div>
+    <button id="btn">
+        <img src="mic.svg" alt="mic">
+        <span id="content">Click to Speak</span>
     </button>
-
-    <div id="skillsContent" class="skills-content">
-
-        <div class="skill-category">
-    <h3><span class="cat-dot dot-cyan"></span>Programming Languages</h3>
-    <div class="skill-static">
-        <span>C</span><span>C++</span><span>Java</span><span>Python</span><span>JavaScript</span>
-    </div>
-</div>
-
-        <div class="skill-category">
-            <h3><span class="cat-dot dot-violet"></span>Frontend</h3>
-            <div class="skill-static">
-                <span>HTML</span><span>CSS</span><span>React</span>
-            </div>
+    <footer>
+        <div class="social-links">
+            <a href="https://github.com/DevRC891/RushoBot" target="_blank" rel="noopener noreferrer">
+                <img src="logos/github.png" alt="Github" class="social-icon">
+            </a>
+            <a href="#" onclick="copyMail()">
+                <img src="logos/Gmail.png" alt="Gmail" class="social-icon">
+            </a>
+            <a href="https://www.instagram.com/rushooo___/" target="_blank" rel="noopener noreferrer">
+                <img src="logos/instagram.png" alt="Instagram" class="social-icon">
+            </a>
         </div>
-
-        <div class="skill-category">
-            <h3><span class="cat-dot dot-gold"></span>Backend</h3>
-            <div class="skill-static">
-                <span>Node.js</span><span>Flask</span><span>EmailJS</span>
-            </div>
-        </div>
-
-        <div class="skill-category">
-            <h3><span class="cat-dot dot-cyan"></span>Database</h3>
-            <div class="skill-static">
-                <span>MySQL</span><span>Oracle 21C</span>
-            </div>
-        </div>
-
-        <div class="skill-category">
-            <h3><span class="cat-dot dot-violet"></span>Tools</h3>
-            <div class="skill-static">
-                <span>GitHub</span><span>VS Code</span><span>Postman</span><span>Render</span>
-            </div>
-        </div>
-
-        <div class="skill-category">
-            <h3><span class="cat-dot dot-gold"></span>Design</h3>
-            <div class="skill-static">
-                <span>Canva</span><span>Figma</span>
-            </div>
-        </div>
-
-        <div class="skill-category">
-            <h3><span class="cat-dot dot-cyan"></span>Other Technologies</h3>
-            <div class="skill-marquee">
-                <div class="skill-track">
-                    <span>OpenCV</span><span>MediaPipe</span><span>NumPy</span><span>PyAutoGUI</span><span>Keil uVision</span><span>R Studio</span><span>Matlab</span><span>ModelSim</span>
-                    <span>OpenCV</span><span>MediaPipe</span><span>NumPy</span><span>PyAutoGUI</span><span>Keil uVision</span><span>R Studio</span><span>Matlab</span><span>ModelSim</span>
-                </div>
-            </div>
-        </div>
-    </div>
-        <div class="tech-orbit-wrapper">
-            <div class="tech-lottie-side reveal reveal-left" style="--reveal-delay: 0.1s">
-                <dotlottie-wc
-                    src="https://lottie.host/54742d41-c7b1-4793-ac84-7bed6fda0bf0/fDWGKGgtNS.lottie"
-                    autoplay loop>
-                </dotlottie-wc>
-            </div>
-            <div class="tech-canvas-side reveal reveal-right" style="--reveal-delay: 0.2s">
-                <canvas id="orbit-canvas"></canvas>
-                <div class="orbit-center-label"></div>
-            </div>
-        </div>
-        
-    </section>
-</div>
-</div>
-    <section class="focus-section">
-        <div class="right-side reveal reveal-right">
-            <div class="changing-text-wrapper">
-                <span id="changing-word">Creative</span>
-                <h1>Developer</h1>
-            </div>
-        </div>
-        <div class="left-side">
-            <p class="focus-label reveal reveal-up">MY FOCUS</p>
-            <ul>
-                <li class="reveal reveal-up" style="--reveal-delay: 0.08s">Premium Software</li>
-                <li class="reveal reveal-up" style="--reveal-delay: 0.16s">Clean Design And Artistic Perfection</li>
-                <li class="reveal reveal-up" style="--reveal-delay: 0.24s">Responsive and User-focused Websites</li>
-                <li class="reveal reveal-up" style="--reveal-delay: 0.32s">Smooth Functionality &amp; Creative Engineering</li>
-            </ul>
-        </div>
-    </section>
-
-      <section class="ProfessionalSkills">
-    <div class="skills-group">
-        <div>Creativity</div>
-        <div>Teamwork</div>
-        <div>Leader</div>
-        <div>Multitasking</div>
-    </div>
-    <div class="skills-group">
-        <div>Management</div>
-        <div>Adaptability</div>
-        <div>Time Management</div>
-        <div>Communication</div>
-    </div>
-</section>
-
-    <section class="resume-section">
-        <div class="resume-card reveal reveal-up">
-            <div class="resume-left">
-                <p class="resume-tag">PROFESSIONAL PROFILE</p>
-                <h2 class="resume-heading">Resume &amp; Experience</h2>
-                <p class="resume-text">
-                    <span class="typewriter-text"></span><span class="typewriter-cursor">|</span>
-                </p>
-            </div>
-            <div class="resume-right">
-                <div class="resume-stats-row">
-                    <div class="resume-stat reveal reveal-up" style="--reveal-delay:0.1s">
-                        <span class="stat-number">1+</span>
-                        <span class="stat-label">Years of<br>Experience</span>
-                    </div>
-                    <div class="resume-stat reveal reveal-up" style="--reveal-delay:0.2s">
-                        <span class="stat-number">10+</span>
-                        <span class="stat-label">Projects<br>Completed</span>
-                    </div>
-                </div>
-                <div class="resume-buttons">
-                    <a href="resume.pdf" target="_blank" class="resume-btn primary">View Resume</a>
-                    <a href="CV.png" download class="resume-btn secondary">Download CV</a>
-                </div>
-            </div>
-        </div>
-    </section>
-
-
-
-<section class="questions-section" id="questions">
-    <div class="questions-container">
-
-        <div class="questions-visuals reveal reveal-left">
-            <dotlottie-wc
-                src="https://lottie.host/f70939e9-0a3f-4b1e-be94-65a620ad6d6a/NPaWjVYKO0.lottie"
-                style="width: 300px; height: 300px"
-                autoplay
-                loop>
-            </dotlottie-wc>
-        </div>
-
-        <div class="questions-content">
-
-            <div class="questions-heading reveal reveal-up">
-                <span class="still-have">Still have</span>
-                <span class="questions-word">Questions?</span>
-            </div>
-
-            <form id="contact-form"
-                  class="questions-form reveal reveal-up"
-                  style="--reveal-delay:0.15s">
-
-                <div class="field-group">
-                    <label class="field-label" for="message">
-                        Your Question
-                    </label>
-                    <textarea
-                        id="message"
-                        name="message"
-                        placeholder="What's on your mind?"
-                        required></textarea>
-                </div>
-
-                <div class="field-group">
-                    <label class="field-label" for="name">
-                        Full Name
-                    </label>
-                    <input
-                        type="text"
-                        id="name"
-                        name="name"
-                        placeholder="John Doe"
-                        required>
-                </div>
-
-                <div class="field-group">
-                    <label class="field-label" for="email">
-                        Email Address
-                    </label>
-                    <input
-                        type="email"
-                        id="email"
-                        name="email"
-                        placeholder="you@example.com"
-                        required>
-                </div>
-
-                <div class="questions-footer">
-                    <span class="questions-note">
-                        I'll get back to you shortly.
-                    </span>
-
-                    <button type="submit" class="submit-btn">
-                        Send
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
-</section>
-
-    <section id="Projects" class="Projects">
-        <div>
-            <h1>
-                <span class="handwriting reveal reveal-up">Take a quick look at my</span>
-                <span class="bold reveal reveal-up" style="--reveal-delay: 0.12s">Projects!</span>
-            </h1>
-        </div>
-    </section>
-    <section class="kinetic-projects-container">
-        <div class="kinetic-projects-stage">
-            <div class="kinetic-slide reveal reveal-up" style="--reveal-delay: 0.15s">
-                <div class="kinetic-visual-wrapper">
-                    <img src="logos/wavify.png" alt="Wavify Logo" class="kinetic-logo">
-                    <div class="hologram-glow"></div>
-                </div>
-                <div class="kinetic-info">
-                    <h2 class="kinetic-title">Wavify</h2>
-                    <div class="kinetic-divider"></div>
-                    <p class="kinetic-desc">A music streaming platform featuring a clean user interface, custom playlist creation, and seamless audio synchronization.</p>
-                    <div class="github-view-btn" style="border: none; color: #fff;  border-radius: 12px; font-family: 'Rajdhani', sans-serif; font-size: 0.95rem; font-weight: 600; letter-spacing: 0.5px; padding: 14px 20px; display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; max-width: 100%; margin-bottom: 20px; cursor: default; pointer-events: none;">
-                        <span style="color: #00f7ff;">HTML</span>
-                        <span style="color: rgba(255,255,255,0.3);">|</span>
-                        <span style="color: #00f7ff;">CSS</span>
-                        <span style="color: rgba(255,255,255,0.3);">|</span>
-                        <span style="color: #00f7ff;">JAVASCRIPT</span>
-                        <span style="color: rgba(255,255,255,0.3);">|</span>
-                        <span style="color: #00f7ff;">GROQ API</span>
-                        <span style="color: rgba(255,255,255,0.3);">|</span>
-                        <span style="color: #00f7ff;">PYTHON</span>
-                    </div>
-                    <a href="https://wavify18.netlify.app/" target="_blank" class="github-view-btn">
-                        <img src="logos/github.png" alt="GitHub" class="btn-git-icon">
-                        View Project
-                    </a>
-                </div>
-            </div>
-            <div class="kinetic-slide reveal reveal-up" style="--reveal-delay: 0.25s">
-                <div class="kinetic-visual-wrapper">
-                    <img src="logos/R.png" alt="Virtual Assistant Logo" class="kinetic-logo-va">
-                    <div class="hologram-glow"></div>
-                </div>
-                <div class="kinetic-info">
-                    <h2 class="kinetic-title">Virtual Bot</h2>
-                    <div class="kinetic-divider"></div>
-                    <p class="kinetic-desc">An intelligent automated system designed for task automation, voice recognition, and contextual natural language processing.</p>
-                    <div class="github-view-btn" style="border: none; color: #fff;  border-radius: 12px; font-family: 'Rajdhani', sans-serif; font-size: 0.95rem; font-weight: 600; letter-spacing: 0.5px; padding: 14px 20px; display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; max-width: 100%; margin-bottom: 20px; cursor: default; pointer-events: none;">
-                        <span style="color: #00f7ff;">HTML</span>
-                        <span style="color: rgba(255,255,255,0.3);">|</span>
-                        <span style="color: #00f7ff;">CSS</span>
-                        <span style="color: rgba(255,255,255,0.3);">|</span>
-                        <span style="color: #00f7ff;">JAVASCRIPT</span>
-                        <span style="color: rgba(255,255,255,0.3);">|</span>
-                        <span style="color: #00f7ff;">GROQ API</span>
-                        <span style="color: rgba(255,255,255,0.3);">|</span>
-                        <span style="color: #00f7ff;">PYTHON</span>
-                    </div>
-                    <a href="https://rushobot.onrender.com/" target="_blank" class="github-view-btn">
-                        <img src="logos/github.png" alt="GitHub" class="btn-git-icon">
-                        View Project
-                    </a>
-                </div>
-            </div>
-            <div class="kinetic-slide reveal reveal-up" style="--reveal-delay: 0.35s">
-                <div class="kinetic-visual-wrapper">
-                    <img src="logos/exe.png" alt="Eye Controlled Mouse Logo" class="kinetic-logo">
-                    <div class="hologram-glow"></div>
-                </div>
-                <div class="kinetic-info">
-                    <h2 class="kinetic-title">Eye Mouse</h2>
-                    <div class="kinetic-divider"></div>
-                    <p class="kinetic-desc">An innovative Human-Computer Interaction (HCI) application utilizing computer vision to precisely map and control mouse cursor movements through eye tracking.</p>
-                    
-                    <div class="github-view-btn" style="border: none; color: #fff;  border-radius: 12px; font-family: 'Rajdhani', sans-serif; font-size: 0.95rem; font-weight: 600; letter-spacing: 0.5px; padding: 14px 20px; display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; max-width: 100%; margin-bottom: 20px; cursor: default; pointer-events: none;">
-                        <span style="color: #00f7ff;">OPENCV</span>
-                        <span style="color: rgba(255,255,255,0.3);">|</span>
-                        <span style="color: #00f7ff;">MEDIAPIPE</span>
-                        <span style="color: rgba(255,255,255,0.3);">|</span>
-                        <span style="color: #00f7ff;">NUMPY</span>
-                        <span style="color: rgba(255,255,255,0.3);">|</span>
-                        <span style="color: #00f7ff;">PYAUTOGUI</span>
-                        <span style="color: rgba(255,255,255,0.3);">|</span>
-                        <span style="color: #00f7ff;">HUMAN COMPUTER INTERACTION</span>
-                    </div>
-
-                    <a href="https://drive.google.com/file/d/1oF2B1ap2t7eguH_3mSvMo_0H1tpLOkJ0/view?usp=sharing" download class="github-view-btn">
-                        <img src="logos/download.png" alt="Download" class="btn-git-icon">
-                        Download EXE (V 2.0)
-                    </a>
-                </div>
-            </div>
-            <div class="kinetic-slide reveal reveal-up" style="--reveal-delay: 0.45s">
-                <div class="kinetic-visual-wrapper">
-                    <img src="logos/exe1.png" alt="Hand Gesture Control Logo" class="kinetic-logo">
-                    <div class="hologram-glow"></div>
-                </div>
-                <div class="kinetic-info">
-                    <h2 class="kinetic-title">Hand Gesture Control</h2>
-                    <div class="kinetic-divider"></div>
-                    <p class="kinetic-desc">A real-time computer vision application that maps hand movements to control the mouse cursor, simulate clicks, adjust system volume levels, and manage media playback seamlessly through custom gestures.</p>
-                    
-                    <div class="github-view-btn" style="border: none; color: #fff;  border-radius: 12px; font-family: 'Rajdhani', sans-serif; font-size: 0.95rem; font-weight: 600; letter-spacing: 0.5px; padding: 14px 20px; display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; max-width: 100%; margin-bottom: 20px; cursor: default; pointer-events: none;">
-                        <span style="color: #00f7ff;">OPENCV</span>
-                        <span style="color: rgba(255,255,255,0.3);">|</span>
-                        <span style="color: #00f7ff;">MEDIAPIPE</span>
-                        <span style="color: rgba(255,255,255,0.3);">|</span>
-                        <span style="color: #00f7ff;">NUMPY</span>
-                        <span style="color: rgba(255,255,255,0.3);">|</span>
-                        <span style="color: #00f7ff;">PYTHON</span>
-                        <span style="color: rgba(255,255,255,0.3);">|</span>
-                        <span style="color: #00f7ff;">HUMAN COMPUTER INTERACTION</span>
-                    </div>
-
-                    <a href="https://drive.google.com/file/d/1hDJE7NqAKrK4h5K5YsDQqcEi_V-6ryej/view?usp=sharing" target="_blank" class="github-view-btn">
-                        <img src="logos/exe.png" alt="GitHub" class="btn-git-icon">
-                        Download EXE (V 1.1)
-                    </a>
-                </div>
-            </div>
-        </div>
-    </section>
-
-   <section id="Testimonials">
-    <div id="below">
-        <h1>
-            <span class="handwriting reveal reveal-up">What People Say About Me</span>
-            <span class="bold reveal reveal-up testimonial-gradient" style="--reveal-delay: 0.12s">Testimonials</span>
-        </h1>
-    </div>
-    
-
-    <div class="testimonials-slider-wrapper">
-        <div class="testimonials-container">
-            <div class="testimonial-card active">
-                <p class="testimonial-text">
-                    Rupayan is a highly skilled and dedicated software engineer who consistently delivers exceptional results. His ability to solve complex problems with innovative solutions is truly impressive. He is a great team player, always willing to collaborate and share his knowledge. I have no doubt that Rupayan will continue to excel in his career and make significant contributions to the tech industry.
-                </p>
-                <span class="testimonial-author">Anonymous</span>
-            </div>
-
-            <div class="testimonial-card">
-                <p class="testimonial-text">
-                    I had the pleasure of working with Rupayan on a challenging project, and his expertise and dedication were instrumental in our success. He consistently went above and beyond to ensure that our project was delivered on time and exceeded expectations. Rupayan's ability to communicate complex technical concepts in a clear and concise manner made him an invaluable asset to our team. I highly recommend Rupayan for any software engineering role.
-                </p>
-                <span class="testimonial-author">Anonymous</span>
-                <a href="#" target="_blank" class="testimonial-portfolio"></a>
-            </div>
-
-            <div class="testimonial-card">
-                <p class="testimonial-text">
-                    Nice to work with Rupayan.
-                </p>
-                <span class="testimonial-author">Aneek Chatterjee</span>
-            </div>
-        </div>
-    </div>
-</section>
-
-
-<section id="contact">
-    <div class="right side">
-        <h1 class="connect-heading reveal reveal-up">
-            <span class="lets-word">Let's</span>
-            <span class="connect-word">Connect</span>
-        </h1>
-
-        <h3 class="reveal reveal-up" style="--reveal-delay: 0.1s">
-            Want to Create Something Amazing websites and applications?
-        </h3>
-
-        <section class="socialmedia reveal reveal-up" style="--reveal-delay: 0.2s">
-            <a href="#" onclick="copyEmail(event)"><img src="logos/Gmail.png" alt="Gmail"></a>
-            <a href="https://github.com/DevRC891"><img src="logos/github.png" alt="GitHub"></a>
-            <a href="https://www.linkedin.com/in/rupayanchattaraj/"><img src="logos/linkedin.png" alt="LinkedIn"></a>
-            <a href="https://x.com/rupayan_01"><img src="logos/xtwitter.png" alt="Twitter"></a>
-        </section>
-    </div>
-
-    <div class="Left side">
-        <form id="connect-form">
-
-            <div class="reveal reveal-right" style="--reveal-delay: 0.05s">
-                <label for="connect-name">Full Name</label>
-                <input
-                    type="text"
-                    id="connect-name"
-                    name="connect-name"
-                    placeholder="Enter your name"
-                    required>
-            </div>
-            <br>
-            <div class="reveal reveal-right" style="--reveal-delay: 0.15s">
-                <label for="connect-message">Description</label>
-                <textarea
-                    id="connect-message"
-                    name="connect-message"
-                    placeholder="Describe your project"
-                    required></textarea>
-            </div>
-            <br>
-            <div class="reveal reveal-right" style="--reveal-delay: 0.25s">
-                <label for="connect-email">Email to contact</label>
-                <input
-                    type="email"
-                    id="connect-email"
-                    name="connect-email"
-                    placeholder="Enter your email"
-                    required>
-            </div>
-            <br>
-            <button
-                type="submit"
-                class="reveal reveal-up"
-                style="--reveal-delay: 0.35s">
-                Submit
-            </button>
-
-        </form>
-    </div>
-</section>
-<footer class="apple-footer">
-    <div class="footer-content">
-        <p>© 2026 Rupayan Chattaraj. All Rights Reserved.</p>
-    </div>
-</footer>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.birds.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vanta@0.5.24/dist/vanta.rings.min.js"></script>
-    <script src="https://unpkg.com/@lottiefiles/dotlottie-wc@0.9.14/dist/dotlottie-wc.js" type="module"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    </footer>
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
