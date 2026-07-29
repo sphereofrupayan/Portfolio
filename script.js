@@ -592,7 +592,7 @@ function appendMessage(text, sender = "bot") {
             : text;
 
     msg.innerHTML = `
-        <span class="msg-avatar">${sender === "bot" ? "🤖" : "🧑"}</span>
+        <span class="msg-avatar">${sender === "bot" ? "AI" : "🧑"}</span>
         <div class="msg-bubble">${content}</div>
     `;
 
