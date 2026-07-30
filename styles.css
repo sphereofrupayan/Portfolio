@@ -2650,3 +2650,59 @@ nav ul li.nav-links a:hover {
 .msg-bubble a:hover{
     text-decoration:underline;
 }
+
+
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Noto+Sans:wght@700&family=Noto+Sans+Devanagari:wght@700&family=Noto+Sans+Bengali:wght@700&family=Noto+Sans+Arabic:wght@700&family=Noto+Sans+JP:wght@700&family=Noto+Sans+KR:wght@700&family=Noto+Sans+SC:wght@700&display=swap');
+
+#hello-intro{
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background: #000000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#hello-word{
+    font-size: clamp(3rem, 13vw, 9rem);
+    color: #ffffff;
+    opacity: 0;
+    transform: scale(0.85);
+    text-shadow: 0 0 40px rgba(29,169,192,0.25);
+}
+
+#hello-word.script{
+    font-family: 'Orbitron', cursive;
+    font-weight: 700;
+}
+
+
+#hello-word.lang-default { font-family: 'Noto Sans', sans-serif; font-weight: 700; }
+#hello-word.lang-hi      { font-family: 'Noto Sans Devanagari', sans-serif; font-weight: 700; }
+#hello-word.lang-bn      { font-family: 'Noto Sans Bengali', sans-serif; font-weight: 700; }
+#hello-word.lang-ar      { font-family: 'Noto Sans Arabic', sans-serif; font-weight: 700; direction: rtl; }
+#hello-word.lang-jp      { font-family: 'Noto Sans JP', sans-serif; font-weight: 700; }
+#hello-word.lang-kr      { font-family: 'Noto Sans KR', sans-serif; font-weight: 700; }
+#hello-word.lang-cn      { font-family: 'Noto Sans SC', sans-serif; font-weight: 700; }
+
+#hello-word.show{
+    animation: helloPop 0.42s cubic-bezier(.2,.8,.3,1) forwards;
+}
+
+@keyframes helloPop{
+    0%   { opacity: 0; transform: scale(0.8); }
+    45%  { opacity: 1; transform: scale(1.04); }
+    100% { opacity: 1; transform: scale(1); }
+}
+
+#hello-intro.fade-out{
+    animation: helloIntroFade 0.7s ease forwards;
+}
+@keyframes helloIntroFade{
+    to { opacity: 0; visibility: hidden; }
+}
+
+@media (prefers-reduced-motion: reduce){
+    #hello-intro{ display: none; }
+}
