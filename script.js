@@ -1,3 +1,53 @@
+(function(){
+    const greetings = [
+     { text: "Hello",       cls: "script" },      
+        { text: "नमस्ते",       cls: "lang-hi" },     
+        { text: "হ্যালো",       cls: "lang-bn" },    
+        { text: "Bonjour",     cls: "lang-default" }, 
+        { text: "Hola",        cls: "lang-default" }, 
+        { text: "Ciao",        cls: "lang-default" }, 
+        { text: "Hallo",       cls: "lang-default" }, 
+        { text: "Olá",         cls: "lang-default" }, 
+        { text: "Merhaba",     cls: "lang-default" }, 
+        { text: "Привет",      cls: "lang-default" }, 
+        { text: "こんにちは",     cls: "lang-jp" },     
+        { text: "안녕하세요",     cls: "lang-kr" },    
+        { text: "你好",         cls: "lang-cn" },    
+        { text: "مرحبا",        cls: "lang-ar" },     
+        { text: "Hello",       cls: "script" }        
+];
+
+    const introEl = document.getElementById('hello-intro');
+    const wordEl  = document.getElementById('hello-word');
+    if (!introEl || !wordEl) return;
+
+    document.body.style.overflow = 'hidden';
+
+    let i = 0;
+    const stepMs = 170;
+
+    function showNext(){
+        wordEl.className = '';
+        void wordEl.offsetWidth; 
+        wordEl.textContent = greetings[i].text;
+        wordEl.classList.add(greetings[i].cls, 'show');
+        i++;
+
+        if (i < greetings.length){
+            setTimeout(showNext, stepMs);
+        } else {
+            setTimeout(() => {
+                introEl.classList.add('fade-out');
+                document.body.style.overflow = '';
+            }, 500);
+            setTimeout(() => introEl.remove(), 1300);
+        }
+    }
+
+    showNext();
+})();
+
+
 VANTA.BIRDS({
     el: "#vanta-birds",
     THREE: THREE,
