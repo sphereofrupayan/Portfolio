@@ -2654,14 +2654,35 @@ nav ul li.nav-links a:hover {
 
 @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Noto+Sans:wght@700&family=Noto+Sans+Devanagari:wght@700&family=Noto+Sans+Bengali:wght@700&family=Noto+Sans+Arabic:wght@700&family=Noto+Sans+JP:wght@700&family=Noto+Sans+KR:wght@700&family=Noto+Sans+SC:wght@700&display=swap');
 
-#hello-intro{
+#hello-intro {
     position: fixed;
     inset: 0;
     z-index: 9999;
-    background: #000000;
+    background-color: #0d0d0d;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
+    gap: 56px; 
+}
+
+#hello-word {
+    position: static;
+    text-align: center;
+    line-height: 1;
+    margin: 0;
+}
+
+#hello-intro img {
+    position: static;
+    width: 160px;
+    height: auto;
+    display: block;
+    margin: 0;
+}
+
+.fade-out {
+    animation: helloIntroFade 0.8s ease forwards;
 }
 
 #hello-word{
@@ -2696,9 +2717,8 @@ nav ul li.nav-links a:hover {
     100% { opacity: 1; transform: scale(1); }
 }
 
-#hello-intro.fade-out{
-    animation: helloIntroFade 0.7s ease forwards;
-}
+
+
 @keyframes helloIntroFade{
     to { opacity: 0; visibility: hidden; }
 }
