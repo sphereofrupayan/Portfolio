@@ -1,6 +1,6 @@
 (function(){
     const greetings = [
-     { text: "Hello",       cls: "script" },      
+        { text: "Hello",       cls: "script" },      
         { text: "नमस्ते",       cls: "lang-hi" },     
         { text: "হ্যালো",       cls: "lang-bn" },    
         { text: "Bonjour",     cls: "lang-default" }, 
@@ -15,7 +15,7 @@
         { text: "你好",         cls: "lang-cn" },    
         { text: "مرحبا",        cls: "lang-ar" },     
         { text: "Hello",       cls: "script" }        
-];
+    ];
 
     const introEl = document.getElementById('hello-intro');
     const wordEl  = document.getElementById('hello-word');
