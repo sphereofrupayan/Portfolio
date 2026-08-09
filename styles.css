@@ -371,17 +371,22 @@ nav ul li.nav-links a:hover {
     text-align: center;
     position: relative;
     z-index: 2;
-    margin-bottom: clamp(10px, 2vh, 20px);
+    max-width: 100%;
+    width: 100%;
+    margin: 0 auto clamp(24px, 4vh, 44px);
+    padding: 0 20px;
 }
 
 .tech-eyebrow {
-    display: block;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
     font-family: 'Rajdhani', sans-serif;
-    font-size: clamp(0.72rem, 1.2vw, 0.9rem);
+    font-size: clamp(0.7rem, 1.1vw, 0.82rem);
     font-weight: 700;
-    letter-spacing: 6px;
+    letter-spacing: 5px;
     text-transform: uppercase;
-    margin-bottom: 14px;
+    margin-bottom: 16px;
     background: linear-gradient(90deg, #1da9c0, #a78bfa, #00ffff, #1da9c0);
     background-size: 280% auto;
     -webkit-background-clip: text;
@@ -390,15 +395,18 @@ nav ul li.nav-links a:hover {
     animation: eyebrowShimmer 4s linear infinite;
 }
 
+.tech-eyebrow::before,
 .tech-eyebrow::after {
     content: '';
-    display: block;
-    width: 40px;
-    height: 2px;
-    margin: 12px auto 0;
-    border-radius: 2px;
-    background: linear-gradient(90deg, transparent, #1da9c0, #a78bfa, transparent);
-    animation: underlinePulse 2.8s ease-in-out infinite;
+    width: 22px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, #1da9c0);
+    flex-shrink: 0;
+}
+
+.tech-eyebrow::after {
+    background: linear-gradient(90deg, #a78bfa, transparent);
+    animation: none;
 }
 
 @keyframes eyebrowShimmer {
@@ -412,18 +420,19 @@ nav ul li.nav-links a:hover {
 
 .tech-title {
     font-family: 'Orbitron', sans-serif;
-    font-size: clamp(1.7rem, 4vw, 3rem);
+    font-size: clamp(1.3rem, 4.6vw, 3.1rem);
     font-weight: 700;
-    letter-spacing: 1px;
-    line-height: 1.2;
-    margin: 0 0 12px;
+    letter-spacing: 0.5px;
+    line-height: 1.25;
+    margin: 0 0 14px;
+    white-space: nowrap;
     background: linear-gradient(115deg, #ffffff 20%, #1da9c0 42%, #a78bfa 58%, #ffffff 80%);
     background-size: 260% auto;
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
     animation: titleSheen 7s ease-in-out infinite;
-    filter: drop-shadow(0 0 26px rgba(167, 139, 250, 0.22));
+    filter: drop-shadow(0 0 30px rgba(167, 139, 250, 0.25));
 }
 
 @keyframes titleSheen {
@@ -433,10 +442,12 @@ nav ul li.nav-links a:hover {
 
 .tech-sub {
     font-family: 'Poppins', sans-serif;
-    font-size: clamp(0.75rem, 1.3vw, 0.95rem);
-    color: rgba(255, 255, 255, 0.52);
-    letter-spacing: 0.3px;
-    margin: 0;
+    font-size: clamp(0.8rem, 1.3vw, 0.98rem);
+    color: rgba(255, 255, 255, 0.5);
+    letter-spacing: 0.4px;
+    line-height: 1.6;
+    max-width: 460px;
+    margin: 0 auto;
     animation: subBreathe 4s ease-in-out infinite;
 }
 
@@ -1118,10 +1129,7 @@ nav ul li.nav-links a:hover {
     padding: 70px 5% 40px;
     position: relative;
     overflow: hidden;
-    background:
-        radial-gradient(circle at top left, rgba(0,255,170,0.05), transparent 30%),
-        radial-gradient(circle at bottom right, rgba(0,153,255,0.05), transparent 30%),
-        #0b0f17;
+    background: transparent;
 }
 
 #Projects::before,
@@ -2091,74 +2099,33 @@ nav ul li.nav-links a:hover {
     transform: rotate(180deg);
 }
 
-.skill-static span {
-    padding: 11px 24px;
-    font-family: 'Poppins', sans-serif;
-    font-size: 0.85rem;
-    font-weight: 500;
-    letter-spacing: 0.3px;
-    color: rgba(255,255,255,0.72);
-    background: transparent;
-    border: 1px solid rgba(255,255,255,0.10);
-    border-radius: 999px;
-    cursor: default;
-    transition: color 0.35s ease, border-color 0.35s ease, transform 0.35s ease, box-shadow 0.35s ease;
-}
-
 .skill-static {
     display: flex;
     flex-wrap: wrap;
     justify-content: flex-start;
     align-items: center;
-    gap: 0;
+    gap: 10px;
 }
 
 .skill-static span {
     position: relative;
-    padding: 6px 20px;
+    padding: 8px 18px;
     font-family: 'Poppins', sans-serif;
-    font-size: 0.92rem;
+    font-size: 0.86rem;
     font-weight: 500;
-    letter-spacing: 0.4px;
-    color: rgba(255,255,255,0.68);
-    background: transparent;
-    border: none;
+    letter-spacing: 0.3px;
+    color: rgba(255,255,255,0.75);
+    background: rgba(255,255,255,0.04);
+    border-radius: 999px;
     cursor: default;
-    transition: color 0.35s ease, transform 0.35s ease;
-}
-
-.skill-static span:not(:last-child)::after {
-    content: '';
-    position: absolute;
-    right: -2px;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 3px;
-    height: 3px;
-    border-radius: 50%;
-    background: rgba(255,255,255,0.25);
-}
-
-.skill-static span::before {
-    content: '';
-    position: absolute;
-    left: 20px;
-    right: 20px;
-    bottom: 2px;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, #1da9c0, transparent);
-    transform: scaleX(0);
-    transform-origin: center;
-    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: color 0.3s ease, background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .skill-static span:hover {
     color: #fff;
-    transform: translateY(-2px);
-}
-
-.skill-static span:hover::before {
-    transform: scaleX(1);
+    background: rgba(29,169,192,0.14);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(29,169,192,0.2);
 }
 
 @media (max-width: 600px) {
@@ -2172,16 +2139,42 @@ nav ul li.nav-links a:hover {
     max-height:0;
     overflow:hidden;
     padding: 0 6px;
-    transition:max-height .7s ease;
+    transition:max-height .8s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .skills-content.active{
-    max-height:1200px;
-    margin-top:40px;
+    max-height:2400px;
+    margin-top:48px;
+}
+
+.skills-content.active .skill-category {
+    animation: categoryFadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.skills-content.active .skill-category:nth-child(1) { animation-delay: 0.05s; }
+.skills-content.active .skill-category:nth-child(2) { animation-delay: 0.1s; }
+.skills-content.active .skill-category:nth-child(3) { animation-delay: 0.15s; }
+.skills-content.active .skill-category:nth-child(4) { animation-delay: 0.2s; }
+.skills-content.active .skill-category:nth-child(5) { animation-delay: 0.25s; }
+.skills-content.active .skill-category:nth-child(6) { animation-delay: 0.3s; }
+.skills-content.active .skill-category:nth-child(7) { animation-delay: 0.35s; }
+
+@keyframes categoryFadeIn {
+    from { opacity: 0; transform: translateY(14px); }
+    to   { opacity: 1; transform: translateY(0); }
 }
 
 .skill-category {
-    margin-bottom: 34px;
+    position: relative;
+    margin-bottom: 24px;
+    padding: 22px 26px;
+    border-radius: 18px;
+    background: transparent;
+    transition: transform 0.4s ease;
+}
+
+.skill-category:hover {
+    transform: translateY(-3px);
 }
 
 .skill-category h3 {
@@ -2189,12 +2182,12 @@ nav ul li.nav-links a:hover {
     align-items: center;
     gap: 10px;
     font-family: 'Rajdhani', sans-serif;
-    font-size: 0.78rem;
+    font-size: 0.74rem;
     font-weight: 700;
     letter-spacing: 3px;
     text-transform: uppercase;
     color: rgba(255,255,255,0.55);
-    margin-bottom: 16px;
+    margin-bottom: 14px;
 }
 
 .cat-dot {
