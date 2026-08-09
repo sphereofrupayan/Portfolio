@@ -377,30 +377,72 @@ nav ul li.nav-links a:hover {
 .tech-eyebrow {
     display: block;
     font-family: 'Rajdhani', sans-serif;
-    font-size: 0.7rem;
+    font-size: clamp(0.72rem, 1.2vw, 0.9rem);
     font-weight: 700;
-    letter-spacing: 5px;
+    letter-spacing: 6px;
     text-transform: uppercase;
-    color: #1da9c0;
-    text-shadow: 0 0 10px rgba(29,169,192,0.4);
-    margin-bottom: 6px;
+    margin-bottom: 14px;
+    background: linear-gradient(90deg, #1da9c0, #a78bfa, #00ffff, #1da9c0);
+    background-size: 280% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: eyebrowShimmer 4s linear infinite;
+}
+
+.tech-eyebrow::after {
+    content: '';
+    display: block;
+    width: 40px;
+    height: 2px;
+    margin: 12px auto 0;
+    border-radius: 2px;
+    background: linear-gradient(90deg, transparent, #1da9c0, #a78bfa, transparent);
+    animation: underlinePulse 2.8s ease-in-out infinite;
+}
+
+@keyframes eyebrowShimmer {
+    to { background-position: -280% center; }
+}
+
+@keyframes underlinePulse {
+    0%, 100% { opacity: 0.4; width: 40px; }
+    50%      { opacity: 1; width: 72px; }
 }
 
 .tech-title {
     font-family: 'Orbitron', sans-serif;
-    font-size: clamp(1.4rem, 3vw, 2.2rem);
+    font-size: clamp(1.7rem, 4vw, 3rem);
     font-weight: 700;
-    color: #fff;
     letter-spacing: 1px;
     line-height: 1.2;
-    margin-bottom: 5px;
+    margin: 0 0 12px;
+    background: linear-gradient(115deg, #ffffff 20%, #1da9c0 42%, #a78bfa 58%, #ffffff 80%);
+    background-size: 260% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: titleSheen 7s ease-in-out infinite;
+    filter: drop-shadow(0 0 26px rgba(167, 139, 250, 0.22));
+}
+
+@keyframes titleSheen {
+    0%, 100% { background-position: 0% center; }
+    50%      { background-position: 100% center; }
 }
 
 .tech-sub {
     font-family: 'Poppins', sans-serif;
-    font-size: clamp(0.78rem, 1.2vw, 0.88rem);
-    color: #4a4a4a;
+    font-size: clamp(0.75rem, 1.3vw, 0.95rem);
+    color: rgba(255, 255, 255, 0.52);
+    letter-spacing: 0.3px;
     margin: 0;
+    animation: subBreathe 4s ease-in-out infinite;
+}
+
+@keyframes subBreathe {
+    0%, 100% { opacity: 0.52; }
+    50%      { opacity: 0.85; }
 }
 
 .tech-orbit-wrapper {
@@ -1110,7 +1152,14 @@ nav ul li.nav-links a:hover {
     z-index: 2;
     text-align: center;
 }
-
+#projects-bubble-canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    pointer-events: none;
+}
 #Projects h1 {
     display: flex;
     flex-direction: column;
@@ -1520,35 +1569,27 @@ nav ul li.nav-links a:hover {
 .apple-footer {
     width: 100%;
     padding: 28px 20px;
-    margin-top: 80px;
+    margin-top: 0;
 
-    background: rgba(255, 255, 255, 0.03);
-    backdrop-filter: blur(24px);
-    -webkit-backdrop-filter: blur(24px);
-
-    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    background: #0f0f0f;
 
     position: relative;
     overflow: hidden;
 }
 
-.apple-footer::before {
-    content: "";
+
+#footer-bubble-canvas {
     position: absolute;
-    top: -80px;
-    left: 50%;
-    transform: translateX(-50%);
-
-    width: 500px;
-    height: 180px;
-
-    background: radial-gradient(
-        circle,
-        rgba(255,255,255,0.04),
-        transparent 70%
-    );
-
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
     pointer-events: none;
+}
+
+.apple-footer .footer-content {
+    position: relative;
+    z-index: 2;
 }
 
 .footer-content {
@@ -1586,14 +1627,15 @@ nav ul li.nav-links a:hover {
 
 @media (max-width: 768px) {
     .apple-footer {
-        padding: 24px 16px;
+        padding: 60px 16px 32px;
+        min-height: 220px;
     }
 
     .footer-content p {
-        font-size: 0.82rem;
+        font-size: 0.72rem;
+        letter-spacing: 0.28em;
     }
 }
-
 
 #Testimonials {
     padding: 160px 6% 120px;
@@ -2235,13 +2277,16 @@ nav ul li.nav-links a:hover {
 }
 
 @media (prefers-reduced-motion: reduce) {
-    .skill-track {
-        animation: none;
-        flex-wrap: wrap;
-        width: 100%;
-    }
-}
 
+    .tech-section canvas {
+        display: none;
+    }
+
+    .tech-eyebrow, .tech-title, .tech-sub, .tech-eyebrow::after {
+        animation: none;
+    }
+
+}
 
 #rusho-bot {
     position: fixed;
