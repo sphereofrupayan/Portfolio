@@ -2696,6 +2696,14 @@ nav ul li.nav-links a:hover {
     z-index: 9999;
     background-color: #0d0d0d;
     overflow: hidden;
+    opacity: 1;
+    transition: opacity 1.1s cubic-bezier(0.4, 0, 0.2, 1);
+    will-change: opacity;
+}
+
+#hello-intro.fade-out {
+    opacity: 0;
+    pointer-events: none;
 }
 
 #hello-canvas {
@@ -2754,7 +2762,7 @@ nav ul li.nav-links a:hover {
 }
 .carousel-3d-scroll {
     position: relative;
-    height: 400vh; /* (number of cards) x 100vh — 4 cards here */
+    height: 400vh;
 }
 
 .carousel-3d-wrapper {
