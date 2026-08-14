@@ -128,6 +128,37 @@
         startIntro();
     }
 })();
+VANTA.BIRDS({
+    el: "#vanta-birds",
+    THREE: THREE,
+    mouseControls: false,
+    touchControls: false,
+    gyroControls: false,
+    backgroundColor: 0x111111,
+    backgroundAlpha: 1.0,
+    color1: 0x00FF7F,
+    color2: 0xFFEC00,
+    colorMode: "variance",
+    birdSize: 0.9,
+    wingSpan: 18,
+    speedLimit: 3.0,
+    speedMultiplier: 0.8,
+    separation: 80,
+    alignment: 20,
+    cohesion: 10,
+    quantity: 3,
+});
+
+VANTA.RINGS({
+    el: "#vanta-rings",
+    THREE: THREE,
+    mouseControls: true,
+    touchControls: true,
+    gyroControls: false,
+    backgroundColor: 0x111111,
+    backgroundAlpha: 0.0,
+    color: 0x1da9c0,
+});
 
 (function () {
     const canvas = document.getElementById('orbit-canvas');
@@ -988,14 +1019,13 @@ ctx.arc(drawX, drawY, p.r, 0, Math.PI * 2);
     resize();
     window.addEventListener('resize', resize);
 
-    const TRAIL_LIFE = 380; // ms a point stays visible
-    let points = []; // {x, y, t}
+    const TRAIL_LIFE = 380; 
+    let points = []; 
 
     window.addEventListener('mousemove', (e) => {
         const now = performance.now();
         const last = points[points.length - 1];
 
-        // skip near-duplicate points for a cleaner curve
         if (!last || Math.hypot(e.clientX - last.x, e.clientY - last.y) > 2) {
             points.push({ x: e.clientX, y: e.clientY, t: now });
         }
