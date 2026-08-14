@@ -1,52 +1,128 @@
-(function(){
-    const greetings = [
-        { text: "Hello",       cls: "script" },      
-        { text: "नमस्ते",       cls: "lang-hi" },     
-        { text: "হ্যালো",       cls: "lang-bn" },    
-        { text: "Bonjour",     cls: "lang-default" }, 
-        { text: "Hola",        cls: "lang-default" }, 
-        { text: "Ciao",        cls: "lang-default" }, 
-        { text: "Hallo",       cls: "lang-default" }, 
-        { text: "Olá",         cls: "lang-default" }, 
-        { text: "Merhaba",     cls: "lang-default" }, 
-        { text: "Привет",      cls: "lang-default" }, 
-        { text: "こんにちは",     cls: "lang-jp" },     
-        { text: "안녕하세요",     cls: "lang-kr" },    
-        { text: "你好",         cls: "lang-cn" },    
-        { text: "مرحبا",        cls: "lang-ar" },     
-        { text: "Hello",       cls: "script" }        
-    ];
-
+(function () {
     const introEl = document.getElementById('hello-intro');
-    const wordEl  = document.getElementById('hello-word');
-    if (!introEl || !wordEl) return;
+    const canvas  = document.getElementById('hello-canvas');
+    const loaderEl = document.getElementById('hello-loader');
+    if (!introEl || !canvas) return;
 
+    const ctx = canvas.getContext('2d');
     document.body.style.overflow = 'hidden';
 
-    let i = 0;
-    const stepMs = 170;
+    let W, H, dpr, particles = [];
 
-    function showNext(){
-        wordEl.className = '';
-        void wordEl.offsetWidth; 
-        wordEl.textContent = greetings[i].text;
-        wordEl.classList.add(greetings[i].cls, 'show');
-        i++;
+    function resize() {
+        dpr = window.devicePixelRatio || 1;
+        W = window.innerWidth;
+        H = window.innerHeight;
+        canvas.width  = W * dpr;
+        canvas.height = H * dpr;
+        canvas.style.width  = W + 'px';
+        canvas.style.height = H + 'px';
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
 
-        if (i < greetings.length){
-            setTimeout(showNext, stepMs);
+    function getTextPoints(text, fontSize, gap) {
+        const off = document.createElement('canvas');
+        off.width = W; off.height = H;
+        const octx = off.getContext('2d');
+        octx.fillStyle = '#fff';
+        octx.font = `700 ${fontSize}px Orbitron, sans-serif`;
+        octx.textAlign = 'center';
+        octx.textBaseline = 'middle';
+        octx.fillText(text, W / 2, H / 2);
+        const data = octx.getImageData(0, 0, W, H).data;
+        const points = [];
+        for (let y = 0; y < H; y += gap) {
+            for (let x = 0; x < W; x += gap) {
+                if (data[(y * W + x) * 4 + 3] > 128) points.push({ x, y });
+            }
+        }
+        return points;
+    }
+
+    function initParticles() {
+        const fontSize = Math.min(W * 0.16, 190);
+        const gap = Math.max(4, Math.round(fontSize / 42));
+        const points = getTextPoints('Welcome', fontSize, gap);
+        const cx = W / 2, cy = H / 2;
+
+        particles = points.map(p => {
+            const angle = Math.random() * Math.PI * 2;
+            const dist  = Math.max(W, H) * (0.5 + Math.random() * 0.35);
+            const distFromCenter = Math.hypot(p.x - cx, p.y - cy);
+
+            return {
+                x: cx + Math.cos(angle) * dist,
+                y: cy + Math.sin(angle) * dist,
+                tx: p.x, ty: p.y,
+                r: Math.random() * 1.1 + 0.8,
+                // outer letters (further from center) start slightly later —
+                // gives a calm, inward "gathering" read rather than chaotic snap
+                delay: 200 + distFromCenter * 0.9 + Math.random() * 260
+            };
+        });
+    }
+
+    resize();
+    initParticles();
+    // reveal the loader once the slowest particle has arrived
+const maxDistFromCenter = Math.hypot(W / 2, H / 2);
+const revealDelay = 200 + maxDistFromCenter * 0.9 + 260 + 2200 - 600; // show ~600ms before hold ends
+setTimeout(() => { if (loaderEl) loaderEl.classList.add('show'); }, revealDelay); // matches delay + FORM_MS
+setTimeout(() => { if (loaderEl) loaderEl.classList.add('show'); }, revealDelay);
+    window.addEventListener('resize', () => { resize(); initParticles(); });
+
+    // slower, steadier formation + gentle overshoot settle
+    const FORM_MS    = 2200;
+    const SETTLE_MS  = 500;
+    const HOLD_MS    = 1100;
+    let start = null;
+
+    function easeOutQuint(t) { return 1 - Math.pow(1 - t, 5); }
+
+    function animate(ts) {
+        if (!start) start = ts;
+        const elapsed = ts - start;
+        ctx.clearRect(0, 0, W, H);
+
+        let allSettled = true;
+
+        particles.forEach(p => {
+            const localT = (elapsed - p.delay) / FORM_MS;
+            const t = Math.max(0, Math.min(1, localT));
+            if (t < 1) allSettled = false;
+
+            const eased = easeOutQuint(t);
+
+            // tiny overshoot for a soft, premium "settle" rather than a hard stop
+            const settleT = Math.max(0, Math.min(1, (elapsed - p.delay - FORM_MS) / SETTLE_MS));
+            const overshoot = t >= 1 ? Math.sin(settleT * Math.PI) * (1 - settleT) * 3 : 0;
+
+            const x = p.x + (p.tx - p.x) * eased;
+            const y = p.y + (p.ty - p.y) * eased - overshoot;
+
+            const glowStrength = 0.35 + eased * 0.65;
+            ctx.beginPath();
+            ctx.arc(x, y, p.r, 0, Math.PI * 2);
+            ctx.shadowColor = 'rgba(255,255,255,0.6)';
+            ctx.shadowBlur = 5;
+            ctx.fillStyle = `rgba(255,255,255,${glowStrength})`;
+            ctx.fill();
+        });
+
+        const totalElapsed = elapsed;
+        const minFinish = FORM_MS + SETTLE_MS + 260 * 2; // covers last delayed particle
+
+        if (totalElapsed < minFinish + HOLD_MS) {
+            requestAnimationFrame(animate);
         } else {
-            setTimeout(() => {
-                introEl.classList.add('fade-out');
-                document.body.style.overflow = '';
-            }, 500);
-            setTimeout(() => introEl.remove(), 1300);
+            introEl.classList.add('fade-out');
+            document.body.style.overflow = '';
+            setTimeout(() => introEl.remove(), 950);
         }
     }
 
-    showNext();
+    requestAnimationFrame(animate);
 })();
-
 
 VANTA.BIRDS({
     el: "#vanta-birds",
@@ -930,4 +1006,469 @@ ctx.arc(drawX, drawY, p.r, 0, Math.PI * 2);
 
     resize();
     requestAnimationFrame(frame);
+})();
+(function () {
+    const canvas = document.getElementById('cursor-spotlight');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+
+    let W, H, dpr;
+    function resize() {
+        dpr = window.devicePixelRatio || 1;
+        W = window.innerWidth;
+        H = window.innerHeight;
+        canvas.width = W * dpr;
+        canvas.height = H * dpr;
+        canvas.style.width = W + 'px';
+        canvas.style.height = H + 'px';
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+    resize();
+    window.addEventListener('resize', resize);
+
+    const TRAIL_LIFE = 380; // ms a point stays visible
+    let points = []; // {x, y, t}
+
+    window.addEventListener('mousemove', (e) => {
+        const now = performance.now();
+        const last = points[points.length - 1];
+
+        // skip near-duplicate points for a cleaner curve
+        if (!last || Math.hypot(e.clientX - last.x, e.clientY - last.y) > 2) {
+            points.push({ x: e.clientX, y: e.clientY, t: now });
+        }
+    });
+
+    function easeOutCubic(t) { return 1 - Math.pow(1 - t, 3); }
+
+    function drawStroke(pts, widthMul, colorStops, blur, alphaMul) {
+        if (pts.length < 2) return;
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+
+        for (let i = 1; i < pts.length - 1; i++) {
+            const p0 = pts[i - 1];
+            const p1 = pts[i];
+            const p2 = pts[i + 1];
+
+            // midpoints for smooth quadratic curve segments
+            const mid1 = { x: (p0.x + p1.x) / 2, y: (p0.y + p1.y) / 2 };
+            const mid2 = { x: (p1.x + p2.x) / 2, y: (p1.y + p2.y) / 2 };
+
+            const now = performance.now();
+            const age = (now - p1.t) / TRAIL_LIFE;
+            const life = Math.max(0, 1 - age);
+            const eased = easeOutCubic(life);
+
+            if (eased <= 0) continue;
+
+            const grad = ctx.createLinearGradient(mid1.x, mid1.y, mid2.x, mid2.y);
+            grad.addColorStop(0, colorStops[0](eased * alphaMul));
+            grad.addColorStop(1, colorStops[1](eased * alphaMul));
+
+            ctx.beginPath();
+            ctx.moveTo(mid1.x, mid1.y);
+            ctx.quadraticCurveTo(p1.x, p1.y, mid2.x, mid2.y);
+            ctx.strokeStyle = grad;
+            ctx.lineWidth = Math.max(0.4, widthMul * eased);
+            ctx.shadowColor = colorStops[1](eased * 0.9);
+            ctx.shadowBlur = blur;
+            ctx.stroke();
+        }
+    }
+
+    function draw() {
+        const now = performance.now();
+        ctx.clearRect(0, 0, W, H);
+
+        points = points.filter(p => now - p.t < TRAIL_LIFE);
+
+        if (points.length > 2) {
+            // outer soft glow — wide, blurred, low opacity
+            drawStroke(
+                points, 11, 
+                [
+                    a => `rgba(255, 40, 90, ${a * 0.28})`,
+                    a => `rgba(255, 110, 180, ${a * 0.28})`
+                ],
+                22, 1
+            );
+
+            // mid glow — medium width, richer color
+            drawStroke(
+                points, 5.5,
+                [
+                    a => `rgba(255, 55, 100, ${a * 0.55})`,
+                    a => `rgba(255, 130, 190, ${a * 0.55})`
+                ],
+                12, 1
+            );
+
+            // inner hot core — thin, bright, near-white edge for a premium sheen
+            drawStroke(
+                points, 1.8,
+                [
+                    a => `rgba(255, 180, 210, ${a * 0.85})`,
+                    a => `rgba(255, 220, 235, ${a * 0.85})`
+                ],
+                6, 1
+            );
+        }
+
+        requestAnimationFrame(draw);
+    }
+
+    requestAnimationFrame(draw);
+})();
+(function () {
+    const scrollSection = document.getElementById('carousel3dScroll');
+    const stage = document.getElementById('carousel3d');
+    if (!scrollSection || !stage) return;
+
+    const cards = Array.from(stage.querySelectorAll('.carousel-3d-card'));
+    const prevBtn = document.getElementById('carousel3dPrev');
+    const nextBtn = document.getElementById('carousel3dNext');
+    const dotsWrap = document.getElementById('carousel3dDots');
+    const total = cards.length;
+
+    cards.forEach((_, i) => {
+        const dot = document.createElement('span');
+        dot.addEventListener('click', () => scrollToIndex(i));
+        dotsWrap.appendChild(dot);
+    });
+    const dots = Array.from(dotsWrap.children);
+
+    let activeFloat = 0;
+    let ticking = false;
+
+    function layout(pos) {
+        cards.forEach((card, i) => {
+            const offset = i - pos;
+            const abs = Math.min(Math.abs(offset), 3.2);
+            const dir = offset === 0 ? 0 : (offset > 0 ? 1 : -1);
+
+            const translateX = offset * 300;
+            const translateZ = -abs * 150;
+            const rotateY = -dir * Math.min(abs * 40, 50);
+            const scale = Math.max(0.5, 1 - abs * 0.18);
+            const opacity = Math.max(0, 1 - abs * 0.38);
+            const blur = Math.min(abs * 1.6, 4.5);
+            const brightness = Math.max(0.4, 1 - abs * 0.22);
+
+            card.style.transform =
+                `translate(-50%, 0) translateX(${translateX}px) translateZ(${translateZ}px) rotateY(${rotateY}deg) scale(${scale})`;
+            card.style.opacity = opacity;
+            card.style.zIndex = Math.round(100 - abs * 10);
+            card.style.filter = `blur(${blur}px) brightness(${brightness})`;
+            card.classList.toggle('is-active', abs < 0.5);
+        });
+
+        const nearest = Math.round(pos + total) % total;
+        dots.forEach((d, i) => d.classList.toggle('active', i === nearest));
+    }
+
+    function updateFromScroll() {
+        const rect = scrollSection.getBoundingClientRect();
+        const scrollableDist = scrollSection.offsetHeight - window.innerHeight;
+        const scrolled = -rect.top;
+        let progress = scrollableDist > 0 ? scrolled / scrollableDist : 0;
+        progress = Math.max(0, Math.min(1, progress));
+
+        activeFloat = progress * (total - 1);
+        layout(activeFloat);
+        ticking = false;
+    }
+
+    window.addEventListener('scroll', () => {
+        if (!ticking) {
+            requestAnimationFrame(updateFromScroll);
+            ticking = true;
+        }
+    }, { passive: true });
+
+    window.addEventListener('resize', updateFromScroll);
+
+    function scrollToIndex(index) {
+        const scrollableDist = scrollSection.offsetHeight - window.innerHeight;
+        const targetProgress = index / (total - 1);
+        const sectionTop = scrollSection.getBoundingClientRect().top + window.scrollY;
+        window.scrollTo({
+            top: sectionTop + targetProgress * scrollableDist,
+            behavior: 'smooth'
+        });
+    }
+
+    cards.forEach((card, i) => {
+        card.addEventListener('click', () => {
+            const nearest = Math.round(activeFloat);
+            if (i !== nearest) scrollToIndex(i);
+        });
+    });
+
+    prevBtn.addEventListener('click', () => scrollToIndex(Math.max(0, Math.round(activeFloat) - 1)));
+    nextBtn.addEventListener('click', () => scrollToIndex(Math.min(total - 1, Math.round(activeFloat) + 1)));
+
+    // keyboard nav when section is in view
+    window.addEventListener('keydown', (e) => {
+        const rect = scrollSection.getBoundingClientRect();
+        const inView = rect.top < window.innerHeight && rect.bottom > 0;
+        if (!inView) return;
+        if (e.key === 'ArrowLeft') scrollToIndex(Math.max(0, Math.round(activeFloat) - 1));
+        if (e.key === 'ArrowRight') scrollToIndex(Math.min(total - 1, Math.round(activeFloat) + 1));
+    });
+
+    updateFromScroll();
+})();
+(function () {
+    const cards = document.querySelectorAll('.carousel-3d-card');
+    if (!cards.length) return;
+
+    const typedCards = new WeakSet();
+
+    function typeText(el, cursorEl, fullText, speed, onDone) {
+        el.textContent = '';
+        let i = 0;
+        if (cursorEl) cursorEl.classList.add('show');
+
+        function step() {
+            if (i < fullText.length) {
+                el.textContent += fullText[i];
+                i++;
+                // slight natural rhythm — pause a touch longer on punctuation
+                const ch = fullText[i - 1];
+                const delay = /[,.]/.test(ch) ? speed * 6 : speed;
+                setTimeout(step, delay);
+            } else {
+                if (cursorEl) setTimeout(() => cursorEl.classList.remove('show'), 900);
+                if (onDone) onDone();
+            }
+        }
+        step();
+    }
+
+    function runCardTypewriter(card) {
+        if (typedCards.has(card)) return;
+        typedCards.add(card);
+
+        const titleSpan = card.querySelector('.kinetic-title .type-text');
+        const titleCursor = card.querySelector('.kinetic-title .type-cursor');
+        const descSpan = card.querySelector('.kinetic-desc .type-text');
+        const revealGroup = card.querySelector('.kinetic-reveal-group');
+
+        if (!titleSpan) return;
+        const titleFull = titleSpan.getAttribute('data-full') || '';
+        const descFull = descSpan ? descSpan.getAttribute('data-full') || '' : '';
+
+        typeText(titleSpan, titleCursor, titleFull, 55, () => {
+            if (descSpan) {
+                typeText(descSpan, null, descFull, 14, () => {
+                    if (revealGroup) revealGroup.classList.add('show');
+                });
+            } else if (revealGroup) {
+                revealGroup.classList.add('show');
+            }
+        });
+    }
+
+    function resetCard(card) {
+        typedCards.delete(card);
+        const titleSpan = card.querySelector('.kinetic-title .type-text');
+        const descSpan = card.querySelector('.kinetic-desc .type-text');
+        const revealGroup = card.querySelector('.kinetic-reveal-group');
+        if (titleSpan) titleSpan.textContent = '';
+        if (descSpan) descSpan.textContent = '';
+        if (revealGroup) revealGroup.classList.remove('show');
+    }
+
+    cards.forEach(card => {
+        const observer = new MutationObserver(() => {
+            if (card.classList.contains('is-active')) {
+                runCardTypewriter(card);
+            } else {
+                resetCard(card);
+            }
+        });
+        observer.observe(card, { attributes: true, attributeFilter: ['class'] });
+    });
+})();
+/* ---------- Premium aurora background per card ---------- */
+class CardAurora {
+    constructor(canvas) {
+        this.canvas = canvas;
+        this.ctx = canvas.getContext('2d');
+        this.running = false;
+        this.blobs = [
+            { x: 0.25, y: 0.3, r: 0.55, dx: 0.00018, dy: 0.00013, hue: 'rgba(0,247,255,' },
+            { x: 0.75, y: 0.65, r: 0.5,  dx: -0.00015, dy: 0.0002,  hue: 'rgba(138,43,226,' },
+            { x: 0.5,  y: 0.85, r: 0.4,  dx: 0.0001,   dy: -0.00016, hue: 'rgba(255,255,255,' }
+        ];
+        this.t = 0;
+        this.resize();
+    }
+
+    resize() {
+        const rect = this.canvas.parentElement.getBoundingClientRect();
+        const dpr = window.devicePixelRatio || 1;
+        this.W = rect.width;
+        this.H = rect.height;
+        this.canvas.width = this.W * dpr;
+        this.canvas.height = this.H * dpr;
+        this.canvas.style.width = this.W + 'px';
+        this.canvas.style.height = this.H + 'px';
+        this.ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+
+    draw() {
+        const ctx = this.ctx;
+        ctx.clearRect(0, 0, this.W, this.H);
+        ctx.fillStyle = '#0d0d0d';
+        ctx.fillRect(0, 0, this.W, this.H);
+
+        this.blobs.forEach(b => {
+            b.x += Math.sin(this.t * b.dx * 500) * 0.0006;
+            b.y += Math.cos(this.t * b.dy * 500) * 0.0006;
+            const cx = b.x * this.W;
+            const cy = b.y * this.H;
+            const r = b.r * Math.max(this.W, this.H);
+
+            const grad = ctx.createRadialGradient(cx, cy, 0, cx, cy, r);
+            grad.addColorStop(0, b.hue + '0.22)');
+            grad.addColorStop(1, b.hue + '0)');
+            ctx.fillStyle = grad;
+            ctx.beginPath();
+            ctx.arc(cx, cy, r, 0, Math.PI * 2);
+            ctx.fill();
+        });
+
+        // fine premium grain overlay
+        ctx.globalAlpha = 0.035;
+        for (let i = 0; i < 60; i++) {
+            const x = Math.random() * this.W;
+            const y = Math.random() * this.H;
+            ctx.fillStyle = '#fff';
+            ctx.fillRect(x, y, 1, 1);
+        }
+        ctx.globalAlpha = 1;
+
+        this.t++;
+    }
+
+    loop() {
+        if (!this.running) return;
+        this.draw();
+        requestAnimationFrame(() => this.loop());
+    }
+
+    start() {
+        if (this.running) return;
+        this.running = true;
+        this.resize();
+        this.loop();
+    }
+
+    stop() {
+        this.running = false;
+    }
+}
+
+(function () {
+    const cards = document.querySelectorAll('.carousel-3d-card');
+    const auroraMap = new WeakMap();
+
+    cards.forEach(card => {
+        const canvas = card.querySelector('.card-aurora');
+        if (canvas) auroraMap.set(card, new CardAurora(canvas));
+    });
+
+    window.addEventListener('resize', () => {
+        cards.forEach(card => {
+            const aurora = auroraMap.get(card);
+            if (aurora) aurora.resize();
+        });
+    });
+
+    const auroraObserver = new MutationObserver(() => {
+        cards.forEach(card => {
+            const aurora = auroraMap.get(card);
+            if (!aurora) return;
+            card.classList.contains('is-active') ? aurora.start() : aurora.stop();
+        });
+    });
+    cards.forEach(card => auroraObserver.observe(card, { attributes: true, attributeFilter: ['class'] }));
+})();
+
+/* ---------- Efficient frame-based typewriter ---------- */
+(function () {
+    const cards = document.querySelectorAll('.carousel-3d-card');
+    if (!cards.length) return;
+
+    const typedCards = new WeakSet();
+    const CHARS_PER_SEC_TITLE = 26; // faster, smoother than setTimeout chains
+    const CHARS_PER_SEC_DESC  = 62;
+
+    function typeStream(el, cursorEl, fullText, charsPerSec, onDone) {
+        el.textContent = '';
+        if (cursorEl) cursorEl.classList.add('show');
+
+        let start = null;
+        function frame(ts) {
+            if (!start) start = ts;
+            const elapsedSec = (ts - start) / 1000;
+            const count = Math.min(fullText.length, Math.floor(elapsedSec * charsPerSec));
+            el.textContent = fullText.slice(0, count);
+
+            if (count < fullText.length) {
+                requestAnimationFrame(frame);
+            } else {
+                if (cursorEl) setTimeout(() => cursorEl.classList.remove('show'), 700);
+                if (onDone) onDone();
+            }
+        }
+        requestAnimationFrame(frame);
+    }
+
+    function runCardTypewriter(card) {
+        if (typedCards.has(card)) return;
+        typedCards.add(card);
+
+        const titleSpan = card.querySelector('.kinetic-title .type-text');
+        const titleCursor = card.querySelector('.kinetic-title .type-cursor');
+        const descSpan = card.querySelector('.kinetic-desc .type-text');
+        const revealGroup = card.querySelector('.kinetic-reveal-group');
+        if (!titleSpan) return;
+
+        const titleFull = titleSpan.getAttribute('data-full') || '';
+        const descFull = descSpan ? descSpan.getAttribute('data-full') || '' : '';
+
+        typeStream(titleSpan, titleCursor, titleFull, CHARS_PER_SEC_TITLE, () => {
+            if (descSpan) {
+                typeStream(descSpan, null, descFull, CHARS_PER_SEC_DESC, () => {
+                    if (revealGroup) revealGroup.classList.add('show');
+                });
+            } else if (revealGroup) {
+                revealGroup.classList.add('show');
+            }
+        });
+    }
+
+    function resetCard(card) {
+        typedCards.delete(card);
+        const titleSpan = card.querySelector('.kinetic-title .type-text');
+        const descSpan = card.querySelector('.kinetic-desc .type-text');
+        const revealGroup = card.querySelector('.kinetic-reveal-group');
+        if (titleSpan) titleSpan.textContent = '';
+        if (descSpan) descSpan.textContent = '';
+        if (revealGroup) revealGroup.classList.remove('show');
+    }
+
+    cards.forEach(card => {
+        const observer = new MutationObserver(() => {
+            if (card.classList.contains('is-active')) {
+                runCardTypewriter(card);
+            } else {
+                resetCard(card);
+            }
+        });
+        observer.observe(card, { attributes: true, attributeFilter: ['class'] });
+    });
 })();
