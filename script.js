@@ -6,6 +6,7 @@
 
     const ctx = canvas.getContext('2d');
     document.body.style.overflow = 'hidden';
+    const isMobile = window.innerWidth < 600;
 
     let W, H, dpr, particles = [];
 
@@ -39,9 +40,16 @@
         return points;
     }
 
+    const FORM_MS         = 900;
+    const SETTLE_MS       = 250;
+    const HOLD_MS         = 300;
+    const BASE_DELAY      = 60;
+    const DIST_FACTOR     = isMobile ? 0.22 : 0.32;
+    const MAX_RAND_DELAY  = isMobile ? 60 : 110;
+
     function initParticles() {
         const fontSize = Math.min(W * 0.16, 190);
-        const gap = Math.max(4, Math.round(fontSize / 42));
+        const gap = Math.max(isMobile ? 6 : 4, Math.round(fontSize / (isMobile ? 30 : 42)));
         const points = getTextPoints('Welcome', fontSize, gap);
         const cx = W / 2, cy = H / 2;
 
@@ -49,34 +57,27 @@
             const angle = Math.random() * Math.PI * 2;
             const dist  = Math.max(W, H) * (0.5 + Math.random() * 0.35);
             const distFromCenter = Math.hypot(p.x - cx, p.y - cy);
-
             return {
                 x: cx + Math.cos(angle) * dist,
                 y: cy + Math.sin(angle) * dist,
                 tx: p.x, ty: p.y,
                 r: Math.random() * 1.1 + 0.8,
-                // outer letters (further from center) start slightly later —
-                // gives a calm, inward "gathering" read rather than chaotic snap
-                delay: 200 + distFromCenter * 0.9 + Math.random() * 260
+                delay: BASE_DELAY + distFromCenter * DIST_FACTOR + Math.random() * MAX_RAND_DELAY
             };
         });
     }
 
     resize();
     initParticles();
-    // reveal the loader once the slowest particle has arrived
-const maxDistFromCenter = Math.hypot(W / 2, H / 2);
-const revealDelay = 200 + maxDistFromCenter * 0.9 + 260 + 2200 - 600; // show ~600ms before hold ends
-setTimeout(() => { if (loaderEl) loaderEl.classList.add('show'); }, revealDelay); // matches delay + FORM_MS
-setTimeout(() => { if (loaderEl) loaderEl.classList.add('show'); }, revealDelay);
+
+    const maxDistFromCenter = Math.hypot(W / 2, H / 2);
+    const maxDelay = BASE_DELAY + maxDistFromCenter * DIST_FACTOR + MAX_RAND_DELAY;
+    const revealDelay = Math.max(0, maxDelay + FORM_MS - 300);
+    setTimeout(() => { if (loaderEl) loaderEl.classList.add('show'); }, revealDelay);
+
     window.addEventListener('resize', () => { resize(); initParticles(); });
 
-    // slower, steadier formation + gentle overshoot settle
-    const FORM_MS    = 2200;
-    const SETTLE_MS  = 500;
-    const HOLD_MS    = 1100;
     let start = null;
-
     function easeOutQuint(t) { return 1 - Math.pow(1 - t, 5); }
 
     function animate(ts) {
@@ -84,35 +85,29 @@ setTimeout(() => { if (loaderEl) loaderEl.classList.add('show'); }, revealDelay)
         const elapsed = ts - start;
         ctx.clearRect(0, 0, W, H);
 
-        let allSettled = true;
-
         particles.forEach(p => {
-            const localT = (elapsed - p.delay) / FORM_MS;
-            const t = Math.max(0, Math.min(1, localT));
-            if (t < 1) allSettled = false;
+    const localT = (elapsed - p.delay) / FORM_MS;
+    const t = Math.max(0, Math.min(1, localT));
+    const eased = easeOutQuint(t);
+    const settleT = Math.max(0, Math.min(1, (elapsed - p.delay - FORM_MS) / SETTLE_MS));
+    const overshoot = t >= 1 ? Math.sin(settleT * Math.PI) * (1 - settleT) * 3 : 0;
+    const x = p.x + (p.tx - p.x) * eased;
+    const y = p.y + (p.ty - p.y) * eased - overshoot;
+    const glowStrength = 0.35 + eased * 0.65;
 
-            const eased = easeOutQuint(t);
+    // cheap glow: soft outer dot, no shadowBlur
+    ctx.beginPath();
+    ctx.arc(x, y, p.r * 1.8, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(255,255,255,${glowStrength * 0.15})`;
+    ctx.fill();
 
-            // tiny overshoot for a soft, premium "settle" rather than a hard stop
-            const settleT = Math.max(0, Math.min(1, (elapsed - p.delay - FORM_MS) / SETTLE_MS));
-            const overshoot = t >= 1 ? Math.sin(settleT * Math.PI) * (1 - settleT) * 3 : 0;
+    ctx.beginPath();
+    ctx.arc(x, y, p.r, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(255,255,255,${glowStrength})`;
+    ctx.fill();
+});
 
-            const x = p.x + (p.tx - p.x) * eased;
-            const y = p.y + (p.ty - p.y) * eased - overshoot;
-
-            const glowStrength = 0.35 + eased * 0.65;
-            ctx.beginPath();
-            ctx.arc(x, y, p.r, 0, Math.PI * 2);
-            ctx.shadowColor = 'rgba(255,255,255,0.6)';
-            ctx.shadowBlur = 5;
-            ctx.fillStyle = `rgba(255,255,255,${glowStrength})`;
-            ctx.fill();
-        });
-
-        const totalElapsed = elapsed;
-        const minFinish = FORM_MS + SETTLE_MS + 260 * 2; // covers last delayed particle
-
-        if (totalElapsed < minFinish + HOLD_MS) {
+        if (elapsed < maxDelay + FORM_MS + SETTLE_MS + HOLD_MS) {
             requestAnimationFrame(animate);
         } else {
             introEl.classList.add('fade-out');
@@ -1219,78 +1214,7 @@ ctx.arc(drawX, drawY, p.r, 0, Math.PI * 2);
 
     updateFromScroll();
 })();
-(function () {
-    const cards = document.querySelectorAll('.carousel-3d-card');
-    if (!cards.length) return;
 
-    const typedCards = new WeakSet();
-
-    function typeText(el, cursorEl, fullText, speed, onDone) {
-        el.textContent = '';
-        let i = 0;
-        if (cursorEl) cursorEl.classList.add('show');
-
-        function step() {
-            if (i < fullText.length) {
-                el.textContent += fullText[i];
-                i++;
-                // slight natural rhythm — pause a touch longer on punctuation
-                const ch = fullText[i - 1];
-                const delay = /[,.]/.test(ch) ? speed * 6 : speed;
-                setTimeout(step, delay);
-            } else {
-                if (cursorEl) setTimeout(() => cursorEl.classList.remove('show'), 900);
-                if (onDone) onDone();
-            }
-        }
-        step();
-    }
-
-    function runCardTypewriter(card) {
-        if (typedCards.has(card)) return;
-        typedCards.add(card);
-
-        const titleSpan = card.querySelector('.kinetic-title .type-text');
-        const titleCursor = card.querySelector('.kinetic-title .type-cursor');
-        const descSpan = card.querySelector('.kinetic-desc .type-text');
-        const revealGroup = card.querySelector('.kinetic-reveal-group');
-
-        if (!titleSpan) return;
-        const titleFull = titleSpan.getAttribute('data-full') || '';
-        const descFull = descSpan ? descSpan.getAttribute('data-full') || '' : '';
-
-        typeText(titleSpan, titleCursor, titleFull, 55, () => {
-            if (descSpan) {
-                typeText(descSpan, null, descFull, 14, () => {
-                    if (revealGroup) revealGroup.classList.add('show');
-                });
-            } else if (revealGroup) {
-                revealGroup.classList.add('show');
-            }
-        });
-    }
-
-    function resetCard(card) {
-        typedCards.delete(card);
-        const titleSpan = card.querySelector('.kinetic-title .type-text');
-        const descSpan = card.querySelector('.kinetic-desc .type-text');
-        const revealGroup = card.querySelector('.kinetic-reveal-group');
-        if (titleSpan) titleSpan.textContent = '';
-        if (descSpan) descSpan.textContent = '';
-        if (revealGroup) revealGroup.classList.remove('show');
-    }
-
-    cards.forEach(card => {
-        const observer = new MutationObserver(() => {
-            if (card.classList.contains('is-active')) {
-                runCardTypewriter(card);
-            } else {
-                resetCard(card);
-            }
-        });
-        observer.observe(card, { attributes: true, attributeFilter: ['class'] });
-    });
-})();
 /* ---------- Premium aurora background per card ---------- */
 class CardAurora {
     constructor(canvas) {
@@ -1370,7 +1294,6 @@ class CardAurora {
         this.running = false;
     }
 }
-
 (function () {
     const cards = document.querySelectorAll('.carousel-3d-card');
     const auroraMap = new WeakMap();
@@ -1395,80 +1318,4 @@ class CardAurora {
         });
     });
     cards.forEach(card => auroraObserver.observe(card, { attributes: true, attributeFilter: ['class'] }));
-})();
-
-/* ---------- Efficient frame-based typewriter ---------- */
-(function () {
-    const cards = document.querySelectorAll('.carousel-3d-card');
-    if (!cards.length) return;
-
-    const typedCards = new WeakSet();
-    const CHARS_PER_SEC_TITLE = 26; // faster, smoother than setTimeout chains
-    const CHARS_PER_SEC_DESC  = 62;
-
-    function typeStream(el, cursorEl, fullText, charsPerSec, onDone) {
-        el.textContent = '';
-        if (cursorEl) cursorEl.classList.add('show');
-
-        let start = null;
-        function frame(ts) {
-            if (!start) start = ts;
-            const elapsedSec = (ts - start) / 1000;
-            const count = Math.min(fullText.length, Math.floor(elapsedSec * charsPerSec));
-            el.textContent = fullText.slice(0, count);
-
-            if (count < fullText.length) {
-                requestAnimationFrame(frame);
-            } else {
-                if (cursorEl) setTimeout(() => cursorEl.classList.remove('show'), 700);
-                if (onDone) onDone();
-            }
-        }
-        requestAnimationFrame(frame);
-    }
-
-    function runCardTypewriter(card) {
-        if (typedCards.has(card)) return;
-        typedCards.add(card);
-
-        const titleSpan = card.querySelector('.kinetic-title .type-text');
-        const titleCursor = card.querySelector('.kinetic-title .type-cursor');
-        const descSpan = card.querySelector('.kinetic-desc .type-text');
-        const revealGroup = card.querySelector('.kinetic-reveal-group');
-        if (!titleSpan) return;
-
-        const titleFull = titleSpan.getAttribute('data-full') || '';
-        const descFull = descSpan ? descSpan.getAttribute('data-full') || '' : '';
-
-        typeStream(titleSpan, titleCursor, titleFull, CHARS_PER_SEC_TITLE, () => {
-            if (descSpan) {
-                typeStream(descSpan, null, descFull, CHARS_PER_SEC_DESC, () => {
-                    if (revealGroup) revealGroup.classList.add('show');
-                });
-            } else if (revealGroup) {
-                revealGroup.classList.add('show');
-            }
-        });
-    }
-
-    function resetCard(card) {
-        typedCards.delete(card);
-        const titleSpan = card.querySelector('.kinetic-title .type-text');
-        const descSpan = card.querySelector('.kinetic-desc .type-text');
-        const revealGroup = card.querySelector('.kinetic-reveal-group');
-        if (titleSpan) titleSpan.textContent = '';
-        if (descSpan) descSpan.textContent = '';
-        if (revealGroup) revealGroup.classList.remove('show');
-    }
-
-    cards.forEach(card => {
-        const observer = new MutationObserver(() => {
-            if (card.classList.contains('is-active')) {
-                runCardTypewriter(card);
-            } else {
-                resetCard(card);
-            }
-        });
-        observer.observe(card, { attributes: true, attributeFilter: ['class'] });
-    });
 })();
