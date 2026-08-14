@@ -11,7 +11,7 @@
     let W, H, dpr, particles = [];
 
     function resize() {
-        dpr = window.devicePixelRatio || 1;
+        dpr = Math.min(window.devicePixelRatio || 1, isMobile ? 1.5 : 2);
         W = window.innerWidth;
         H = window.innerHeight;
         canvas.width  = W * dpr;
@@ -40,12 +40,12 @@
         return points;
     }
 
-    const FORM_MS         = 900;
-    const SETTLE_MS       = 250;
-    const HOLD_MS         = 300;
+    const FORM_MS         = 1200;
+    const SETTLE_MS       = 300;
+    const HOLD_MS         = 750;  
     const BASE_DELAY      = 60;
-    const DIST_FACTOR     = isMobile ? 0.22 : 0.32;
-    const MAX_RAND_DELAY  = isMobile ? 60 : 110;
+    const DIST_FACTOR     = isMobile ? 0.22 : 0.30;
+    const MAX_RAND_DELAY  = isMobile ? 70 : 120;
 
     function initParticles() {
         const fontSize = Math.min(W * 0.16, 190);
@@ -67,18 +67,10 @@
         });
     }
 
-    resize();
-    initParticles();
-
-    const maxDistFromCenter = Math.hypot(W / 2, H / 2);
-    const maxDelay = BASE_DELAY + maxDistFromCenter * DIST_FACTOR + MAX_RAND_DELAY;
-    const revealDelay = Math.max(0, maxDelay + FORM_MS - 300);
-    setTimeout(() => { if (loaderEl) loaderEl.classList.add('show'); }, revealDelay);
-
-    window.addEventListener('resize', () => { resize(); initParticles(); });
+    function easeOutQuint(t) { return 1 - Math.pow(1 - t, 5); }
 
     let start = null;
-    function easeOutQuint(t) { return 1 - Math.pow(1 - t, 5); }
+    let maxDelay = 0;
 
     function animate(ts) {
         if (!start) start = ts;
@@ -86,81 +78,56 @@
         ctx.clearRect(0, 0, W, H);
 
         particles.forEach(p => {
-    const localT = (elapsed - p.delay) / FORM_MS;
-    const t = Math.max(0, Math.min(1, localT));
-    const eased = easeOutQuint(t);
-    const settleT = Math.max(0, Math.min(1, (elapsed - p.delay - FORM_MS) / SETTLE_MS));
-    const overshoot = t >= 1 ? Math.sin(settleT * Math.PI) * (1 - settleT) * 3 : 0;
-    const x = p.x + (p.tx - p.x) * eased;
-    const y = p.y + (p.ty - p.y) * eased - overshoot;
-    const glowStrength = 0.35 + eased * 0.65;
+            const localT = (elapsed - p.delay) / FORM_MS;
+            const t = Math.max(0, Math.min(1, localT));
+            const eased = easeOutQuint(t);
+            const settleT = Math.max(0, Math.min(1, (elapsed - p.delay - FORM_MS) / SETTLE_MS));
+            const overshoot = t >= 1 ? Math.sin(settleT * Math.PI) * (1 - settleT) * 3 : 0;
+            const x = p.x + (p.tx - p.x) * eased;
+            const y = p.y + (p.ty - p.y) * eased - overshoot;
+            const glowStrength = 0.35 + eased * 0.65;
 
-    // cheap glow: soft outer dot, no shadowBlur
-    ctx.beginPath();
-    ctx.arc(x, y, p.r * 1.8, 0, Math.PI * 2);
-    ctx.fillStyle = `rgba(255,255,255,${glowStrength * 0.15})`;
-    ctx.fill();
+            ctx.beginPath();
+            ctx.arc(x, y, p.r * 1.8, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(255,255,255,${glowStrength * 0.15})`;
+            ctx.fill();
 
-    ctx.beginPath();
-    ctx.arc(x, y, p.r, 0, Math.PI * 2);
-    ctx.fillStyle = `rgba(255,255,255,${glowStrength})`;
-    ctx.fill();
-});
+            ctx.beginPath();
+            ctx.arc(x, y, p.r, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(255,255,255,${glowStrength})`;
+            ctx.fill();
+        });
 
         if (elapsed < maxDelay + FORM_MS + SETTLE_MS + HOLD_MS) {
             requestAnimationFrame(animate);
         } else {
             introEl.classList.add('fade-out');
             document.body.style.overflow = '';
-            setTimeout(() => introEl.remove(), 950);
+            setTimeout(() => introEl.remove(), 1100);
         }
     }
 
-    requestAnimationFrame(animate);
+    function startIntro() {
+        resize();
+        initParticles();
+
+        const maxDistFromCenter = Math.hypot(W / 2, H / 2);
+        maxDelay = BASE_DELAY + maxDistFromCenter * DIST_FACTOR + MAX_RAND_DELAY;
+        const revealDelay = Math.max(0, maxDelay + FORM_MS - 300);
+        setTimeout(() => { if (loaderEl) loaderEl.classList.add('show'); }, revealDelay);
+
+        window.addEventListener('resize', () => { resize(); initParticles(); });
+        requestAnimationFrame(animate);
+    }
+    if (document.fonts && document.fonts.ready) {
+        let started = false;
+        const begin = () => { if (!started) { started = true; startIntro(); } };
+        document.fonts.load('700 190px Orbitron').then(begin).catch(begin);
+        setTimeout(begin, 400);
+    } else {
+        startIntro();
+    }
 })();
-
-VANTA.BIRDS({
-    el: "#vanta-birds",
-    THREE: THREE,
-    mouseControls: false,
-    touchControls: false,
-    gyroControls: false,
-    backgroundColor: 0x111111,
-    backgroundAlpha: 1.0,
-    color1: 0x00FF7F,
-    color2: 0xFFEC00,
-    colorMode: "variance",
-    birdSize: 0.9,
-    wingSpan: 18,
-    speedLimit: 3.0,
-    speedMultiplier: 0.8,
-    separation: 80,
-    alignment: 20,
-    cohesion: 10,
-    quantity: 3,
-});
-
-VANTA.RINGS({
-    el: "#vanta-rings",
-    THREE: THREE,
-    mouseControls: true,
-    touchControls: true,
-    gyroControls: false,
-    backgroundColor: 0x111111,
-    backgroundAlpha: 0.0,
-    color: 0x1da9c0,
-});
-
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function (e) {
-        const href = this.getAttribute('href');
-        const target = document.querySelector(href);
-        if (target) {
-            e.preventDefault();
-            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
-    });
-});
 
 (function () {
     const canvas = document.getElementById('orbit-canvas');
@@ -1075,11 +1042,8 @@ ctx.arc(drawX, drawY, p.r, 0, Math.PI * 2);
     function draw() {
         const now = performance.now();
         ctx.clearRect(0, 0, W, H);
-
         points = points.filter(p => now - p.t < TRAIL_LIFE);
-
         if (points.length > 2) {
-            // outer soft glow — wide, blurred, low opacity
             drawStroke(
                 points, 11, 
                 [
@@ -1088,8 +1052,6 @@ ctx.arc(drawX, drawY, p.r, 0, Math.PI * 2);
                 ],
                 22, 1
             );
-
-            // mid glow — medium width, richer color
             drawStroke(
                 points, 5.5,
                 [
@@ -1098,8 +1060,6 @@ ctx.arc(drawX, drawY, p.r, 0, Math.PI * 2);
                 ],
                 12, 1
             );
-
-            // inner hot core — thin, bright, near-white edge for a premium sheen
             drawStroke(
                 points, 1.8,
                 [
@@ -1203,7 +1163,6 @@ ctx.arc(drawX, drawY, p.r, 0, Math.PI * 2);
     prevBtn.addEventListener('click', () => scrollToIndex(Math.max(0, Math.round(activeFloat) - 1)));
     nextBtn.addEventListener('click', () => scrollToIndex(Math.min(total - 1, Math.round(activeFloat) + 1)));
 
-    // keyboard nav when section is in view
     window.addEventListener('keydown', (e) => {
         const rect = scrollSection.getBoundingClientRect();
         const inView = rect.top < window.innerHeight && rect.bottom > 0;
@@ -1215,7 +1174,6 @@ ctx.arc(drawX, drawY, p.r, 0, Math.PI * 2);
     updateFromScroll();
 })();
 
-/* ---------- Premium aurora background per card ---------- */
 class CardAurora {
     constructor(canvas) {
         this.canvas = canvas;
@@ -1264,7 +1222,7 @@ class CardAurora {
             ctx.fill();
         });
 
-        // fine premium grain overlay
+
         ctx.globalAlpha = 0.035;
         for (let i = 0; i < 60; i++) {
             const x = Math.random() * this.W;
