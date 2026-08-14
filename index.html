@@ -57,10 +57,12 @@
 </div>
 <body>
 
+    <canvas id="cursor-spotlight"></canvas>
+
     <div id="hello-intro">
-        <span id="hello-word">Hello</span>
-        <img src='loading.gif'>
-    </div>
+    <canvas id="hello-canvas"></canvas>
+    <img id="hello-loader" src="loading.gif" alt="">
+</div>
 
 
     <div class="cover-section">
@@ -389,7 +391,7 @@
     </div>
 </section>
 
-   <section id="Projects" class="Projects">
+<section id="Projects" class="Projects">
 <canvas id="projects-bubble-canvas"></canvas>
     <div>
         <h1>
@@ -398,118 +400,133 @@
         </h1>
     </div>
 </section>
-    <section class="kinetic-projects-container">
-        <div class="kinetic-projects-stage">
-            <div class="kinetic-slide reveal reveal-up" style="--reveal-delay: 0.15s">
-                <div class="kinetic-visual-wrapper">
-                    <img src="logos/wavify.png" alt="Wavify Logo" class="kinetic-logo">
-                    <div class="hologram-glow"></div>
-                </div>
-                <div class="kinetic-info">
-                    <h2 class="kinetic-title">Wavify</h2>
-                    <div class="kinetic-divider"></div>
-                    <p class="kinetic-desc">A music streaming platform featuring a clean user interface, custom playlist creation, and seamless audio synchronization.</p>
-                    <div class="github-view-btn" style="border: none; color: #fff;  border-radius: 12px; font-family: 'Rajdhani', sans-serif; font-size: 0.95rem; font-weight: 600; letter-spacing: 0.5px; padding: 14px 20px; display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; max-width: 100%; margin-bottom: 20px; cursor: default; pointer-events: none;">
-                        <span style="color: #00f7ff;">HTML</span>
-                        <span style="color: rgba(255,255,255,0.3);">|</span>
-                        <span style="color: #00f7ff;">CSS</span>
-                        <span style="color: rgba(255,255,255,0.3);">|</span>
-                        <span style="color: #00f7ff;">JAVASCRIPT</span>
-                        <span style="color: rgba(255,255,255,0.3);">|</span>
-                        <span style="color: #00f7ff;">GROQ API</span>
-                        <span style="color: rgba(255,255,255,0.3);">|</span>
-                        <span style="color: #00f7ff;">PYTHON</span>
-                    </div>
-                    <a href="https://wavify18.netlify.app/" target="_blank" class="github-view-btn">
-                        <img src="logos/github.png" alt="GitHub" class="btn-git-icon">
-                        View Project
-                    </a>
-                </div>
-            </div>
-            <div class="kinetic-slide reveal reveal-up" style="--reveal-delay: 0.25s">
-                <div class="kinetic-visual-wrapper">
-                    <img src="logos/R.png" alt="Virtual Assistant Logo" class="kinetic-logo-va">
-                    <div class="hologram-glow"></div>
-                </div>
-                <div class="kinetic-info">
-                    <h2 class="kinetic-title">Virtual Bot</h2>
-                    <div class="kinetic-divider"></div>
-                    <p class="kinetic-desc">An intelligent automated system designed for task automation, voice recognition, and contextual natural language processing.</p>
-                    <div class="github-view-btn" style="border: none; color: #fff;  border-radius: 12px; font-family: 'Rajdhani', sans-serif; font-size: 0.95rem; font-weight: 600; letter-spacing: 0.5px; padding: 14px 20px; display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; max-width: 100%; margin-bottom: 20px; cursor: default; pointer-events: none;">
-                        <span style="color: #00f7ff;">HTML</span>
-                        <span style="color: rgba(255,255,255,0.3);">|</span>
-                        <span style="color: #00f7ff;">CSS</span>
-                        <span style="color: rgba(255,255,255,0.3);">|</span>
-                        <span style="color: #00f7ff;">JAVASCRIPT</span>
-                        <span style="color: rgba(255,255,255,0.3);">|</span>
-                        <span style="color: #00f7ff;">GROQ API</span>
-                        <span style="color: rgba(255,255,255,0.3);">|</span>
-                        <span style="color: #00f7ff;">PYTHON</span>
-                    </div>
-                    <a href="https://rushobot.onrender.com/" target="_blank" class="github-view-btn">
-                        <img src="logos/github.png" alt="GitHub" class="btn-git-icon">
-                        View Project
-                    </a>
-                </div>
-            </div>
-            <div class="kinetic-slide reveal reveal-up" style="--reveal-delay: 0.35s">
-                <div class="kinetic-visual-wrapper">
-                    <img src="logos/exe.png" alt="Eye Controlled Mouse Logo" class="kinetic-logo">
-                    <div class="hologram-glow"></div>
-                </div>
-                <div class="kinetic-info">
-                    <h2 class="kinetic-title">Eye Mouse</h2>
-                    <div class="kinetic-divider"></div>
-                    <p class="kinetic-desc">An innovative Human-Computer Interaction (HCI) application utilizing computer vision to precisely map and control mouse cursor movements through eye tracking.</p>
-                    
-                    <div class="github-view-btn" style="border: none; color: #fff;  border-radius: 12px; font-family: 'Rajdhani', sans-serif; font-size: 0.95rem; font-weight: 600; letter-spacing: 0.5px; padding: 14px 20px; display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; max-width: 100%; margin-bottom: 20px; cursor: default; pointer-events: none;">
-                        <span style="color: #00f7ff;">OPENCV</span>
-                        <span style="color: rgba(255,255,255,0.3);">|</span>
-                        <span style="color: #00f7ff;">MEDIAPIPE</span>
-                        <span style="color: rgba(255,255,255,0.3);">|</span>
-                        <span style="color: #00f7ff;">NUMPY</span>
-                        <span style="color: rgba(255,255,255,0.3);">|</span>
-                        <span style="color: #00f7ff;">PYAUTOGUI</span>
-                        <span style="color: rgba(255,255,255,0.3);">|</span>
-                        <span style="color: #00f7ff;">HUMAN COMPUTER INTERACTION</span>
-                    </div>
 
-                    <a href="https://drive.google.com/file/d/1oF2B1ap2t7eguH_3mSvMo_0H1tpLOkJ0/view?usp=sharing" download class="github-view-btn">
-                        <img src="logos/download.png" alt="Download" class="btn-git-icon">
-                        Download EXE (V 2.0)
-                    </a>
-                </div>
-            </div>
-            <div class="kinetic-slide reveal reveal-up" style="--reveal-delay: 0.45s">
-                <div class="kinetic-visual-wrapper">
-                    <img src="logos/exe1.png" alt="Hand Gesture Control Logo" class="kinetic-logo">
-                    <div class="hologram-glow"></div>
-                </div>
-                <div class="kinetic-info">
-                    <h2 class="kinetic-title">Hand Gesture Control</h2>
-                    <div class="kinetic-divider"></div>
-                    <p class="kinetic-desc">A real-time computer vision application that maps hand movements to control the mouse cursor, simulate clicks, adjust system volume levels, and manage media playback seamlessly through custom gestures.</p>
-                    
-                    <div class="github-view-btn" style="border: none; color: #fff;  border-radius: 12px; font-family: 'Rajdhani', sans-serif; font-size: 0.95rem; font-weight: 600; letter-spacing: 0.5px; padding: 14px 20px; display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; max-width: 100%; margin-bottom: 20px; cursor: default; pointer-events: none;">
-                        <span style="color: #00f7ff;">OPENCV</span>
-                        <span style="color: rgba(255,255,255,0.3);">|</span>
-                        <span style="color: #00f7ff;">MEDIAPIPE</span>
-                        <span style="color: rgba(255,255,255,0.3);">|</span>
-                        <span style="color: #00f7ff;">NUMPY</span>
-                        <span style="color: rgba(255,255,255,0.3);">|</span>
-                        <span style="color: #00f7ff;">PYTHON</span>
-                        <span style="color: rgba(255,255,255,0.3);">|</span>
-                        <span style="color: #00f7ff;">HUMAN COMPUTER INTERACTION</span>
-                    </div>
+<section class="kinetic-projects-container">
+    <div class="carousel-3d-scroll" id="carousel3dScroll">
+        <div class="carousel-3d-wrapper">
+            <div class="carousel-3d-stage" id="carousel3d">
 
-                    <a href="https://drive.google.com/file/d/1hDJE7NqAKrK4h5K5YsDQqcEi_V-6ryej/view?usp=sharing" target="_blank" class="github-view-btn">
-                        <img src="logos/exe.png" alt="GitHub" class="btn-git-icon">
-                        Download EXE (V 1.1)
-                    </a>
+                <div class="carousel-3d-card" data-index="0">
+                    <div class="kinetic-visual-wrapper">
+                        <img src="logos/wavify.png" alt="Wavify Logo" class="kinetic-logo">
+                        <div class="hologram-glow"></div>
+                    </div>
+                    <div class="kinetic-info">
+                        <h2 class="kinetic-title">
+                            <span class="type-text" data-full="Wavify"></span><span class="type-cursor">|</span>
+                        </h2>
+                        <div class="kinetic-divider"></div>
+                        <p class="kinetic-desc">
+                            <span class="type-text" data-full="A music streaming platform featuring a clean user interface, custom playlist creation, and seamless audio synchronization."></span>
+                        </p>
+                        <div class="kinetic-reveal-group">
+                            <div class="github-view-btn" style="border: none; color: #fff; border-radius: 12px; font-family: 'Rajdhani', sans-serif; font-size: 0.95rem; font-weight: 600; letter-spacing: 0.5px; padding: 14px 20px; display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; max-width: 100%; margin-bottom: 20px; cursor: default; pointer-events: none;">
+                                <span style="color: #00f7ff;">HTML</span><span style="color: rgba(255,255,255,0.3);">|</span>
+                                <span style="color: #00f7ff;">CSS</span><span style="color: rgba(255,255,255,0.3);">|</span>
+                                <span style="color: #00f7ff;">JAVASCRIPT</span><span style="color: rgba(255,255,255,0.3);">|</span>
+                                <span style="color: #00f7ff;">GROQ API</span><span style="color: rgba(255,255,255,0.3);">|</span>
+                                <span style="color: #00f7ff;">PYTHON</span>
+                            </div>
+                            <a href="https://wavify18.netlify.app/" target="_blank" class="github-view-btn">
+                                <img src="logos/github.png" alt="GitHub" class="btn-git-icon"> View Project
+                            </a>
+                        </div>
+                    </div>
                 </div>
+
+                <div class="carousel-3d-card" data-index="1">
+                    <div class="kinetic-visual-wrapper">
+                        <img src="logos/R.png" alt="Virtual Assistant Logo" class="kinetic-logo-va">
+                        <div class="hologram-glow"></div>
+                    </div>
+                    <div class="kinetic-info">
+                        <h2 class="kinetic-title">
+                            <span class="type-text" data-full="Virtual Bot"></span><span class="type-cursor">|</span>
+                        </h2>
+                        <div class="kinetic-divider"></div>
+                        <p class="kinetic-desc">
+                            <span class="type-text" data-full="An intelligent automated system designed for task automation, voice recognition, and contextual natural language processing."></span>
+                        </p>
+                        <div class="kinetic-reveal-group">
+                            <div class="github-view-btn" style="border: none; color: #fff; border-radius: 12px; font-family: 'Rajdhani', sans-serif; font-size: 0.95rem; font-weight: 600; letter-spacing: 0.5px; padding: 14px 20px; display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; max-width: 100%; margin-bottom: 20px; cursor: default; pointer-events: none;">
+                                <span style="color: #00f7ff;">HTML</span><span style="color: rgba(255,255,255,0.3);">|</span>
+                                <span style="color: #00f7ff;">CSS</span><span style="color: rgba(255,255,255,0.3);">|</span>
+                                <span style="color: #00f7ff;">JAVASCRIPT</span><span style="color: rgba(255,255,255,0.3);">|</span>
+                                <span style="color: #00f7ff;">GROQ API</span><span style="color: rgba(255,255,255,0.3);">|</span>
+                                <span style="color: #00f7ff;">PYTHON</span>
+                            </div>
+                            <a href="https://rushobot.onrender.com/" target="_blank" class="github-view-btn">
+                                <img src="logos/github.png" alt="GitHub" class="btn-git-icon"> View Project
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="carousel-3d-card" data-index="2">
+                    <div class="kinetic-visual-wrapper">
+                        <img src="logos/exe.png" alt="Eye Controlled Mouse Logo" class="kinetic-logo">
+                        <div class="hologram-glow"></div>
+                    </div>
+                    <div class="kinetic-info">
+                        <h2 class="kinetic-title">
+                            <span class="type-text" data-full="Eye Mouse"></span><span class="type-cursor">|</span>
+                        </h2>
+                        <div class="kinetic-divider"></div>
+                        <p class="kinetic-desc">
+                            <span class="type-text" data-full="An innovative Human-Computer Interaction (HCI) application utilizing computer vision to precisely map and control mouse cursor movements through eye tracking."></span>
+                        </p>
+                        <div class="kinetic-reveal-group">
+                            <div class="github-view-btn" style="border: none; color: #fff; border-radius: 12px; font-family: 'Rajdhani', sans-serif; font-size: 0.95rem; font-weight: 600; letter-spacing: 0.5px; padding: 14px 20px; display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; max-width: 100%; margin-bottom: 20px; cursor: default; pointer-events: none;">
+                                <span style="color: #00f7ff;">OPENCV</span><span style="color: rgba(255,255,255,0.3);">|</span>
+                                <span style="color: #00f7ff;">MEDIAPIPE</span><span style="color: rgba(255,255,255,0.3);">|</span>
+                                <span style="color: #00f7ff;">NUMPY</span><span style="color: rgba(255,255,255,0.3);">|</span>
+                                <span style="color: #00f7ff;">PYAUTOGUI</span><span style="color: rgba(255,255,255,0.3);">|</span>
+                                <span style="color: #00f7ff;">HUMAN COMPUTER INTERACTION</span>
+                            </div>
+                            <a href="https://drive.google.com/file/d/1oF2B1ap2t7eguH_3mSvMo_0H1tpLOkJ0/view?usp=sharing" download class="github-view-btn">
+                                <img src="logos/download.png" alt="Download" class="btn-git-icon"> Download EXE (V 2.0)
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="carousel-3d-card" data-index="3">
+                    <div class="kinetic-visual-wrapper">
+                        <img src="logos/exe1.png" alt="Hand Gesture Control Logo" class="kinetic-logo">
+                        <div class="hologram-glow"></div>
+                    </div>
+                    <div class="kinetic-info">
+                        <h2 class="kinetic-title">
+                            <span class="type-text" data-full="Hand Gesture Control"></span><span class="type-cursor">|</span>
+                        </h2>
+                        <div class="kinetic-divider"></div>
+                        <p class="kinetic-desc">
+                            <span class="type-text" data-full="A real-time computer vision application that maps hand movements to control the mouse cursor, simulate clicks, adjust system volume levels, and manage media playback seamlessly through custom gestures."></span>
+                        </p>
+                        <div class="kinetic-reveal-group">
+                            <div class="github-view-btn" style="border: none; color: #fff; border-radius: 12px; font-family: 'Rajdhani', sans-serif; font-size: 0.95rem; font-weight: 600; letter-spacing: 0.5px; padding: 14px 20px; display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; max-width: 100%; margin-bottom: 20px; cursor: default; pointer-events: none;">
+                                <span style="color: #00f7ff;">OPENCV</span><span style="color: rgba(255,255,255,0.3);">|</span>
+                                <span style="color: #00f7ff;">MEDIAPIPE</span><span style="color: rgba(255,255,255,0.3);">|</span>
+                                <span style="color: #00f7ff;">NUMPY</span><span style="color: rgba(255,255,255,0.3);">|</span>
+                                <span style="color: #00f7ff;">PYTHON</span><span style="color: rgba(255,255,255,0.3);">|</span>
+                                <span style="color: #00f7ff;">HUMAN COMPUTER INTERACTION</span>
+                            </div>
+                            <a href="https://drive.google.com/file/d/1hDJE7NqAKrK4h5K5YsDQqcEi_V-6ryej/view?usp=sharing" target="_blank" class="github-view-btn">
+                                <img src="logos/exe.png" alt="GitHub" class="btn-git-icon"> Download EXE (V 1.1)
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
             </div>
+
+            <button class="carousel-3d-nav prev" id="carousel3dPrev" aria-label="Previous project">‹</button>
+            <button class="carousel-3d-nav next" id="carousel3dNext" aria-label="Next project">›</button>
+
+            <div class="carousel-3d-dots" id="carousel3dDots"></div>
         </div>
-    </section>
+    </div>
+</section>
 
    <section id="Testimonials">
     <div id="below">
