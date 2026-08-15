@@ -11,7 +11,7 @@
     let W, H, dpr, particles = [];
 
     function resize() {
-        dpr = Math.min(window.devicePixelRatio || 1, isMobile ? 1.5 : 2);
+        dpr = Math.min(window.devicePixelRatio || 1, 2);
         W = window.innerWidth;
         H = window.innerHeight;
         canvas.width  = W * dpr;
@@ -44,12 +44,13 @@
     const SETTLE_MS       = 300;
     const HOLD_MS         = 750;  
     const BASE_DELAY      = 60;
-    const DIST_FACTOR     = isMobile ? 0.22 : 0.30;
-    const MAX_RAND_DELAY  = isMobile ? 70 : 120;
+    const DIST_FACTOR     = isMobile ? 0.28 : 0.30;   
+const MAX_RAND_DELAY  = isMobile ? 100 : 120;
+
 
     function initParticles() {
         const fontSize = Math.min(W * 0.16, 190);
-        const gap = Math.max(isMobile ? 6 : 4, Math.round(fontSize / (isMobile ? 30 : 42)));
+        const gap = Math.max(isMobile ? 4 : 4, Math.round(fontSize / (isMobile ? 38 : 42)));
         const points = getTextPoints('Welcome', fontSize, gap);
         const cx = W / 2, cy = H / 2;
 
@@ -159,7 +160,6 @@ VANTA.RINGS({
     backgroundAlpha: 0.0,
     color: 0x1da9c0,
 });
-
 (function () {
     const canvas = document.getElementById('orbit-canvas');
     if (!canvas) return;
@@ -207,19 +207,15 @@ VANTA.RINGS({
     let lastTs = null;
 
     function resize() {
-        const rect = wrapper.getBoundingClientRect();
-        W = rect.width  || window.innerWidth * 0.65;
-        H = rect.height || window.innerHeight * 0.7;
-        dpr = window.devicePixelRatio || 1;
-        canvas.width  = Math.round(W * dpr);
-        canvas.height = Math.round(H * dpr);
-        canvas.style.width  = W + 'px';
-        canvas.style.height = H + 'px';
-        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-        CX = W / 2; CY = H / 2;
-        const iconPad = Math.min(W, H) * ICON_FRAC * 2.2;
-        minSide = Math.min(W, H) - iconPad * 2;
-    }
+    dpr = Math.min(window.devicePixelRatio || 1, 2); // same sharpness on all devices
+    W = window.innerWidth;
+    H = window.innerHeight;
+    canvas.width  = W * dpr;
+    canvas.height = H * dpr;
+    canvas.style.width  = W + 'px';
+    canvas.style.height = H + 'px';
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+}
 
     function drawIcon(tech, x, y, scaleMul, isHovered) {
         const iconR = Math.min(minSide * ICON_FRAC * scaleMul, 46);
