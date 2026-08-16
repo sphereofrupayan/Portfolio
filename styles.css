@@ -197,7 +197,7 @@ nav ul li.nav-links a:hover {
 
 .right.corner {
     text-align: right;
-    pointer-events: none;
+    pointer-events: auto;
     flex-shrink: 0;
 }
 
@@ -2899,4 +2899,194 @@ nav ul li.nav-links a:hover {
     line-height: 1.75;
     letter-spacing: -0.01em;
     color: rgba(255,255,255,0.72);
+}
+
+
+
+.right.corner {
+    pointer-events: auto; 
+}
+
+.corner-photo-wrap {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 8px;
+}
+
+#portrait-frame {
+    position: relative;
+    width: clamp(120px, 13vw, 180px);
+    height: clamp(120px, 13vw, 180px);
+    overflow: hidden;
+    background: transparent;
+    border: none;
+    border-radius: 10px;
+    box-shadow: none;
+    pointer-events: auto;
+}
+
+.portrait-img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain; 
+    object-position: center;
+    background: transparent;
+    opacity: 1;
+    pointer-events: none;
+    user-select: none;
+    -webkit-user-drag: none;
+}
+
+.portrait-base { z-index: 1; }
+
+.portrait-robot {
+    z-index: 2;
+    clip-path: circle(0px at -999px -999px);
+    transition: clip-path 0.05s linear;
+}
+
+.corner-divider {
+    width: clamp(100px, 13vw, 180px);
+    height: 1px;
+    margin: 0 0 8px auto;
+    background: linear-gradient(90deg, transparent, rgba(29,169,192,0.6), transparent);
+}
+
+.socialmedia {
+    position: relative;
+    z-index: 50;
+    display: flex;
+    gap: 14px;
+    align-items: center;
+    flex-wrap: wrap;
+    pointer-events: auto;
+}
+
+.socialmedia a {
+    position: relative;
+    z-index: 51;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 46px;
+    height: 46px;
+    cursor: pointer;
+    pointer-events: auto;
+    text-decoration: none;
+}
+
+.socialmedia a img {
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
+    pointer-events: none;
+    user-select: none;
+}
+
+.socialmedia a:hover {
+    transform: translateY(-3px);
+}
+
+.bottom-info {
+    position: absolute;
+    bottom: 14px;
+    left: clamp(16px, 3vw, 28px);
+    right: clamp(16px, 3vw, 28px);
+    z-index: 50;
+    pointer-events: none;
+}
+
+.bottom-row {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.right.corner {
+    position: relative;
+    z-index: 51;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: flex-end;
+    text-align: right;
+    pointer-events: auto;
+}
+
+.right.corner p {
+    display: block;
+    visibility: visible;
+    position: relative;
+    z-index: 55;
+
+    font-family: 'Rajdhani', sans-serif;
+    color: #c8f0c8;
+    font-size: clamp(0.7rem, 1.1vw, 0.85rem);
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+
+    opacity: 1;
+    margin: 3px 0;
+    line-height: 1.2;
+
+    text-shadow: 0 0 8px rgba(144, 238, 144, 0.35);
+}
+
+
+.right.corner p:first-of-type {
+    font-family: 'Orbitron', sans-serif;
+    font-size: clamp(0.8rem, 1.5vw, 1rem);
+    font-weight: 700;
+    color: #FFD700;
+
+    opacity: 1;
+    visibility: visible;
+
+    text-shadow:
+        0 0 8px rgba(255, 215, 0, 0.6),
+        0 0 18px rgba(255, 215, 0, 0.25);
+}
+
+.corner-photo-wrap {
+    position: relative;
+    z-index: 52;
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 8px;
+}
+
+#portrait-frame {
+    position: relative;
+    z-index: 53;
+
+    width: clamp(110px, 12vw, 170px);
+    height: clamp(110px, 12vw, 170px);
+
+    overflow: hidden;
+    pointer-events: auto;
+}
+
+.portrait-img {
+    pointer-events: none;
+}
+
+.corner-divider {
+    position: relative;
+    z-index: 52;
+
+    width: clamp(100px, 13vw, 180px);
+    height: 1px;
+
+    margin: 0 0 8px auto;
+
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(29, 169, 192, 0.8),
+        transparent
+    );
 }
