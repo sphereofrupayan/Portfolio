@@ -1306,3 +1306,90 @@ class CardAurora {
     });
     cards.forEach(card => auroraObserver.observe(card, { attributes: true, attributeFilter: ['class'] }));
 })();
+
+(function () {
+    const frame    = document.getElementById('portrait-frame');
+    const robotImg = document.getElementById('portraitRobot');
+    if (!frame || !robotImg) return;
+
+    if (window.matchMedia('(max-width: 900px)').matches) return;
+
+    const TORCH_RADIUS = 60; 
+
+    let autoRafId = null;
+    let isHovering = false;
+    let resumeTimeout = null;
+
+    function setSpot(x, y) {
+        robotImg.style.clipPath = `circle(${TORCH_RADIUS}px at ${x}px ${y}px)`;
+    }
+
+
+    function startAutoAnimation() {
+        if (autoRafId) return;
+
+        const rect = frame.getBoundingClientRect();
+        const w = rect.width;
+        const h = rect.height;
+        const pad = TORCH_RADIUS * 0.6;
+
+        const rows = 3;             
+        const rowHeight = (h - pad * 2) / (rows - 1 || 1);
+        const cycleMs = 5200;       
+
+        const start = performance.now();
+
+        function frameLoop(now) {
+            if (!autoRafId) return; 
+            const elapsed = (now - start) % cycleMs;
+            const t = elapsed / cycleMs;
+
+            const rowProgress = t * rows;
+            const row = Math.floor(rowProgress);
+            const rowT = rowProgress - row;
+
+
+            const goingRight = row % 2 === 0;
+            const xT = goingRight ? rowT : 1 - rowT;
+
+            const x = pad + xT * (w - pad * 2);
+            const y = pad + Math.min(row, rows - 1) * rowHeight;
+
+            setSpot(x, y);
+            autoRafId = requestAnimationFrame(frameLoop);
+        }
+
+        autoRafId = requestAnimationFrame(frameLoop);
+    }
+
+    function stopAutoAnimation() {
+        if (autoRafId) {
+            cancelAnimationFrame(autoRafId);
+            autoRafId = null;
+        }
+    }
+
+
+    frame.addEventListener('mouseenter', () => {
+        isHovering = true;
+        clearTimeout(resumeTimeout);
+        stopAutoAnimation();
+    });
+
+    frame.addEventListener('mousemove', (e) => {
+        const rect = frame.getBoundingClientRect();
+        setSpot(e.clientX - rect.left, e.clientY - rect.top);
+    });
+
+    frame.addEventListener('mouseleave', () => {
+        isHovering = false;
+        setSpot(-999, -999);
+       
+        resumeTimeout = setTimeout(() => {
+            if (!isHovering) startAutoAnimation();
+        }, 1200);
+    });
+
+  
+    startAutoAnimation();
+})();
