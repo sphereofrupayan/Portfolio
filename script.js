@@ -841,8 +841,8 @@ sendBtn.addEventListener("click", sendMessage);
     function frame() {
         ctx.clearRect(0, 0, W, H);
 
-        mouse.x += (mouse.targetX - mouse.x) * 0.15;
-        mouse.y += (mouse.targetY - mouse.y) * 0.15;
+        mouse.x += (mouse.targetX - mouse.x) * 0.35; 
+mouse.y += (mouse.targetY - mouse.y) * 0.35;
 
         particles.forEach(p => {
     const dx = p.homeX - mouse.x;
@@ -860,8 +860,8 @@ sendBtn.addEventListener("click", sendMessage);
                 targetDispY = Math.sin(angle) * push;
             }
 
-            p.dispX += (targetDispX - p.dispX) * 0.08;
-            p.dispY += (targetDispY - p.dispY) * 0.08;
+            p.dispX += (targetDispX - p.dispX) * 0.35; 
+p.dispY += (targetDispY - p.dispY) * 0.35; 
 
             const drawX = p.homeX + p.dispX;
             const drawY = p.homeY + p.dispY;
@@ -946,8 +946,8 @@ sendBtn.addEventListener("click", sendMessage);
     function frame() {
         ctx.clearRect(0, 0, W, H);
 
-        mouse.x += (mouse.targetX - mouse.x) * 0.15;
-        mouse.y += (mouse.targetY - mouse.y) * 0.15;
+        mouse.x += (mouse.targetX - mouse.x) * 0.35;
+mouse.y += (mouse.targetY - mouse.y) * 0.35;
 
         particles.forEach(p => {
             const dx = p.homeX - mouse.x;
@@ -965,8 +965,8 @@ sendBtn.addEventListener("click", sendMessage);
                 targetDispY = Math.sin(angle) * push;
             }
 
-            p.dispX += (targetDispX - p.dispX) * 0.09;
-p.dispY += (targetDispY - p.dispY) * 0.09;
+           p.dispX += (targetDispX - p.dispX) * 0.35; 
+p.dispY += (targetDispY - p.dispY) * 0.35; 
 
 let drawX = p.homeX + p.dispX;
 let drawY = p.homeY + p.dispY;
@@ -1018,87 +1018,92 @@ ctx.arc(drawX, drawY, p.r, 0, Math.PI * 2);
     resize();
     window.addEventListener('resize', resize);
 
-    const TRAIL_LIFE = 380; 
-    let points = []; 
+    const BUBBLE_LIFE = 1800;       
+    const BUBBLE_SPAWN_EVERY = 26;  
+    let bubbles = [];
+    let lastBubbleSpawn = 0;
+    let lastMouse = { x: -9999, y: -9999 };
+
+    const PALETTE = [
+        [255, 110, 170],
+        [255, 160, 200],
+        [255, 210, 225],
+        [190, 140, 255],
+        [255, 255, 255]
+    ];
 
     window.addEventListener('mousemove', (e) => {
         const now = performance.now();
-        const last = points[points.length - 1];
+        const dist = Math.hypot(e.clientX - lastMouse.x, e.clientY - lastMouse.y);
+        lastMouse = { x: e.clientX, y: e.clientY };
 
-        if (!last || Math.hypot(e.clientX - last.x, e.clientY - last.y) > 2) {
-            points.push({ x: e.clientX, y: e.clientY, t: now });
+        if (now - lastBubbleSpawn > BUBBLE_SPAWN_EVERY && dist > 1.5) {
+            lastBubbleSpawn = now;
+            const color = PALETTE[Math.floor(Math.random() * PALETTE.length)];
+            const spawnCount = dist > 40 ? 2 : 1; 
+
+            for (let i = 0; i < spawnCount; i++) {
+                bubbles.push({
+                    x: e.clientX + (Math.random() - 0.5) * 16,
+                    y: e.clientY + (Math.random() - 0.5) * 16,
+                    r: Math.random() * 6 + 3,
+                    vx: (Math.random() - 0.5) * 0.35,
+                    vy: (Math.random() - 0.5) * 0.35 - 0.25,
+                    drift: Math.random() * 0.02 + 0.01,
+                    phase: Math.random() * Math.PI * 2,
+                    t: now,
+                    life: BUBBLE_LIFE + Math.random() * 500,
+                    hue: color
+                });
+            }
         }
     });
 
-    function easeOutCubic(t) { return 1 - Math.pow(1 - t, 3); }
+    function easeOutQuart(t) { return 1 - Math.pow(1 - t, 4); }
 
-    function drawStroke(pts, widthMul, colorStops, blur, alphaMul) {
-        if (pts.length < 2) return;
-        ctx.lineCap = 'round';
-        ctx.lineJoin = 'round';
+    function drawBubbles() {
+        const now = performance.now();
 
-        for (let i = 1; i < pts.length - 1; i++) {
-            const p0 = pts[i - 1];
-            const p1 = pts[i];
-            const p2 = pts[i + 1];
-
-            // midpoints for smooth quadratic curve segments
-            const mid1 = { x: (p0.x + p1.x) / 2, y: (p0.y + p1.y) / 2 };
-            const mid2 = { x: (p1.x + p2.x) / 2, y: (p1.y + p2.y) / 2 };
-
-            const now = performance.now();
-            const age = (now - p1.t) / TRAIL_LIFE;
+        bubbles.forEach(b => {
+            const age = (now - b.t) / b.life;
             const life = Math.max(0, 1 - age);
-            const eased = easeOutCubic(life);
+            if (life <= 0) return;
 
-            if (eased <= 0) continue;
+            const eased = easeOutQuart(life);
+            const floatX = Math.sin((now - b.t) * b.drift + b.phase) * 0.6;
 
-            const grad = ctx.createLinearGradient(mid1.x, mid1.y, mid2.x, mid2.y);
-            grad.addColorStop(0, colorStops[0](eased * alphaMul));
-            grad.addColorStop(1, colorStops[1](eased * alphaMul));
+            b.x += b.vx + floatX * 0.3;
+            b.y += b.vy;
+
+            const [r, g, bl] = b.hue;
+            const radius = b.r * (0.4 + eased * 0.9);
+
+            ctx.save();
+            ctx.beginPath();
+            ctx.arc(b.x, b.y, radius, 0, Math.PI * 2);
+            const grad = ctx.createRadialGradient(b.x, b.y, 0, b.x, b.y, radius);
+            grad.addColorStop(0, `rgba(${r}, ${g}, ${bl}, ${eased * 0.75})`);
+            grad.addColorStop(0.6, `rgba(${r}, ${g}, ${bl}, ${eased * 0.35})`);
+            grad.addColorStop(1, `rgba(${r}, ${g}, ${bl}, 0)`);
+            ctx.fillStyle = grad;
+            ctx.shadowColor = `rgba(${r}, ${g}, ${bl}, 0.9)`;
+            ctx.shadowBlur = 14;
+            ctx.fill();
 
             ctx.beginPath();
-            ctx.moveTo(mid1.x, mid1.y);
-            ctx.quadraticCurveTo(p1.x, p1.y, mid2.x, mid2.y);
-            ctx.strokeStyle = grad;
-            ctx.lineWidth = Math.max(0.4, widthMul * eased);
-            ctx.shadowColor = colorStops[1](eased * 0.9);
-            ctx.shadowBlur = blur;
-            ctx.stroke();
-        }
+            ctx.arc(b.x, b.y, Math.max(0.4, radius * 0.28), 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(255, 255, 255, ${eased * 0.6})`;
+            ctx.shadowBlur = 6;
+            ctx.fill();
+            ctx.restore();
+        });
+
+        bubbles = bubbles.filter(b => now - b.t < b.life);
     }
 
     function draw() {
-        const now = performance.now();
         ctx.clearRect(0, 0, W, H);
-        points = points.filter(p => now - p.t < TRAIL_LIFE);
-        if (points.length > 2) {
-            drawStroke(
-                points, 11, 
-                [
-                    a => `rgba(255, 40, 90, ${a * 0.28})`,
-                    a => `rgba(255, 110, 180, ${a * 0.28})`
-                ],
-                22, 1
-            );
-            drawStroke(
-                points, 5.5,
-                [
-                    a => `rgba(255, 55, 100, ${a * 0.55})`,
-                    a => `rgba(255, 130, 190, ${a * 0.55})`
-                ],
-                12, 1
-            );
-            drawStroke(
-                points, 1.8,
-                [
-                    a => `rgba(255, 180, 210, ${a * 0.85})`,
-                    a => `rgba(255, 220, 235, ${a * 0.85})`
-                ],
-                6, 1
-            );
-        }
-
+        drawBubbles();
         requestAnimationFrame(draw);
     }
 
@@ -1392,4 +1397,101 @@ class CardAurora {
 
   
     startAutoAnimation();
+})();(function () {
+    const canvas = document.getElementById('leetcode-canvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    const wrapper = canvas.parentElement;
+
+    const BUFFER = 80;
+    let W, H, dpr;
+    let particles = [];
+    const mouse = { x: -9999, y: -9999, targetX: -9999, targetY: -9999 };
+    const REPEL_RADIUS = 140;
+
+    function resize() {
+        const rect = wrapper.getBoundingClientRect();
+        W = rect.width + BUFFER * 2;
+        H = rect.height + BUFFER * 2;
+        dpr = window.devicePixelRatio || 1;
+        canvas.width = Math.round(W * dpr);
+        canvas.height = Math.round(H * dpr);
+        canvas.style.width = W + 'px';
+        canvas.style.height = H + 'px';
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        initParticles(rect.width, rect.height);
+    }
+
+    function initParticles(baseW, baseH) {
+        particles = [];
+        const spacing = 32;
+        const cols = Math.ceil(baseW / spacing) + 1;
+        const rows = Math.ceil(baseH / spacing) + 1;
+
+        for (let row = 0; row < rows; row++) {
+            for (let col = 0; col < cols; col++) {
+                const x = BUFFER + col * spacing + (row % 2 === 0 ? 0 : spacing / 2);
+                const y = BUFFER + row * spacing;
+
+                const sizeRoll = Math.random();
+                let r;
+                if (sizeRoll > 0.96)      r = Math.random() * 4 + 7;
+                else if (sizeRoll > 0.82) r = Math.random() * 2 + 4;
+                else if (sizeRoll > 0.5)  r = Math.random() * 1.5 + 2.4;
+                else                      r = Math.random() * 1.2 + 1.3;
+
+                particles.push({
+                    x, y, homeX: x, homeY: y,
+                    dispX: 0, dispY: 0,
+                    r: r,
+                    alpha: Math.random() * 0.25 + 0.15
+                });
+            }
+        }
+    }
+
+    function frame() {
+        ctx.clearRect(0, 0, W, H);
+        mouse.x += (mouse.targetX - mouse.x) * 0.35;
+        mouse.y += (mouse.targetY - mouse.y) * 0.35;
+
+        particles.forEach(p => {
+            const dx = p.homeX - mouse.x;
+            const dy = p.homeY - mouse.y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            let tx = 0, ty = 0;
+
+            if (dist < REPEL_RADIUS) {
+                const force = Math.pow(1 - dist / REPEL_RADIUS, 2);
+                const angle = Math.atan2(dy, dx);
+                const push = force * (REPEL_RADIUS * 0.75 + p.r * 2.2);
+                tx = Math.cos(angle) * push;
+                ty = Math.sin(angle) * push;
+            }
+
+            p.dispX += (tx - p.dispX) * 0.35;
+            p.dispY += (ty - p.dispY) * 0.35;
+
+            ctx.beginPath();
+            ctx.arc(p.homeX + p.dispX, p.homeY + p.dispY, p.r, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(255,255,255,${p.alpha})`;
+            ctx.fill();
+        });
+
+        requestAnimationFrame(frame);
+    }
+
+    wrapper.addEventListener('mousemove', e => {
+        const rect = canvas.getBoundingClientRect();
+        mouse.targetX = e.clientX - rect.left;
+        mouse.targetY = e.clientY - rect.top;
+    });
+    wrapper.addEventListener('mouseleave', () => {
+        mouse.targetX = -9999;
+        mouse.targetY = -9999;
+    });
+
+    window.addEventListener('resize', resize);
+    resize();
+    requestAnimationFrame(frame);
 })();
