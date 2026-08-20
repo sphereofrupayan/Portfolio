@@ -134,9 +134,9 @@ User Question:
 
 
     try:
-        # First try Groq
+        
         response = client.chat.completions.create(
-            model="llama-3.3-70b-versatile",
+            model="openai/gpt-oss-120b",
             messages=[
                 {
                     "role": "system",
@@ -158,7 +158,7 @@ User Question:
         print("Groq failed:", e)
 
         try:
-           
+            
             gemini_response = gemini_model.generate_content(prompt)
 
             answer = gemini_response.text
