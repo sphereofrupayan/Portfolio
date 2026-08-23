@@ -1495,3 +1495,198 @@ class CardAurora {
     resize();
     requestAnimationFrame(frame);
 })();
+
+(function () {
+    const canvas = document.getElementById('internship-canvas');
+    const section = document.getElementById('internship');
+    if (!canvas || !section) return;
+
+    const ctx = canvas.getContext('2d');
+    const isMobile = window.innerWidth < 600;
+    let W, H, dpr, particles = [];
+    let rafId = null;
+    let start = null;
+    let hasPlayed = false;
+    let fontReady = false;
+    let pendingPlay = false;
+
+    function resize() {
+        const rect = section.getBoundingClientRect();
+        W = rect.width;
+        H = rect.height;
+        dpr = Math.min(window.devicePixelRatio || 1, 2);
+        canvas.width = Math.round(W * dpr);
+        canvas.height = Math.round(H * dpr);
+        canvas.style.width = W + 'px';
+        canvas.style.height = H + 'px';
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+
+
+    function getTextPoints(text, gap) {
+        const off = document.createElement('canvas');
+        off.width = Math.max(1, Math.round(W));
+        off.height = Math.max(1, Math.round(H));
+        const octx = off.getContext('2d');
+
+        let fontSize = Math.min(W / 5.5, H * 0.55);
+        const maxWidth = W * 0.92;
+
+        for (let i = 0; i < 20; i++) {
+            octx.font = `700 ${fontSize}px Orbitron, sans-serif`;
+            const w = octx.measureText(text).width;
+            if (w <= maxWidth || fontSize < 10) break;
+            fontSize *= (maxWidth / w) * 0.98;
+        }
+
+        octx.clearRect(0, 0, off.width, off.height);
+        octx.fillStyle = '#fff';
+        octx.font = `700 ${fontSize}px Orbitron, sans-serif`;
+        octx.textAlign = 'center';
+        octx.textBaseline = 'middle';
+        octx.fillText(text, off.width / 2, off.height / 2);
+
+        const data = octx.getImageData(0, 0, off.width, off.height).data;
+        const points = [];
+        for (let y = 0; y < off.height; y += gap) {
+            for (let x = 0; x < off.width; x += gap) {
+                if (data[(y * off.width + x) * 4 + 3] > 128) points.push({ x, y });
+            }
+        }
+        return points;
+    }
+
+    const FORM_MS        = 1000;
+    const BASE_DELAY     = 30;
+    const DIST_FACTOR    = isMobile ? 0.35 : 0.45;
+    const MAX_RAND_DELAY = isMobile ? 80 : 130;
+
+    function initParticles() {
+        const gap = isMobile ? 4 : 3;
+        const points = getTextPoints('EXPERIENCE', gap);
+
+        const cx = W / 2, cy = H / 2;
+        particles = points.map(p => {
+            const angle = Math.random() * Math.PI * 2;
+            const dist  = Math.max(W, H) * (0.4 + Math.random() * 0.3);
+            const distFromCenter = Math.hypot(p.x - cx, p.y - cy);
+            return {
+                x: cx + Math.cos(angle) * dist,
+                y: cy + Math.sin(angle) * dist,
+                tx: p.x, ty: p.y,
+                r: Math.random() * 1.2 + 0.9,
+                delay: BASE_DELAY + distFromCenter * DIST_FACTOR + Math.random() * MAX_RAND_DELAY
+            };
+        });
+    }
+
+    function easeOutQuint(t) { return 1 - Math.pow(1 - t, 5); }
+
+    function drawParticleAt(x, y, r, glow) {
+        ctx.beginPath();
+        ctx.arc(x, y, r * 1.8, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(29,169,192,${glow * 0.22})`;
+        ctx.fill();
+
+        ctx.beginPath();
+        ctx.arc(x, y, r, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(230,245,255,${glow})`;
+        ctx.fill();
+    }
+
+    function drawStatic() {
+        ctx.clearRect(0, 0, W, H);
+        particles.forEach(p => drawParticleAt(p.tx, p.ty, p.r, 1));
+    }
+
+    function animate(ts) {
+        if (!start) start = ts;
+        const elapsed = ts - start;
+        ctx.clearRect(0, 0, W, H);
+
+        let allDone = true;
+        particles.forEach(p => {
+            const localT = (elapsed - p.delay) / FORM_MS;
+            const t = Math.max(0, Math.min(1, localT));
+            if (t < 1) allDone = false;
+            const eased = easeOutQuint(t);
+            const x = p.x + (p.tx - p.x) * eased;
+            const y = p.y + (p.ty - p.y) * eased;
+            const glow = 0.4 + eased * 0.6;
+            drawParticleAt(x, y, p.r, glow);
+        });
+
+        if (!allDone) {
+            rafId = requestAnimationFrame(animate);
+        } else {
+            rafId = null;
+            hasPlayed = true;
+        }
+    }
+
+    function playIntro() {
+        if (hasPlayed || rafId) return;
+        resize();
+        initParticles();
+        if (!particles.length) return;
+        start = null;
+        rafId = requestAnimationFrame(animate);
+    }
+
+    function tryPlay() {
+        if (fontReady) playIntro();
+        else pendingPlay = true;
+    }
+
+    function isInView() {
+        const rect = section.getBoundingClientRect();
+        return rect.top < window.innerHeight * 0.9 && rect.bottom > window.innerHeight * 0.1;
+    }
+
+    if (document.fonts && document.fonts.ready) {
+        document.fonts.load('700 100px Orbitron').then(() => {
+            fontReady = true;
+            if (pendingPlay) playIntro();
+        }).catch(() => {
+            fontReady = true;
+            if (pendingPlay) playIntro();
+        });
+        setTimeout(() => {
+            if (!fontReady) { fontReady = true; if (pendingPlay) playIntro(); }
+        }, 800);
+    } else {
+        fontReady = true;
+    }
+
+    window.addEventListener('resize', () => {
+        if (hasPlayed) {
+            resize();
+            initParticles();
+            drawStatic();
+        } else if (rafId) {
+            resize();
+        }
+    });
+
+    
+    let ticking = false;
+    function onScroll() {
+        if (ticking) return;
+        ticking = true;
+        requestAnimationFrame(() => {
+            if (!hasPlayed && isInView()) tryPlay();
+            ticking = false;
+        });
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+
+    const io = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) tryPlay();
+        });
+    }, { threshold: 0.05 });
+    io.observe(section);
+
+    
+    onScroll();
+})();
