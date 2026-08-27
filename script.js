@@ -1,7 +1,9 @@
 (function () {
     const introEl = document.getElementById('hello-intro');
     const canvas  = document.getElementById('hello-canvas');
-    const loaderEl = document.getElementById('hello-loader');
+    const progressBar = document.getElementById('hello-progress-bar');
+    const progressTrack = document.querySelector('.hello-progress');
+    const loadButton = document.getElementById('load-website');
     if (!introEl || !canvas) return;
 
     const ctx = canvas.getContext('2d');
@@ -69,12 +71,85 @@
 
     function easeOutQuint(t) { return 1 - Math.pow(1 - t, 5); }
 
+    function drawMountainMark(elapsed) {
+        const centerX = W / 2;
+        const baseY = H / 2 + Math.min(H * 0.13, 115);
+        const width = Math.min(W * 0.58, 620);
+        const height = Math.min(H * 0.12, 100);
+        const drift = Math.sin(elapsed * 0.0012) * 3;
+        const left = centerX - width / 2;
+        const points = [
+            [left, baseY],
+            [left + width * 0.18, baseY - height * 0.42],
+            [left + width * 0.3, baseY - height * 0.2],
+            [left + width * 0.47, baseY - height],
+            [left + width * 0.62, baseY - height * 0.3],
+            [left + width * 0.76, baseY - height * 0.58],
+            [left + width, baseY]
+        ];
+
+        ctx.save();
+        ctx.translate(0, drift);
+        ctx.strokeStyle = 'rgba(93, 225, 210, 0.92)';
+        ctx.lineWidth = 1.2;
+        ctx.shadowColor = 'rgba(93, 225, 210, 0.9)';
+        ctx.shadowBlur = 16;
+        ctx.beginPath();
+        points.forEach(([x, y], index) => index ? ctx.lineTo(x, y) : ctx.moveTo(x, y));
+        ctx.stroke();
+
+        ctx.shadowBlur = 0;
+        ctx.strokeStyle = 'rgba(172, 255, 244, 0.82)';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(centerX - width * 0.22, baseY - height * 0.47);
+        ctx.lineTo(centerX - width * 0.04, baseY - height * 0.7);
+        ctx.lineTo(centerX + width * 0.08, baseY - height * 0.45);
+        ctx.moveTo(centerX + width * 0.17, baseY - height * 0.48);
+        ctx.lineTo(centerX + width * 0.3, baseY - height * 0.3);
+        ctx.stroke();
+
+        const beamOriginY = baseY - height * 0.88;
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.42)';
+        ctx.lineWidth = 1;
+        ctx.setLineDash([3, 7]);
+        [-0.42, -0.26, -0.1, 0.1, 0.26, 0.42].forEach(offset => {
+            ctx.beginPath();
+            ctx.moveTo(centerX + offset * width, beamOriginY);
+            ctx.lineTo(centerX + offset * width * 1.65, baseY + height * 0.02);
+            ctx.stroke();
+        });
+
+        ctx.setLineDash([2, 8]);
+        ctx.strokeStyle = 'rgba(93, 225, 210, 0.72)';
+        ctx.beginPath();
+        ctx.ellipse(centerX, baseY - height * 0.35, width * 0.62, height * 0.22, -0.06, Math.PI * 1.08, Math.PI * 1.92);
+        ctx.stroke();
+        ctx.restore();
+    }
+
     let start = null;
     let maxDelay = 0;
+    let introFinished = false;
+
+    function finishIntro() {
+        if (introFinished) return;
+        introFinished = true;
+        if (progressBar) progressBar.style.width = '100%';
+        if (progressTrack) progressTrack.setAttribute('aria-valuenow', '100');
+        introEl.classList.add('fade-out');
+        document.body.style.overflow = '';
+        setTimeout(() => introEl.remove(), 1100);
+    }
 
     function animate(ts) {
+        if (introFinished) return;
         if (!start) start = ts;
         const elapsed = ts - start;
+        const totalDuration = maxDelay + FORM_MS + SETTLE_MS + HOLD_MS;
+        const progress = Math.min(100, (elapsed / totalDuration) * 100);
+        if (progressBar) progressBar.style.width = `${progress}%`;
+        if (progressTrack) progressTrack.setAttribute('aria-valuenow', String(Math.round(progress)));
         ctx.clearRect(0, 0, W, H);
 
         particles.forEach(p => {
@@ -98,12 +173,12 @@
             ctx.fill();
         });
 
-        if (elapsed < maxDelay + FORM_MS + SETTLE_MS + HOLD_MS) {
+        drawMountainMark(elapsed);
+
+        if (elapsed < totalDuration) {
             requestAnimationFrame(animate);
         } else {
-            introEl.classList.add('fade-out');
-            document.body.style.overflow = '';
-            setTimeout(() => introEl.remove(), 1100);
+            finishIntro();
         }
     }
 
@@ -113,10 +188,8 @@
 
         const maxDistFromCenter = Math.hypot(W / 2, H / 2);
         maxDelay = BASE_DELAY + maxDistFromCenter * DIST_FACTOR + MAX_RAND_DELAY;
-        const revealDelay = Math.max(0, maxDelay + FORM_MS - 300);
-        setTimeout(() => { if (loaderEl) loaderEl.classList.add('show'); }, revealDelay);
-
         window.addEventListener('resize', () => { resize(); initParticles(); });
+        if (loadButton) loadButton.addEventListener('click', finishIntro, { once: true });
         requestAnimationFrame(animate);
     }
     if (document.fonts && document.fonts.ready) {
@@ -159,6 +232,86 @@ VANTA.RINGS({
     backgroundAlpha: 0.0,
     color: 0x1da9c0,
 });
+(function () {
+    const canvas = document.getElementById('code-canvas');
+    if (!canvas || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    const ctx = canvas.getContext('2d');
+    const glyphs = ['</>', '{ }', '=>', '01', 'const', 'npm run', 'git push', '[ ]'];
+    let width = 0;
+    let height = 0;
+    let dpr = 1;
+    let particles = [];
+
+    function resize() {
+        const rect = canvas.getBoundingClientRect();
+        width = rect.width;
+        height = rect.height;
+        dpr = Math.min(window.devicePixelRatio || 1, 2);
+        canvas.width = Math.round(width * dpr);
+        canvas.height = Math.round(height * dpr);
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+        const count = width < 600 ? 15 : 30;
+        particles = Array.from({ length: count }, (_, index) => ({
+            x: Math.random() * width,
+            band: Math.random() < 0.5 ? 'top' : 'bottom',
+            y: 0,
+            speed: Math.random() * 0.12 + 0.04,
+            drift: Math.random() * 0.5 - 0.25,
+            phase: Math.random() * Math.PI * 2,
+            size: Math.random() * 4 + 11,
+            weight: Math.random() > 0.55 ? 700 : 600,
+            text: glyphs[index % glyphs.length]
+        }));
+        particles.forEach(particle => {
+            particle.y = particle.band === 'top'
+                ? Math.random() * height * 0.12 + height * 0.06
+                : Math.random() * height * 0.12 + height * 0.82;
+        });
+    }
+
+    function draw(timestamp) {
+        ctx.clearRect(0, 0, width, height);
+        const nodes = particles.filter(particle => particle.size > 11);
+
+        nodes.forEach((particle, index) => {
+            const wave = Math.sin(timestamp * 0.0007 + particle.phase);
+            const x = particle.x + wave * 14;
+            const lift = Math.sin(timestamp * 0.00045 + particle.phase) * 9;
+            const y = particle.y - (timestamp * particle.speed * 0.01) % 18 + lift;
+            const alpha = 0.34 + (wave + 1) * 0.12;
+
+            ctx.fillStyle = `rgba(159, 232, 220, ${alpha})`;
+            ctx.font = `${particle.weight} ${particle.size}px Rajdhani, sans-serif`;
+            ctx.shadowColor = 'rgba(159, 232, 220, 0.65)';
+            ctx.shadowBlur = 9;
+            ctx.letterSpacing = '0.08em';
+            ctx.fillText(particle.text, x, y);
+            ctx.shadowBlur = 0;
+
+            if (index > 0 && particle.band === nodes[index - 1].band && Math.abs(x - nodes[index - 1].x) < width * 0.22) {
+                ctx.strokeStyle = `rgba(159, 232, 220, ${alpha * 0.6})`;
+                ctx.lineWidth = 1;
+                ctx.beginPath();
+                ctx.moveTo(x, y - 4);
+                ctx.lineTo(nodes[index - 1].x, nodes[index - 1].y - 4);
+                ctx.stroke();
+
+                ctx.fillStyle = `rgba(255, 255, 255, ${alpha})`;
+                ctx.beginPath();
+                ctx.arc(x, y - 4, 2, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        });
+
+        requestAnimationFrame(draw);
+    }
+
+    resize();
+    window.addEventListener('resize', resize);
+    requestAnimationFrame(draw);
+})();
 (function () {
     const canvas = document.getElementById('orbit-canvas');
     if (!canvas) return;
@@ -1046,7 +1199,7 @@ ctx.arc(drawX, drawY, p.r, 0, Math.PI * 2);
                 bubbles.push({
                     x: e.clientX + (Math.random() - 0.5) * 16,
                     y: e.clientY + (Math.random() - 0.5) * 16,
-                    r: Math.random() * 6 + 3,
+                    r: Math.random() * 5 + 3,
                     vx: (Math.random() - 0.5) * 0.35,
                     vy: (Math.random() - 0.5) * 0.35 - 0.25,
                     drift: Math.random() * 0.02 + 0.01,
@@ -1076,34 +1229,50 @@ ctx.arc(drawX, drawY, p.r, 0, Math.PI * 2);
             b.y += b.vy;
 
             const [r, g, bl] = b.hue;
-            const radius = b.r * (0.4 + eased * 0.9);
+            const size = b.r * (0.6 + eased * 0.8);
 
             ctx.save();
-            ctx.beginPath();
-            ctx.arc(b.x, b.y, radius, 0, Math.PI * 2);
-            const grad = ctx.createRadialGradient(b.x, b.y, 0, b.x, b.y, radius);
-            grad.addColorStop(0, `rgba(${r}, ${g}, ${bl}, ${eased * 0.75})`);
-            grad.addColorStop(0.6, `rgba(${r}, ${g}, ${bl}, ${eased * 0.35})`);
-            grad.addColorStop(1, `rgba(${r}, ${g}, ${bl}, 0)`);
-            ctx.fillStyle = grad;
+            ctx.translate(b.x, b.y);
+            ctx.rotate((now - b.t) * 0.0015);
+            ctx.strokeStyle = `rgba(${r}, ${g}, ${bl}, ${eased * 0.8})`;
+            ctx.lineWidth = 1;
             ctx.shadowColor = `rgba(${r}, ${g}, ${bl}, 0.9)`;
-            ctx.shadowBlur = 14;
-            ctx.fill();
-
-            ctx.beginPath();
-            ctx.arc(b.x, b.y, Math.max(0.4, radius * 0.28), 0, Math.PI * 2);
-            ctx.fillStyle = `rgba(255, 255, 255, ${eased * 0.6})`;
-            ctx.shadowBlur = 6;
-            ctx.fill();
+            ctx.shadowBlur = 10;
+            ctx.strokeRect(-size / 2, -size / 2, size, size);
+            ctx.fillStyle = `rgba(255, 255, 255, ${eased * 0.45})`;
+            ctx.fillRect(-1, -1, 2, 2);
             ctx.restore();
         });
 
         bubbles = bubbles.filter(b => now - b.t < b.life);
     }
 
+    function drawMagnifier() {
+        if (lastMouse.x < 0 || lastMouse.y < 0 || window.matchMedia('(hover: none)').matches) return;
+
+        ctx.save();
+        ctx.translate(lastMouse.x, lastMouse.y);
+        ctx.rotate(performance.now() * 0.0018);
+        const zoom = 1 + Math.sin(performance.now() * 0.004) * 0.08;
+        ctx.scale(zoom, zoom);
+        ctx.strokeStyle = 'rgba(255,255,255,0.7)';
+        ctx.lineWidth = 1;
+        ctx.shadowColor = 'rgba(159,232,220,0.85)';
+        ctx.shadowBlur = 12;
+        ctx.beginPath();
+        ctx.arc(0, 0, 18, 0, Math.PI * 2);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(13, 13);
+        ctx.lineTo(25, 25);
+        ctx.stroke();
+        ctx.restore();
+    }
+
     function draw() {
         ctx.clearRect(0, 0, W, H);
         drawBubbles();
+        drawMagnifier();
         requestAnimationFrame(draw);
     }
 
@@ -1191,6 +1360,9 @@ ctx.arc(drawX, drawY, p.r, 0, Math.PI * 2);
         card.addEventListener('click', () => {
             const nearest = Math.round(activeFloat);
             if (i !== nearest) scrollToIndex(i);
+        });
+        card.querySelectorAll('a.github-view-btn').forEach(link => {
+            link.addEventListener('click', event => event.stopPropagation());
         });
     });
 
