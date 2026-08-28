@@ -779,7 +779,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const offscreen = document.createElement('canvas');
     const offscreenCtx = offscreen.getContext('2d', { willReadFrequently: true });
     const palette = ['#f5f7ff', '#b9fff1', '#8cdcff', '#d4b7ff', '#ffb8c4', '#ffd88a'];
-    const sequence = ['AI', 'RC', 'JS', 'PY'];
+    const sequence = ['RC', 'AI', 'JS', 'PY'];
     let particles = [];
     let width = 0;
     let height = 0;
@@ -794,7 +794,13 @@ document.addEventListener("DOMContentLoaded", () => {
         offscreen.height = Math.round(height);
         offscreenCtx.clearRect(0, 0, width, height);
         offscreenCtx.fillStyle = '#fff';
-        offscreenCtx.font = `700 ${Math.min(width * 0.42, height * 0.78)}px Orbitron, sans-serif`;
+        const maxFontSize = Math.min(width * 0.52, height * 0.82);
+        offscreenCtx.font = `700 ${maxFontSize}px Orbitron, sans-serif`;
+        const measuredWidth = offscreenCtx.measureText(text).width;
+        const fontSize = measuredWidth > width * 0.84
+            ? maxFontSize * (width * 0.84 / measuredWidth)
+            : maxFontSize;
+        offscreenCtx.font = `700 ${fontSize}px Orbitron, sans-serif`;
         offscreenCtx.textAlign = 'center';
         offscreenCtx.textBaseline = 'middle';
         offscreenCtx.fillText(text, width / 2, height / 2);
@@ -1453,6 +1459,7 @@ ctx.arc(drawX, drawY, p.r, 0, Math.PI * 2);
     const prevBtn = document.getElementById('carousel3dPrev');
     const nextBtn = document.getElementById('carousel3dNext');
     const dotsWrap = document.getElementById('carousel3dDots');
+    const projectLinks = Array.from(document.querySelectorAll('[data-project-link]'));
     const total = cards.length;
 
     cards.forEach((_, i) => {
@@ -1489,6 +1496,9 @@ ctx.arc(drawX, drawY, p.r, 0, Math.PI * 2);
 
         const nearest = Math.round(pos + total) % total;
         dots.forEach((d, i) => d.classList.toggle('active', i === nearest));
+        projectLinks.forEach(link => {
+            link.classList.toggle('active', Number(link.dataset.projectLink) === nearest);
+        });
     }
 
     function updateFromScroll() {
@@ -1526,9 +1536,6 @@ ctx.arc(drawX, drawY, p.r, 0, Math.PI * 2);
         card.addEventListener('click', () => {
             const nearest = Math.round(activeFloat);
             if (i !== nearest) scrollToIndex(i);
-        });
-        card.querySelectorAll('a.github-view-btn').forEach(link => {
-            link.addEventListener('click', event => event.stopPropagation());
         });
     });
 
