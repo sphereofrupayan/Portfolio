@@ -767,6 +767,151 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 });
 
+(function () {
+    const canvas = document.getElementById('bubble-canvas');
+    const stage = document.querySelector('.magnetic-art-stage');
+    if (!canvas || !stage) return;
+
+    const ctx = canvas.getContext('2d');
+    const mirrorCanvas = document.getElementById('bubble-canvas-right');
+    const mirrorCard = document.querySelector('.about-card');
+    const mirrorCtx = mirrorCanvas ? mirrorCanvas.getContext('2d') : null;
+    const offscreen = document.createElement('canvas');
+    const offscreenCtx = offscreen.getContext('2d', { willReadFrequently: true });
+    const palette = ['#f5f7ff', '#b9fff1', '#8cdcff', '#d4b7ff', '#ffb8c4', '#ffd88a'];
+    const sequence = ['AI', 'RC', 'JS', 'PY'];
+    let particles = [];
+    let width = 0;
+    let height = 0;
+    let dpr = 1;
+    let animationFrame;
+    let lastTime = 0;
+    let sequenceIndex = 0;
+    const pointer = { x: 0, y: 0, active: false };
+
+    function buildTargets(text) {
+        offscreen.width = Math.round(width);
+        offscreen.height = Math.round(height);
+        offscreenCtx.clearRect(0, 0, width, height);
+        offscreenCtx.fillStyle = '#fff';
+        offscreenCtx.font = `700 ${Math.min(width * 0.42, height * 0.78)}px Orbitron, sans-serif`;
+        offscreenCtx.textAlign = 'center';
+        offscreenCtx.textBaseline = 'middle';
+        offscreenCtx.fillText(text, width / 2, height / 2);
+
+        const pixels = offscreenCtx.getImageData(0, 0, Math.round(width), Math.round(height)).data;
+        const targets = [];
+        const step = width < 600 ? 3 : 4;
+        for (let y = 0; y < height; y += step) {
+            for (let x = 0; x < width; x += step) {
+            if (pixels[(y * Math.round(width) + x) * 4 + 3] > 100 && Math.random() < 0.9) {
+                    targets.push({ x, y });
+                }
+            }
+        }
+        return targets;
+    }
+
+    function resize() {
+        const rect = stage.getBoundingClientRect();
+        width = rect.width;
+        height = rect.height;
+        dpr = Math.min(window.devicePixelRatio || 1, 2);
+        canvas.width = Math.round(width * dpr);
+        canvas.height = Math.round(height * dpr);
+        canvas.style.width = width + 'px';
+        canvas.style.height = height + 'px';
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+        if (mirrorCanvas && mirrorCard) {
+            const mirrorRect = mirrorCard.getBoundingClientRect();
+            mirrorCanvas.width = Math.round(mirrorRect.width * dpr);
+            mirrorCanvas.height = Math.round(mirrorRect.height * dpr);
+            mirrorCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        }
+
+        particles = buildTargets(sequence[sequenceIndex]).map((target, index) => ({
+            x: Math.random() < 0.5 ? (Math.random() * width * 0.25 - 30) : (width * (0.75 + Math.random() * 0.25) + 30),
+            y: Math.random() < 0.5 ? (Math.random() * height * 0.25 - 30) : (height * (0.75 + Math.random() * 0.25) + 30),
+            tx: target.x,
+            ty: target.y,
+            vx: 0,
+            vy: 0,
+            size: Math.random() * 1.7 + 0.65,
+            color: palette[index % palette.length],
+            phase: Math.random() * Math.PI * 2
+        }));
+    }
+
+    function startNextShape() {
+        sequenceIndex = (sequenceIndex + 1) % sequence.length;
+        const targets = buildTargets(sequence[sequenceIndex]);
+        particles.forEach((particle, index) => {
+            const corner = index % 4;
+            particle.x = corner % 2 ? width + Math.random() * 50 : -Math.random() * 50;
+            particle.y = corner < 2 ? -Math.random() * 50 : height + Math.random() * 50;
+            const target = targets[index % targets.length];
+            particle.tx = target.x;
+            particle.ty = target.y;
+            particle.vx = 0;
+            particle.vy = 0;
+        });
+    }
+
+    function draw(time) {
+        const delta = Math.min((time - lastTime) / 16.67 || 1, 2);
+        lastTime = time;
+        ctx.clearRect(0, 0, width, height);
+
+        particles.forEach(particle => {
+            const dx = particle.tx - particle.x;
+            const dy = particle.ty - particle.y;
+            const distance = Math.max(16, Math.hypot(dx, dy));
+            const pointerDx = pointer.x - particle.x;
+            const pointerDy = pointer.y - particle.y;
+            const pointerDistance = Math.max(20, Math.hypot(pointerDx, pointerDy));
+            const pointerForce = pointer.active ? Math.max(0, 1 - pointerDistance / 150) * 1.8 : 0;
+
+            particle.vx += dx * 0.008 * delta - pointerDx / pointerDistance * pointerForce * delta;
+            particle.vy += dy * 0.008 * delta - pointerDy / pointerDistance * pointerForce * delta;
+            particle.vx += Math.sin(time * 0.0012 + particle.phase) * 0.018 * delta;
+            particle.vy += Math.cos(time * 0.001 + particle.phase) * 0.018 * delta;
+            particle.vx *= 0.9;
+            particle.vy *= 0.9;
+            particle.x += particle.vx * delta;
+            particle.y += particle.vy * delta;
+
+            ctx.globalAlpha = Math.min(0.92, 0.3 + 18 / distance);
+            ctx.fillStyle = particle.color;
+            ctx.beginPath();
+            ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+            ctx.fill();
+        });
+        ctx.globalAlpha = 1;
+        if (mirrorCanvas && mirrorCtx && mirrorCard) {
+            const mirrorRect = mirrorCard.getBoundingClientRect();
+            mirrorCtx.clearRect(0, 0, mirrorRect.width, mirrorRect.height);
+            mirrorCtx.globalAlpha = 0.8;
+            mirrorCtx.drawImage(canvas, 0, 0, width, height, 0, 0, mirrorRect.width, mirrorRect.height);
+            mirrorCtx.globalAlpha = 1;
+        }
+        animationFrame = requestAnimationFrame(draw);
+    }
+
+    stage.addEventListener('pointermove', event => {
+        const rect = stage.getBoundingClientRect();
+        pointer.x = event.clientX - rect.left;
+        pointer.y = event.clientY - rect.top;
+        pointer.active = true;
+    });
+    stage.addEventListener('pointerleave', () => { pointer.active = false; });
+    window.addEventListener('resize', resize);
+    resize();
+    setInterval(startNextShape, 4200);
+    animationFrame = requestAnimationFrame(draw);
+    window.addEventListener('pagehide', () => cancelAnimationFrame(animationFrame), { once: true });
+})();
+
 
 document.addEventListener("DOMContentLoaded", () => {
     const skillsSection = document.querySelector('.ProfessionalSkills');
@@ -1247,25 +1392,46 @@ ctx.arc(drawX, drawY, p.r, 0, Math.PI * 2);
         bubbles = bubbles.filter(b => now - b.t < b.life);
     }
 
+    const cursorGradients = [
+        ['#79f5e2', '#5b8cff'],
+        ['#ff9fca', '#b78cff'],
+        ['#ffd166', '#ff6b8a'],
+        ['#8ce7ff', '#b9ff9b']
+    ];
+
     function drawMagnifier() {
         if (lastMouse.x < 0 || lastMouse.y < 0 || window.matchMedia('(hover: none)').matches) return;
 
+        const now = performance.now();
+        const rotationSpeed = 0.0016;
+        const rotation = now * rotationSpeed;
+        const turn = rotation % (Math.PI * 2);
+        const colorSet = cursorGradients[Math.floor(rotation / (Math.PI * 2)) % cursorGradients.length];
+
         ctx.save();
         ctx.translate(lastMouse.x, lastMouse.y);
-        ctx.rotate(performance.now() * 0.0018);
-        const zoom = 1 + Math.sin(performance.now() * 0.004) * 0.08;
-        ctx.scale(zoom, zoom);
-        ctx.strokeStyle = 'rgba(255,255,255,0.7)';
-        ctx.lineWidth = 1;
-        ctx.shadowColor = 'rgba(159,232,220,0.85)';
-        ctx.shadowBlur = 12;
+        ctx.rotate(turn);
+        const boxSize = 44;
+        const half = boxSize / 2;
+        const gradient = ctx.createLinearGradient(-half, -half, half, half);
+        gradient.addColorStop(0, colorSet[0]);
+        gradient.addColorStop(1, colorSet[1]);
+        ctx.shadowColor = colorSet[0];
+        ctx.shadowBlur = 18;
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = gradient;
+        ctx.fillStyle = 'rgba(10, 18, 24, 0.16)';
         ctx.beginPath();
-        ctx.arc(0, 0, 18, 0, Math.PI * 2);
+        ctx.rect(-half, -half, boxSize, boxSize);
+        ctx.fill();
         ctx.stroke();
+
+        ctx.shadowColor = colorSet[1];
+        ctx.shadowBlur = 14;
+        ctx.fillStyle = gradient;
         ctx.beginPath();
-        ctx.moveTo(13, 13);
-        ctx.lineTo(25, 25);
-        ctx.stroke();
+        ctx.arc(0, 0, 5.5, 0, Math.PI * 2);
+        ctx.fill();
         ctx.restore();
     }
 
