@@ -338,7 +338,31 @@ nav ul li.nav-links a:hover {
     z-index: 20;
 }
 
-#bubble-canvas { display: none; }
+.magnetic-art-stage {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    height: clamp(240px, 34vw, 390px);
+    margin: 0;
+    overflow: hidden;
+    background: transparent;
+    box-shadow: none;
+}
+
+.about-split {
+    display: grid;
+    grid-template-columns: minmax(0, 1.05fr) minmax(320px, 0.95fr);
+    align-items: center;
+    gap: clamp(24px, 5vw, 76px);
+    max-width: 1280px;
+    margin: clamp(28px, 5vw, 58px) auto 0;
+}
+
+#bubble-canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
 
 .skills-section {
     padding: clamp(48px, 8vh, 80px) clamp(20px, 6vw, 72px);
@@ -1806,6 +1830,13 @@ nav ul li.nav-links a:hover {
         width: clamp(160px, 50vw, 280px);
         height: clamp(160px, 50vw, 280px);
     }
+    .about-split {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    .magnetic-art-stage {
+        height: clamp(210px, 52vw, 300px);
+    }
 
     .tech-orbit-wrapper {
         flex-direction: column;
@@ -1926,7 +1957,9 @@ nav ul li.nav-links a:hover {
 
 .about-card {
     position: relative;
-    margin: 50px auto 0;
+    z-index: 2;
+    width: 100%;
+    margin: 0;
     max-width: 1000px;
     padding: 40px 50px;
     border-radius: 32px;
@@ -1938,6 +1971,16 @@ nav ul li.nav-links a:hover {
     text-align: center;
 }
 
+#bubble-canvas-right {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0.2;
+    pointer-events: none;
+    transform: scaleX(-1);
+}
+
 .about-text {
     position: relative;
     z-index: 2;
@@ -1945,14 +1988,57 @@ nav ul li.nav-links a:hover {
     font-family: -apple-system, BlinkMacSystemFont,
                  "SF Pro Display", "Inter",
                  "Poppins", sans-serif;
-    font-size: clamp(1.1rem, 1.5vw, 1.35rem);
+    font-size: clamp(0.92rem, 1.25vw, 1.08rem);
     font-weight: 400;
-    line-height: 1.9;
-    letter-spacing: -0.02em;
-    color: rgba(255,255,255,0.82);
+    line-height: 1.55;
+    letter-spacing: 0;
     text-align: center;
     max-width: 850px;     
     animation: fadeText 1.2s ease forwards;
+}
+
+.about-kicker,
+.about-keyword,
+.about-support {
+    display: block;
+    position: relative;
+    z-index: 2;
+}
+
+.about-kicker {
+    margin-bottom: 12px;
+    color: rgba(185,255,241,0.72);
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+}
+
+.about-keyword {
+    margin-bottom: 12px;
+    color: #fff;
+    font-family: 'Orbitron', sans-serif;
+    font-size: clamp(2.2rem, 5vw, 4.4rem);
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    line-height: 1;
+    background: linear-gradient(100deg, #f5f7ff, #8cdcff 45%, #d4b7ff);
+    background-size: 180% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: aboutKeywordFlow 4s ease-in-out infinite alternate;
+}
+
+.about-support {
+    max-width: 290px;
+    margin: 0 auto;
+    color: rgba(255,255,255,0.72);
+}
+
+@keyframes aboutKeywordFlow {
+    from { background-position: 0% center; transform: translateY(0); }
+    to { background-position: 100% center; transform: translateY(-4px); }
 }
 
 .apple-highlight {
@@ -3283,13 +3369,14 @@ nav ul li.nav-links a:hover {
 }
 
 @media (pointer: fine) {
-    body { cursor: none; }
-    a, button, select, textarea, input { cursor: pointer; }
+    body,
+    body * {
+        cursor: none !important;
+    }
 }
 
 #cursor-spotlight {
     position: fixed;
-    border: 1px solid rgba(159,232,220,0.22);
 }
 .fade-out {
     animation: helloIntroFade 0.9s cubic-bezier(0.4, 0, 0.2, 1) forwards;
