@@ -36,6 +36,22 @@ nav ul li.brand {
     color: #fff;
 }
 
+nav ul li.brand .brand-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    color: inherit;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+nav ul li.brand .brand-logo {
+    display: block;
+    width: 38px;
+    height: 38px;
+    object-fit: contain;
+}
+
 nav ul li.nav-links {
     display: flex;
     gap: clamp(8px, 2vw, 18px);
@@ -1197,11 +1213,11 @@ nav ul li.nav-links a:hover {
     max-width: 680px;
     padding: clamp(30px, 4.5vw, 50px);
     border-radius: 24px;
-    background: rgba(255,255,255,0.045);           
-    border: 1px solid rgba(255,255,255,0.09);
-    backdrop-filter: blur(8px) saturate(160%);       
-    -webkit-backdrop-filter: blur(8px) saturate(160%);
-    box-shadow: 0 25px 60px rgba(0,0,0,0.5);
+    background: linear-gradient(145deg, rgba(255,255,255,0.035), rgba(10,20,25,0.18));
+    border: 1px solid rgba(159,232,220,0.16);
+    backdrop-filter: blur(18px) saturate(145%);
+    -webkit-backdrop-filter: blur(18px) saturate(145%);
+    box-shadow: 0 25px 60px rgba(0,0,0,0.42), 0 0 45px rgba(29,169,192,0.08);
     overflow: hidden;
     transition: transform 0.4s cubic-bezier(0.22,1,0.36,1), box-shadow 0.4s ease, border-color 0.4s ease;
 }
@@ -1318,7 +1334,17 @@ nav ul li.nav-links a:hover {
     font-family: 'Poppins', sans-serif;
     font-size: clamp(0.9rem, 1.4vw, 1rem);
     line-height: 1.7;
-    color: rgba(255,255,255,0.8);
+    background: linear-gradient(100deg, #b8fff3 0%, #8edff1 44%, #c7b8ff 100%);
+    background-size: 180% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: internshipTextDrift 7s ease-in-out infinite alternate;
+}
+
+@keyframes internshipTextDrift {
+    from { background-position: 0% center; }
+    to { background-position: 100% center; }
 }
 
 .internship-points li::before {
@@ -1327,6 +1353,7 @@ nav ul li.nav-links a:hover {
     left: 0;
     top: 0.3em;
     color: #1da9c0;
+    -webkit-text-fill-color: #1da9c0;
     font-size: 0.6em;
 }
 
@@ -1350,6 +1377,12 @@ nav ul li.nav-links a:hover {
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
+}
+
+.stack-chips .chip-frontend,
+.stack-chips .chip-backend {
+    flex: 0 0 100%;
+    width: max-content;
 }
 
 .chip {
@@ -1819,6 +1852,9 @@ nav ul li.nav-links a:hover {
 
 @media (max-width: 600px) {
     nav ul { height: 56px; padding: 0 16px; }
+    nav ul li.brand .brand-link { gap: 7px; }
+    nav ul li.brand .brand-logo { width: 32px; height: 32px; }
+    nav ul li.brand span { font-size: 0.72rem; letter-spacing: 1px; }
 
     .hero { padding: 72px 20px 0; }
     .hero-left h1 { font-size: clamp(1.6rem, 7vw, 2.2rem); }
@@ -2805,22 +2841,23 @@ nav ul li.nav-links a:hover {
     position: absolute;
     bottom: 80px;
     right: 0;
-    width: 380px;
-    height: 560px;
+    width: min(420px, calc(100vw - 32px));
+    height: min(620px, calc(100vh - 120px));
     display: none;
     flex-direction: column;
     overflow: hidden;
-    border-radius: 4px;
+    border-radius: 22px;
     background:
         radial-gradient(circle at 15% 0%, rgba(127,92,255,0.10), transparent 55%),
         radial-gradient(circle at 100% 100%, rgba(29,169,192,0.09), transparent 55%),
-        rgba(17,17,17,0.9);
-    border: 1px solid rgba(255,255,255,0.08);
+        rgba(10,18,22,0.88);
+    border: 1px solid rgba(159,232,220,0.22);
     backdrop-filter: blur(26px) saturate(160%);
     -webkit-backdrop-filter: blur(26px) saturate(160%);
     box-shadow:
-        0 25px 70px rgba(0,0,0,0.5),
-        0 0 0 1px rgba(255,255,255,0.04) inset;
+        0 28px 80px rgba(0,0,0,0.58),
+        0 0 45px rgba(29,169,192,0.14),
+        0 0 0 1px rgba(255,255,255,0.05) inset;
     transform-origin: bottom right;
     animation: botWindowIn 0.5s cubic-bezier(0.22,1,0.36,1);
 }
@@ -2837,9 +2874,9 @@ nav ul li.nav-links a:hover {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 16px 18px;
+    padding: 18px 20px;
     border-bottom: 1px solid rgba(255,255,255,0.07);
-    background: rgba(255,255,255,0.02);
+    background: linear-gradient(120deg, rgba(159,232,220,0.09), rgba(127,92,255,0.07));
     flex-shrink: 0;
 }
 
@@ -2867,7 +2904,10 @@ nav ul li.nav-links a:hover {
     font-family: 'Orbitron', sans-serif;
     font-size: 0.92rem;
     font-weight: 700;
-    color: #fff;
+    background: linear-gradient(90deg, #e8fff9, #9fe8dc 50%, #c6b7ff);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
     letter-spacing: 0.5px;
 }
 
@@ -3057,7 +3097,7 @@ nav ul li.nav-links a:hover {
     gap: 10px;
     padding: 14px 16px;
     border-top: 1px solid rgba(255,255,255,0.07);
-    background: rgba(255,255,255,0.02);
+    background: rgba(7,15,18,0.38);
     flex-shrink: 0;
     min-height: 68px;
     box-sizing: border-box;
@@ -3114,8 +3154,9 @@ nav ul li.nav-links a:hover {
     #rusho-bot { bottom: 16px; right: 16px; }
     #bot-window {
         width: calc(100vw - 32px);
-        height: 70vh;
+        height: min(72vh, 620px);
         bottom: 74px;
+        border-radius: 18px;
     }
 }
 .msg-bubble a{
@@ -3135,7 +3176,7 @@ nav ul li.nav-links a:hover {
 #hello-intro {
     position: fixed;
     inset: 0;
-    z-index: 9999;
+    z-index: 90;
     display: grid;
     place-items: center;
     background:
