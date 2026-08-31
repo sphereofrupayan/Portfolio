@@ -994,6 +994,23 @@ userInput.addEventListener("keydown", (e) => {
         document.getElementById("send-btn").click();
     }
 });
+function escapeHtml(value) {
+    return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/\"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
+function formatBotText(text) {
+    const escaped = escapeHtml(text);
+    const withCode = escaped.replace(/`([^`]+)`/g, '<code>$1</code>');
+    const withBold = withCode.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+    const withItalic = withBold.replace(/\*(.+?)\*/g, '<em>$1</em>');
+    return makeLinksClickable(withItalic);
+}
+
 function makeLinksClickable(text) {
     const urlRegex = /(https?:\/\/[^\s]+)/g;
 
@@ -1008,18 +1025,77 @@ function appendMessage(text, sender = "bot") {
 
     msg.className = `msg ${sender}`;
 
-    const content =
-        sender === "bot"
-            ? makeLinksClickable(text)
-            : text;
+    const content = sender === "bot" ? formatBotText(text) : escapeHtml(text);
 
-    msg.innerHTML = `
-        <span class="msg-avatar">${sender === "bot" ? "AI" : "🧑"}</span>
-        <div class="msg-bubble">${content}</div>
-    `;
+    const bubble = document.createElement("div");
+    bubble.className = "msg-bubble";
+    bubble.innerHTML = content;
 
+    if (sender === "bot") {
+        const canvas = document.createElement("canvas");
+        canvas.className = "msg-canvas";
+        bubble.prepend(canvas);
+
+        const ctx = canvas.getContext("2d");
+        const renderBubbleCanvas = () => {
+            const rect = bubble.getBoundingClientRect();
+            const dpr = window.devicePixelRatio || 1;
+            canvas.width = Math.max(160, rect.width) * dpr;
+            canvas.height = 92 * dpr;
+            canvas.style.width = `${Math.max(160, rect.width)}px`;
+            canvas.style.height = "92px";
+            ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            const w = rect.width;
+            const h = 92;
+            const t = performance.now() * 0.001;
+
+            for (let i = 0; i < 18; i++) {
+                const x = ((i * 31 + (t * 24)) % (w + 40)) - 20;
+                const y = 18 + (i % 5) * 14 + Math.sin(t * 1.6 + i) * 12;
+                const radius = 2 + ((i % 3) * 1.2);
+                ctx.beginPath();
+                ctx.arc(x, y, radius, 0, Math.PI * 2);
+                ctx.fillStyle = i % 2 === 0 ? "rgba(255, 214, 102, 0.9)" : "rgba(111, 183, 255, 0.9)";
+                ctx.fill();
+            }
+
+            ctx.beginPath();
+            ctx.moveTo(0, h * 0.8);
+            for (let x = 0; x <= w; x += 20) {
+                const y = h * 0.72 + Math.sin(x * 0.07 + t * 2.2) * 12;
+                ctx.lineTo(x, y);
+            }
+            ctx.strokeStyle = "rgba(127, 214, 255, 0.42)";
+            ctx.lineWidth = 1.1;
+            ctx.stroke();
+        };
+
+        renderBubbleCanvas();
+        window.addEventListener("resize", renderBubbleCanvas, { passive: true });
+        bubble._bubbleCanvasRender = renderBubbleCanvas;
+    }
+
+    const avatar = document.createElement("span");
+    avatar.className = "msg-avatar";
+    avatar.textContent = sender === "bot" ? "AI" : "🧑";
+
+    msg.appendChild(avatar);
+    msg.appendChild(bubble);
     chatBox.appendChild(msg);
     chatBox.scrollTop = chatBox.scrollHeight;
+
+    if (bubble._bubbleCanvasRender) {
+        requestAnimationFrame(() => {
+            const animate = () => {
+                if (!document.body.contains(bubble)) return;
+                bubble._bubbleCanvasRender();
+                requestAnimationFrame(animate);
+            };
+            requestAnimationFrame(animate);
+        });
+    }
 }
 const sendBtn = document.getElementById("send-btn");
 
