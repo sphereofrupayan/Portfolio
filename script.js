@@ -11,6 +11,10 @@
     const isMobile = window.innerWidth < 600;
 
     let W, H, dpr, particles = [];
+    let pointerX = -1;
+    let pointerY = -1;
+    let smoothPointerX = 0;
+    let smoothPointerY = 0;
 
     function resize() {
         dpr = Math.min(window.devicePixelRatio || 1, isMobile ? 1.5 : 2);
@@ -70,6 +74,40 @@
     }
 
     function easeOutQuint(t) { return 1 - Math.pow(1 - t, 5); }
+
+    function drawRotatingSphere(elapsed) {
+        const centerX = W / 2;
+        const centerY = H / 2;
+        const radius = Math.min(W * 0.31, H * 0.38, 310);
+        const rotation = 0;
+
+        ctx.save();
+        ctx.translate(centerX, centerY);
+        const glow = ctx.createRadialGradient(-radius * 0.28, -radius * 0.35, radius * 0.08, 0, 0, radius);
+        glow.addColorStop(0, 'rgba(159, 232, 220, 0.14)');
+        glow.addColorStop(0.55, 'rgba(159, 232, 220, 0.035)');
+        glow.addColorStop(1, 'rgba(159, 232, 220, 0)');
+        ctx.fillStyle = glow;
+        ctx.beginPath();
+        ctx.arc(0, 0, radius, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.strokeStyle = 'rgba(159, 232, 220, 0.24)';
+        ctx.lineWidth = 1;
+        ctx.shadowColor = 'rgba(159, 232, 220, 0.45)';
+        ctx.shadowBlur = 18;
+        ctx.beginPath();
+        ctx.arc(0, 0, radius, 0, Math.PI * 2);
+        ctx.stroke();
+
+        ctx.shadowBlur = 12;
+        ctx.strokeStyle = 'rgba(203, 255, 247, 0.58)';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.arc(0, 0, radius, rotation, rotation + Math.PI * 0.34);
+        ctx.stroke();
+        ctx.restore();
+    }
 
     function drawMountainMark(elapsed) {
         const centerX = W / 2;
@@ -150,7 +188,21 @@
         const progress = Math.min(100, (elapsed / totalDuration) * 100);
         if (progressBar) progressBar.style.width = `${progress}%`;
         if (progressTrack) progressTrack.setAttribute('aria-valuenow', String(Math.round(progress)));
+        if (pointerX < 0 || pointerY < 0) {
+            smoothPointerX += (W / 2 - smoothPointerX) * 0.08;
+            smoothPointerY += (H / 2 - smoothPointerY) * 0.08;
+        } else {
+            smoothPointerX += (pointerX - smoothPointerX) * 0.08;
+            smoothPointerY += (pointerY - smoothPointerY) * 0.08;
+        }
+        if (loadButton) {
+            const ready = progress >= 100;
+            loadButton.disabled = !ready;
+            loadButton.textContent = ready ? 'Swipe Down ↓' : 'Just a moment..';
+            loadButton.classList.toggle('is-ready', ready);
+        }
         ctx.clearRect(0, 0, W, H);
+        drawRotatingSphere(elapsed);
 
         particles.forEach(p => {
             const localT = (elapsed - p.delay) / FORM_MS;
@@ -158,18 +210,20 @@
             const eased = easeOutQuint(t);
             const settleT = Math.max(0, Math.min(1, (elapsed - p.delay - FORM_MS) / SETTLE_MS));
             const overshoot = t >= 1 ? Math.sin(settleT * Math.PI) * (1 - settleT) * 3 : 0;
-            const x = p.x + (p.tx - p.x) * eased;
-            const y = p.y + (p.ty - p.y) * eased - overshoot;
+            const parallaxX = (smoothPointerX - W / 2) * 0.018;
+            const parallaxY = (smoothPointerY - H / 2) * 0.018;
+            const x = p.x + (p.tx - p.x) * eased + parallaxX;
+            const y = p.y + (p.ty - p.y) * eased - overshoot + parallaxY;
             const glowStrength = 0.35 + eased * 0.65;
 
             ctx.beginPath();
             ctx.arc(x, y, p.r * 1.8, 0, Math.PI * 2);
-            ctx.fillStyle = `rgba(255,255,255,${glowStrength * 0.15})`;
+            ctx.fillStyle = `rgba(255,255,255,${glowStrength * 0.16})`;
             ctx.fill();
 
             ctx.beginPath();
             ctx.arc(x, y, p.r, 0, Math.PI * 2);
-            ctx.fillStyle = `rgba(255,255,255,${glowStrength})`;
+            ctx.fillStyle = `rgba(255,255,255,${0.62 + eased * 0.34})`;
             ctx.fill();
         });
 
@@ -178,18 +232,42 @@
         if (elapsed < totalDuration) {
             requestAnimationFrame(animate);
         } else {
-            finishIntro();
+            if (progressBar) progressBar.style.width = '100%';
+            if (progressTrack) progressTrack.setAttribute('aria-valuenow', '100');
+            requestAnimationFrame(animate);
         }
     }
 
     function startIntro() {
         resize();
         initParticles();
+        smoothPointerX = W / 2;
+        smoothPointerY = H / 2;
 
         const maxDistFromCenter = Math.hypot(W / 2, H / 2);
         maxDelay = BASE_DELAY + maxDistFromCenter * DIST_FACTOR + MAX_RAND_DELAY;
         window.addEventListener('resize', () => { resize(); initParticles(); });
-        if (loadButton) loadButton.addEventListener('click', finishIntro, { once: true });
+        window.addEventListener('pointermove', event => {
+            pointerX = event.clientX;
+            pointerY = event.clientY;
+        });
+        window.addEventListener('pointerleave', () => {
+            pointerX = -1;
+            pointerY = -1;
+        });
+        window.addEventListener('wheel', event => {
+            if (loadButton && !loadButton.disabled && event.deltaY > 0) finishIntro();
+        }, { passive: true });
+        window.addEventListener('touchstart', event => {
+            touchStartY = event.touches[0]?.clientY ?? null;
+        }, { passive: true });
+        window.addEventListener('touchend', event => {
+            const touchEndY = event.changedTouches[0]?.clientY;
+            if (loadButton && !loadButton.disabled && touchStartY !== null && touchEndY < touchStartY - 30) {
+                finishIntro();
+            }
+            touchStartY = null;
+        }, { passive: true });
         requestAnimationFrame(animate);
     }
     if (document.fonts && document.fonts.ready) {
