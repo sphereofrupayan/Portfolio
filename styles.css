@@ -3648,17 +3648,6 @@ nav ul li.nav-links a:hover {
     display: block;
 }
 
-#hello-intro::before {
-    content: "";
-    position: absolute;
-    width: min(72vw, 720px);
-    aspect-ratio: 1;
-    border: 2px dotted rgba(255,255,255,0.55);
-    border-radius: 50%;
-    box-shadow: 0 0 80px rgba(29,169,192,0.12), inset 0 0 80px rgba(29,169,192,0.06);
-    pointer-events: none;
-}
-
 .hello-content {
     position: relative;
     position: absolute;
@@ -3667,21 +3656,47 @@ nav ul li.nav-links a:hover {
     pointer-events: none;
 }
 
-.hello-kicker {
+.hello-welcome-logo {
     position: absolute;
-    top: 24%;
+    top: 8%;
     left: 50%;
+    width: clamp(78px, 9vw, 124px);
+    height: clamp(78px, 9vw, 124px);
+    object-fit: contain;
     transform: translateX(-50%);
-    color: rgba(255,255,255,0.7);
-    font-size: clamp(0.62rem, 1.1vw, 0.8rem);
-    letter-spacing: 0.3em;
+    opacity: 0.96;
+    filter: drop-shadow(0 10px 22px rgba(0,0,0,0.34));
+}
+
+.hello-brand {
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    height: 64px;
+    padding: 0 clamp(20px, 4vw, 56px);
+    color: #fff;
+    font-family: 'Orbitron', sans-serif;
+    font-size: clamp(0.9rem, 2vw, 1.1rem);
+    font-weight: 700;
+    letter-spacing: 2px;
     white-space: nowrap;
+}
+
+.hello-brand-logo {
+    display: block;
+    width: 38px;
+    height: 38px;
+    object-fit: contain;
 }
 
 .hello-progress {
     position: absolute;
     left: 50%;
-    bottom: 13%;
+    top: 73%;
+    bottom: auto;
     transform: translateX(-50%);
     width: min(280px, 68vw);
     height: 3px;
@@ -3694,35 +3709,56 @@ nav ul li.nav-links a:hover {
     display: block;
     width: 0%;
     height: 100%;
-    background: #9fe8dc;
-    box-shadow: 0 0 14px rgba(159,232,220,0.8);
+    background: linear-gradient(90deg, rgba(159,232,220,0.2), #9fe8dc 34%, #ffffff 50%, #9fe8dc 66%, rgba(159,232,220,0.2));
+    background-size: 220% 100%;
+    box-shadow: 0 0 18px rgba(159,232,220,0.75), 0 0 34px rgba(159,232,220,0.22);
     transition: width 0.12s linear;
+    animation: loadingSpotlight 2.2s ease-in-out infinite;
+}
+
+@keyframes loadingSpotlight {
+    0%, 100% { background-position: 100% 0; }
+    50% { background-position: 0 0; }
 }
 
 #load-website {
     position: absolute;
     left: 50%;
-    bottom: 7%;
+    top: 78%;
+    bottom: auto;
     transform: translateX(-50%);
-    padding: 9px 18px;
+    padding: 9px 0;
     color: rgba(255,255,255,0.75);
-    background: rgba(255,255,255,0.06);
-    border: 1px solid rgba(255,255,255,0.24);
-    border-radius: 2px;
+    background: transparent;
+    border: 0;
+    border-radius: 0;
     font-family: 'Rajdhani', sans-serif;
     font-size: 0.78rem;
     font-weight: 700;
     letter-spacing: 0.12em;
     text-transform: uppercase;
-    cursor: pointer;
+    cursor: none;
     pointer-events: auto;
     transition: color 0.2s ease, background 0.2s ease, border-color 0.2s ease;
 }
 
+#load-website:disabled {
+    opacity: 0.55;
+    cursor: default;
+}
+
+#load-website.is-ready {
+    color: #9fe8dc;
+    background: transparent;
+    border-color: transparent;
+    pointer-events: none;
+    animation: promptFloat 1.8s ease-in-out infinite;
+}
+
 #load-website:hover {
-    color: #0d0d0d;
-    background: #9fe8dc;
-    border-color: #9fe8dc;
+    color: #9fe8dc;
+    background: transparent;
+    border-color: transparent;
 }
 
 #cursor-spotlight {
@@ -3780,18 +3816,29 @@ nav ul li.nav-links a:hover {
 }
 
 @media (prefers-reduced-motion: reduce) {
-    #hello-intro { display: none; }
+    #hello-intro { transition: none; }
 }
 
 @media (max-width: 600px) {
-    #hello-intro::before { width: 88vw; }
-    .hello-kicker {
-        top: 22%;
-        font-size: 0.58rem;
-        letter-spacing: 0.2em;
+        .hello-brand {
+            right: 1px;
+            height: 56px;
+            font-size: 0.72rem;
+            letter-spacing: 1px;
+            gap: 7px;
+            padding: 0 18px;
+        }
+        .hello-brand-logo {
+            width: 32px;
+            height: 32px;
     }
-    .hello-progress { bottom: 15%; }
-    #load-website { bottom: 8%; }
+    .hello-welcome-logo {
+        top: 7%;
+        width: 84px;
+        height: 84px;
+    }
+    .hello-progress { top: 73%; }
+    #load-website { top: 79%; }
 }
 #cursor-spotlight {
     position: fixed;
@@ -4236,4 +4283,9 @@ nav ul li.nav-links a:hover {
     .corner-photo-wrap {
         display: none !important;
     }
+}
+
+@keyframes promptFloat {
+    0%, 100% { opacity: 0.72; text-shadow: 0 0 0 rgba(159,232,220,0); }
+    50% { opacity: 1; text-shadow: 0 0 14px rgba(159,232,220,0.55); }
 }
