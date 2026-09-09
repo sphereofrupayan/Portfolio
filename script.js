@@ -1578,10 +1578,10 @@ ctx.arc(drawX, drawY, p.r, 0, Math.PI * 2);
     }
 
     const cursorGradients = [
-        ['#ff3b30', '#ff8a83'],
-        ['#ff5c52', '#d91e18'],
-        ['#ffb0aa', '#ff3b30'],
-        ['#d91e18', '#ff6b61']
+        ['#ffffff', '#b9fff1'],
+        ['#d7d9dc', '#1da9c0'],
+        ['#f2f3f4', '#8cdcff'],
+        ['#b9fff1', '#0e7a8f']
     ];
 
     function drawMagnifier() {
