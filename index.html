@@ -9,8 +9,7 @@
 <div id="rusho-bot">
 
     <button id="bot-toggle" aria-label="Open Rusho.Bot">
-    <span class="bot-toggle-label">Ask Me</span>
-    <span class="bot-toggle-ai">AI</span>
+    <span class="bot-orb" aria-hidden="true"><span class="bot-orb-core"></span></span>
     <span class="bot-toggle-pulse"></span>
 </button>
 
@@ -18,13 +17,15 @@
 
         <div class="bot-header">
             <div class="bot-header-left">
-                <span class="bot-avatar">Ai</span>
                 <div class="bot-header-text">
                     <span class="bot-name">Rusho.Bot</span>
                     <span class="bot-version"><i class="status-dot"></i>v2.0 · Online</span>
                 </div>
             </div>
-            <button id="bot-close" aria-label="Close chat">✕</button>
+            <div class="bot-header-actions">
+                <button id="bot-minimize" aria-label="Minimize chat">−</button>
+                <button id="bot-close" aria-label="Close chat">✕</button>
+            </div>
         </div>
 
         <div class="bot-model-row">
@@ -43,6 +44,13 @@
             <span class="msg-pill">AI concierge</span>
             <p><span class="msg-name">Hey, I’m Rusho.Bot.</span> Ask me anything about Rupayan’s projects, skills, or experience.</p>
         </div>
+    </div>
+    <div class="bot-suggestions" aria-label="Suggested questions">
+        <span class="suggestions-label">TRY ASKING</span>
+        <button type="button" class="suggestion-chip">What projects have you built?</button>
+        <button type="button" class="suggestion-chip">Tell me about your skills</button>
+        <button type="button" class="suggestion-chip">What was your hackathon role?</button>
+        <button type="button" class="suggestion-chip">How can I contact you?</button>
     </div>
 </div>
 
@@ -331,7 +339,7 @@
         </div>
     </div>
 </section>
-    <section class="focus-section">
+    <section id="focus" class="focus-section">
         <div class="right-side reveal reveal-right">
             <div class="changing-text-wrapper">
                 <span id="changing-word">Creative</span>
@@ -364,7 +372,7 @@
     </div>
 </section>
 
-    <section class="resume-section">
+    <section id="experience" class="resume-section">
         <div class="resume-card reveal reveal-up">
             <div class="resume-left">
                 <p class="resume-tag">PROFESSIONAL PROFILE</p>
@@ -390,6 +398,47 @@
                 </div>
             </div>
         </div>  
+    </section>
+
+    <section id="hackathon" class="hackathon-section" aria-labelledby="hackathon-title">
+        <div class="hackathon-shell">
+            <div class="hackathon-heading reveal reveal-left">
+                <span class="hackathon-eyebrow">HACKATHON / 01</span>
+                <span class="hackathon-line" aria-hidden="true"></span>
+                <div class="hackathon-brand-lockup" aria-label="MailMeet by CipherSquad">
+                    <div class="hackathon-brand-mark mailmeet-mark">
+                        <img src="logos/Mailmeet.png" alt="MailMeet logo">
+                        <span>MailMeet</span>
+                    </div>
+                    <span class="hackathon-brand-separator" aria-hidden="true">X</span>
+                    <div class="hackathon-brand-mark team-mark">
+                        <img src="logos/Ciphersquad.jpg" alt="CipherSquad team logo">
+                        <span>CipherSquad</span>
+                    </div>
+                </div>
+                <h2 id="hackathon-title">Code2create7.0</h2>
+                <p class="hackathon-subtitle">Team CipherSquad · MailMate</p>
+                <p class="hackathon-organizer">Organized by ACM-VIT Chapter · Flagship Event</p>
+            </div>
+
+            <div class="hackathon-content">
+                <div class="hackathon-story reveal reveal-up" style="--reveal-delay:0.12s">
+                    <p class="hackathon-kicker">Proud to be the leader</p>
+                    <p class="hackathon-description">Proud to be the Leader of Team CipherSquad, overseeing debugging and troubleshooting while driving key frontend development and contributing to the ElevenLabs integration. Grateful to have led an incredible team and brought MailMate to life!</p>
+                </div>
+
+                <div class="hackathon-meta reveal reveal-right" style="--reveal-delay:0.22s">
+                    <span class="hackathon-meta-label">MY ROLE</span>
+                    <strong>Team Leader</strong>
+                    <span class="hackathon-meta-label">CONTRIBUTION</span>
+                    <strong>Frontend · Debugging · ElevenLabs</strong>
+                    <a class="hackathon-github" href="https://github.com/sphereofrupayan/CipherSquad" target="_blank" rel="noopener noreferrer">
+                        <span>View on GitHub</span>
+                        <b>↗</b>
+                    </a>
+                </div>
+            </div>
+        </div>
     </section>
 
 
@@ -469,10 +518,12 @@
 <section id="Projects" class="Projects">
 <canvas id="projects-bubble-canvas"></canvas>
     <div>
+        <span class="projects-eyebrow">SELECTED WORK / 04 PROJECTS</span>
         <h1>
             <span class="handwriting reveal reveal-up">Take a quick look at my</span>
             <span class="bold reveal reveal-up" style="--reveal-delay: 0.12s">Projects!</span>
         </h1>
+        <p class="projects-intro">Interfaces, intelligent systems, and human-computer interaction experiments built from idea to release.</p>
     </div>
 </section>
 
@@ -489,15 +540,11 @@
                     <div class="kinetic-info">
                         <h2 class="kinetic-title">Wavify</h2>
 <div class="kinetic-divider"></div>
-<p class="kinetic-desc">A music streaming platform featuring a clean user interface, custom playlist creation, and seamless audio synchronization.</p>
+<p class="kinetic-desc">Wavify is a focused music streaming experience designed around discovery and personal listening. It combines a responsive browsing interface with playlist creation, synchronized playback, and API-powered music data so that moving from a new track to a saved collection feels immediate on every screen.</p>
                         <div class="kinetic-reveal-group">
-                            <div class="github-view-btn" style="border: none; color: #fff; border-radius: 12px; font-family: 'Rajdhani', sans-serif; font-size: 0.95rem; font-weight: 600; letter-spacing: 0.5px; padding: 14px 20px; display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; max-width: 100%; margin-bottom: 20px; cursor: default; pointer-events: none;">
-                                <span style="color: #00f7ff;">HTML</span><span style="color: rgba(255,255,255,0.3);">|</span>
-                                <span style="color: #00f7ff;">CSS</span><span style="color: rgba(255,255,255,0.3);">|</span>
-                                <span style="color: #00f7ff;">JavaScript</span><span style="color: rgba(255,255,255,0.3);">|</span>
-                                <span style="color: #00f7ff;">React</span><span style="color: rgba(255,255,255,0.3);">|</span>
-                                <span style="color: #00f7ff;">GROQ API</span><span style="color: rgba(255,255,255,0.3);">|</span>
-                                <span style="color: #00f7ff;">PYTHON</span>
+                            <div class="project-stack" aria-label="Wavify technology stack">
+                                <div class="project-stack-group frontend"><span>Frontend</span><b>HTML</b><b>CSS</b><b>JavaScript</b><b>React</b></div>
+                                <div class="project-stack-group backend"><span>Backend</span><b>Python</b><b>Groq API</b></div>
                             </div>
                         </div>
                     </div>
@@ -511,14 +558,11 @@
                     <div class="kinetic-info">
                         <h2 class="kinetic-title">Rusho_Bot</h2>
 <div class="kinetic-divider"></div>
-<p class="kinetic-desc">An intelligent automated system designed for task automation, voice recognition, and contextual natural language processing.</p>
+<p class="kinetic-desc">Rusho.Bot is an AI concierge built to answer questions about my work, skills, and experience in a natural conversational flow. It combines a polished chat interface with model selection, suggestion prompts, live response handling, and a Python service layer that connects the portfolio to large-language-model APIs.</p>
                         <div class="kinetic-reveal-group">
-                            <div class="github-view-btn" style="border: none; color: #fff; border-radius: 12px; font-family: 'Rajdhani', sans-serif; font-size: 0.95rem; font-weight: 600; letter-spacing: 0.5px; padding: 14px 20px; display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; max-width: 100%; margin-bottom: 20px; cursor: default; pointer-events: none;">
-                                <span style="color: #00f7ff;">HTML</span><span style="color: rgba(255,255,255,0.3);">|</span>
-                                <span style="color: #00f7ff;">CSS</span><span style="color: rgba(255,255,255,0.3);">|</span>
-                                <span style="color: #00f7ff;">JavaScript</span><span style="color: rgba(255,255,255,0.3);">|</span>
-                                <span style="color: #00f7ff;">GROQ API</span><span style="color: rgba(255,255,255,0.3);">|</span>
-                                <span style="color: #00f7ff;">PYTHON</span>
+                            <div class="project-stack" aria-label="Rusho Bot technology stack">
+                                <div class="project-stack-group frontend"><span>Frontend</span><b>HTML</b><b>CSS</b><b>JavaScript</b></div>
+                                <div class="project-stack-group backend"><span>Backend</span><b>Python</b><b>Groq API</b></div>
                             </div>
                         </div>
                     </div>
@@ -532,14 +576,11 @@
                     <div class="kinetic-info">
                         <h2 class="kinetic-title">Eye Pointer</h2>
 <div class="kinetic-divider"></div>
-<p class="kinetic-desc">An innovative Human-Computer Interaction (HCI) application utilizing computer vision to precisely map and control mouse cursor movements through eye tracking.</p>
+<p class="kinetic-desc">Eye Pointer explores accessible computer control through computer vision. The application tracks facial and eye landmarks in real time, translates gaze movement into cursor coordinates, and turns a camera into a hands-free input device while keeping the interaction responsive enough for everyday desktop use.</p>
                         <div class="kinetic-reveal-group">
-                            <div class="github-view-btn" style="border: none; color: #fff; border-radius: 12px; font-family: 'Rajdhani', sans-serif; font-size: 0.95rem; font-weight: 600; letter-spacing: 0.5px; padding: 14px 20px; display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; max-width: 100%; margin-bottom: 20px; cursor: default; pointer-events: none;">
-                                <span style="color: #00f7ff;">OPENCV</span><span style="color: rgba(255,255,255,0.3);">|</span>
-                                <span style="color: #00f7ff;">MEDIAPIPE</span><span style="color: rgba(255,255,255,0.3);">|</span>
-                                <span style="color: #00f7ff;">NUMPY</span><span style="color: rgba(255,255,255,0.3);">|</span>
-                                <span style="color: #00f7ff;">PYAUTOGUI</span><span style="color: rgba(255,255,255,0.3);">|</span>
-                                <span style="color: #00f7ff;">HUMAN COMPUTER INTERACTION</span>
+                            <div class="project-stack" aria-label="Eye Pointer technology stack">
+                                <div class="project-stack-group backend"><span>Computer Vision</span><b>OpenCV</b><b>MediaPipe</b><b>NumPy</b></div>
+                                <div class="project-stack-group support"><span>Interaction</span><b>PyAutoGUI</b><b>HCI</b></div>
                             </div>
                         </div>
                     </div>
@@ -553,14 +594,11 @@
                     <div class="kinetic-info">
                         <h2 class="kinetic-title">Hand Gesture Control</h2>
 <div class="kinetic-divider"></div>
-<p class="kinetic-desc">A real-time computer vision application that maps hand movements to control the mouse cursor, simulate clicks, adjust system volume levels, and manage media playback seamlessly through custom gestures.</p>
+<p class="kinetic-desc">Hand Gesture Control turns a live camera feed into a configurable desktop controller. It recognizes hand landmarks and maps gestures to cursor movement, clicks, volume changes, and media commands, creating a practical touch-free interface that responds to clear, repeatable actions.</p>
                         <div class="kinetic-reveal-group">
-                            <div class="github-view-btn" style="border: none; color: #fff; border-radius: 12px; font-family: 'Rajdhani', sans-serif; font-size: 0.95rem; font-weight: 600; letter-spacing: 0.5px; padding: 14px 20px; display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; max-width: 100%; margin-bottom: 20px; cursor: default; pointer-events: none;">
-                                <span style="color: #00f7ff;">OPENCV</span><span style="color: rgba(255,255,255,0.3);">|</span>
-                                <span style="color: #00f7ff;">MEDIAPIPE</span><span style="color: rgba(255,255,255,0.3);">|</span>
-                                <span style="color: #00f7ff;">NUMPY</span><span style="color: rgba(255,255,255,0.3);">|</span>
-                                <span style="color: #00f7ff;">PYTHON</span><span style="color: rgba(255,255,255,0.3);">|</span>
-                                <span style="color: #00f7ff;">HUMAN COMPUTER INTERACTION</span>
+                            <div class="project-stack" aria-label="Hand Gesture Control technology stack">
+                                <div class="project-stack-group backend"><span>Computer Vision</span><b>OpenCV</b><b>MediaPipe</b><b>NumPy</b><b>Python</b></div>
+                                <div class="project-stack-group support"><span>Interaction</span><b>HCI</b><b>Desktop Automation</b></div>
                             </div>
                         </div>
                     </div>
@@ -571,13 +609,17 @@
             <button class="carousel-3d-nav prev" id="carousel3dPrev" aria-label="Previous project">‹</button>
             <button class="carousel-3d-nav next" id="carousel3dNext" aria-label="Next project">›</button>
 
-            <div class="carousel-3d-dots" id="carousel3dDots"></div>
             <div class="project-links" id="projectLinks" aria-label="Project links">
-                <a href="https://wavify18.netlify.app/" target="_blank" rel="noopener noreferrer" data-project-link="0">Open Wavify <span>↗</span></a>
-                <a href="https://rushobot.onrender.com/" target="_blank" rel="noopener noreferrer" data-project-link="1">Open Rusho.Bot <span>↗</span></a>
-                <a href="https://drive.google.com/file/d/1oF2B1ap2t7eguH_3mSvMo_0H1tpLOkJ0/view?usp=sharing" target="_blank" rel="noopener noreferrer" data-project-link="2">Download EXE · Eye Pointer <span>↓</span></a>
-                <a href="https://drive.google.com/file/d/1hDJE7NqAKrK4h5K5YsDQqcEi_V-6ryej/view?usp=sharing" target="_blank" rel="noopener noreferrer" data-project-link="3">Download EXE · Hand Gesture Control <span>↓</span></a>
+                <span class="project-links-kicker">SELECTED PROJECT</span>
+                <div class="project-links-track">
+                    <span class="project-links-rule" aria-hidden="true"></span>
+                    <a href="https://wavify18.netlify.app/" target="_blank" rel="noopener noreferrer" data-project-link="0"><small>01 / 04</small><strong>Open Wavify</strong><span>↗</span></a>
+                    <a href="https://rushobot.onrender.com/" target="_blank" rel="noopener noreferrer" data-project-link="1"><small>02 / 04</small><strong>Open Rusho.Bot</strong><span>↗</span></a>
+                    <a href="https://drive.google.com/file/d/1oF2B1ap2t7eguH_3mSvMo_0H1tpLOkJ0/view?usp=sharing" target="_blank" rel="noopener noreferrer" data-project-link="2"><small>03 / 04</small><strong>Download Eye Pointer</strong><span>↓</span></a>
+                    <a href="https://drive.google.com/file/d/1hDJE7NqAKrK4h5K5YsDQqcEi_V-6ryej/view?usp=sharing" target="_blank" rel="noopener noreferrer" data-project-link="3"><small>04 / 04</small><strong>Download Hand Gesture Control</strong><span>↓</span></a>
+                </div>
             </div>
+            <div class="carousel-3d-dots" id="carousel3dDots"></div>
         </div>
     </div>
 </section>  
