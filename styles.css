@@ -17,7 +17,7 @@ section[id], .cover-section {
 nav {
     position: fixed;
     top: 0; left: 0;
-    width: 100%;
+    width: 100%;    
     z-index: 100;
     font-weight: bold;
 }
@@ -1497,19 +1497,15 @@ nav ul li.nav-links a:hover {
 
 
 .Projects {
-    --project-red: #ff3b30;
-    --project-coral: #ff8a83;
     min-height: auto;
     padding: 100px 20px 40px;
     text-align: center;
-    background:
-        radial-gradient(circle at 12% 18%, rgba(255,59,48,0.22), transparent 30%),
-        linear-gradient(135deg, #160708 0%, #280b0e 48%, #090909 100%);
+    background: #0b0b0c;
 }
 
 .kinetic-projects-container {
     position: relative;
-    background: linear-gradient(180deg, #090909 0%, #150607 34%, #0b0909 100%);
+    background: linear-gradient(180deg, #0b0b0c 0%, #151618 34%, #0b0b0c 100%);
     padding: 20px 20px 100px;
     width: 100%;
 }
@@ -2085,9 +2081,7 @@ nav ul li.nav-links a:hover {
     padding: 70px 5% 40px;
     position: relative;
     overflow: hidden;
-    background:
-        radial-gradient(circle at 12% 18%, rgba(255,59,48,0.22), transparent 30%),
-        linear-gradient(135deg, #160708 0%, #280b0e 48%, #090909 100%);
+    background: linear-gradient(135deg, #0b0b0c 0%, #17181a 50%, #09090a 100%);
 }
 
 #Projects::before,
@@ -2102,13 +2096,13 @@ nav ul li.nav-links a:hover {
 }
 
 #Projects::before {
-    background: rgba(255,59,48,0.2);
+    background: rgba(255,255,255,0.045);
     top: -80px;
     left: 0;
 }
 
 #Projects::after {
-    background: rgba(126,12,22,0.24);
+    background: rgba(29,169,192,0.06);
     bottom: -80px;
     right: 0;
 }
@@ -2147,13 +2141,13 @@ nav ul li.nav-links a:hover {
     font-size: clamp(2.5rem, 7vw, 5.5rem);
     font-weight: 700;
     letter-spacing: 2px;
-    background: linear-gradient(100deg, #fff9f8 0%, #ffb0a8 38%, #ff3b30 72%, #8e111a 100%);
+    background: linear-gradient(100deg, #ffffff 0%, #b9fff1 38%, #1da9c0 72%, #0e7a8f 100%);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
     text-shadow:
-        0 0 12px rgba(255,59,48,0.2),
-        0 0 30px rgba(255,59,48,0.15);
+        0 0 12px rgba(29,169,192,0.2),
+        0 0 30px rgba(29,169,192,0.15);
     position: relative;
 }
 
