@@ -1043,14 +1043,24 @@ toggleBtn.addEventListener("click", () => {
 const toggle = document.getElementById("bot-toggle");
 const windowBox = document.getElementById("bot-window");
 const closeBtn = document.getElementById("bot-close");
+const minimizeBtn = document.getElementById("bot-minimize");
 const userInput = document.getElementById("user-input");
+const suggestionChips = document.querySelectorAll(".suggestion-chip");
 
 function openBot() {
     windowBox.style.display = "flex";
+    windowBox.setAttribute("aria-hidden", "false");
     requestAnimationFrame(() => windowBox.classList.add("open"));
 }
 function closeBot() {
     windowBox.classList.remove("open");
+    windowBox.setAttribute("aria-hidden", "true");
+    setTimeout(() => { windowBox.style.display = "none"; }, 200);
+}
+function minimizeBot() {
+    if (!windowBox.classList.contains("open")) return;
+    windowBox.classList.remove("open");
+    windowBox.setAttribute("aria-hidden", "true");
     setTimeout(() => { windowBox.style.display = "none"; }, 200);
 }
 
@@ -1058,6 +1068,21 @@ toggle.onclick = () => {
     windowBox.classList.contains("open") ? closeBot() : openBot();
 };
 closeBtn.onclick = closeBot;
+minimizeBtn.onclick = minimizeBot;
+
+suggestionChips.forEach(chip => {
+    chip.addEventListener("click", () => {
+        userInput.value = chip.textContent.trim();
+        userInput.dispatchEvent(new Event("input", { bubbles: true }));
+        userInput.focus();
+    });
+});
+
+let lastScrollPosition = window.scrollY;
+window.addEventListener("scroll", () => {
+    if (Math.abs(window.scrollY - lastScrollPosition) > 4) minimizeBot();
+    lastScrollPosition = window.scrollY;
+}, { passive: true });
 
 
 userInput.addEventListener("input", () => {
@@ -1107,7 +1132,7 @@ function appendMessage(text, sender = "bot") {
 
     const bubble = document.createElement("div");
     bubble.className = "msg-bubble";
-    bubble.innerHTML = content;
+    bubble.innerHTML = `<span class="message-copy">${content}</span>`;
 
     if (sender === "bot") {
         const canvas = document.createElement("canvas");
@@ -1483,11 +1508,11 @@ ctx.arc(drawX, drawY, p.r, 0, Math.PI * 2);
     let lastMouse = { x: -9999, y: -9999 };
 
     const PALETTE = [
-        [255, 110, 170],
-        [255, 160, 200],
-        [255, 210, 225],
-        [190, 140, 255],
-        [255, 255, 255]
+        [255, 59, 48],
+        [255, 92, 82],
+        [255, 138, 131],
+        [217, 30, 24],
+        [255, 188, 182]
     ];
 
     window.addEventListener('mousemove', (e) => {
@@ -1553,10 +1578,10 @@ ctx.arc(drawX, drawY, p.r, 0, Math.PI * 2);
     }
 
     const cursorGradients = [
-        ['#79f5e2', '#5b8cff'],
-        ['#ff9fca', '#b78cff'],
-        ['#ffd166', '#ff6b8a'],
-        ['#8ce7ff', '#b9ff9b']
+        ['#ff3b30', '#ff8a83'],
+        ['#ff5c52', '#d91e18'],
+        ['#ffb0aa', '#ff3b30'],
+        ['#d91e18', '#ff6b61']
     ];
 
     function drawMagnifier() {
@@ -2189,3 +2214,4 @@ class CardAurora {
     
     onScroll();
 })();
+
