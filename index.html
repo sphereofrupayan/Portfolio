@@ -70,18 +70,90 @@
 
     <canvas id="cursor-spotlight"></canvas>
 
-    <div id="hello-intro">
+    <div id="hello-intro" class="welcome-intro-screen">
         <canvas id="hello-canvas"></canvas>
-        <div class="hello-content">
-            <img src="mylogo.png" alt="" class="hello-welcome-logo">
-            <div class="hello-brand">
-                <img src="mylogo.png" alt="" class="hello-brand-logo">
-                <span>Rupayan Chattaraj</span>
-            </div>
-            <div class="hello-progress" role="progressbar" aria-label="Loading website" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
-                <span id="hello-progress-bar"></span>
-            </div>
-            <button id="load-website" type="button" disabled>Just a moment..</button>
+        <div class="welcome-ambient-glow" aria-hidden="true"></div>
+
+        <div class="welcome-container">
+            <!-- Top Status Bar (HUD Header: 2026 Edition Centered) -->
+            <header class="welcome-header">
+                <div class="welcome-header-side left">
+                    <div class="welcome-status-pill">
+                        <span class="status-pulse-dot"></span>
+                        <span class="status-text">AVAILABLE FOR ROLES &amp; INNOVATION</span>
+                    </div>
+                </div>
+                <div class="welcome-header-center">
+                    <div class="welcome-meta-pill">
+                        <span class="meta-val">2026 Edition</span>
+                    </div>
+                </div>
+                <div class="welcome-header-side right">
+                    <div class="welcome-location-pill">
+                        <span class="loc-pin">✦</span>
+                        <span class="loc-text">VELLORE, IN</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Center Stage -->
+            <main class="welcome-center">
+                <div class="welcome-emblem-wrap">
+                    <img src="rc_logo.png" alt="RC" class="welcome-emblem-img">
+                </div>
+
+                <div class="welcome-kicker-row">
+                    <span class="kicker-line"></span>
+                    <span class="welcome-kicker-text">RUPAYAN CHATTARAJ</span>
+                    <span class="kicker-line"></span>
+                </div>
+
+                <!-- Antigravity Particle WELCOME Canvas Slot (No Overlapping) -->
+                <div id="welcome-canvas-slot" class="welcome-particle-slot" aria-label="Welcome"></div>
+
+                <div class="welcome-sub-row" aria-label="Full Stack Developer, Creative Engineer, AI Researcher">
+                    <span class="sub-sep">✦</span>
+                    <span class="sub-role">FULL STACK DEVELOPER</span>
+                    <span class="sub-sep">✦</span>
+                    <span class="sub-role">CREATIVE ENGINEER</span>
+                    <span class="sub-sep">✦</span>
+                    <span class="sub-role">PROMPT ENGINEER</span>
+                    
+                </div>
+            </main>
+
+            <!-- Bottom Console Dock -->
+            <footer class="welcome-footer">
+                <div class="welcome-console-dock">
+                    <div class="console-telemetry">
+                        <div class="telemetry-top">
+                            <span class="telemetry-status" id="loader-status">INITIALIZING SYSTEM</span>
+                            <span class="telemetry-percent" id="loader-percent">00%</span>
+                        </div>
+                        <div class="hello-progress" role="progressbar" aria-label="Loading website" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+                            <span id="hello-progress-bar"></span>
+                        </div>
+                    </div>
+
+                    <button id="load-website" type="button" class="welcome-enter-btn" disabled aria-label="Explore portfolio">
+                        <span class="enter-btn-glow"></span>
+                        <span class="enter-btn-content">
+                            <span class="enter-btn-text">EXPLORE PORTFOLIO</span>
+                            <svg class="enter-btn-arrow" width="14" height="14" viewBox="0 0 14 14" fill="none">
+                                <path d="M1 7H13M13 7L7.5 1.5M13 7L7.5 12.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </span>
+                    </button>
+                </div>
+
+                <div class="welcome-interaction-hint" id="welcome-hint">
+                    <span class="hint-item"><kbd>CLICK</kbd></span>
+                    <span class="hint-dot">·</span>
+                    <span class="hint-item"><kbd>SCROLL</kbd></span>
+                    <span class="hint-dot">·</span>
+                    <span class="hint-item"><kbd>SPACE</kbd></span>
+                </div>
+            </footer>
         </div>
     </div>
 
