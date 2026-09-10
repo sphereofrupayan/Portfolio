@@ -4,17 +4,22 @@
     const progressBar = document.getElementById('hello-progress-bar');
     const progressTrack = document.querySelector('.hello-progress');
     const loadButton = document.getElementById('load-website');
+    const consoleDock = document.querySelector('.welcome-console-dock');
+    const loaderStatus = document.getElementById('loader-status');
+    const loaderPercent = document.getElementById('loader-percent');
     if (!introEl || !canvas) return;
 
     const ctx = canvas.getContext('2d');
     document.body.style.overflow = 'hidden';
-    const isMobile = window.innerWidth < 600;
+    const isMobile = window.innerWidth < 640;
 
-    let W, H, dpr, particles = [];
-    let pointerX = -1;
-    let pointerY = -1;
-    let smoothPointerX = 0;
-    let smoothPointerY = 0;
+    let W, H, dpr;
+    let pointerX = -1000;
+    let pointerY = -1000;
+    let smoothPointerX = -1000;
+    let smoothPointerY = -1000;
+    let isPointerActive = false;
+    let touchStartY = null;
 
     function resize() {
         dpr = Math.min(window.devicePixelRatio || 1, isMobile ? 1.5 : 2);
@@ -27,147 +32,12 @@
         ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     }
 
-    function getTextPoints(text, fontSize, gap) {
-        const off = document.createElement('canvas');
-        off.width = W; off.height = H;
-        const octx = off.getContext('2d');
-        octx.fillStyle = '#fff';
-        octx.font = `700 ${fontSize}px Orbitron, sans-serif`;
-        octx.textAlign = 'center';
-        octx.textBaseline = 'middle';
-        octx.fillText(text, W / 2, H / 2);
-        const data = octx.getImageData(0, 0, W, H).data;
-        const points = [];
-        for (let y = 0; y < H; y += gap) {
-            for (let x = 0; x < W; x += gap) {
-                if (data[(y * W + x) * 4 + 3] > 128) points.push({ x, y });
-            }
-        }
-        return points;
-    }
-
-    const FORM_MS         = 1200;
-    const SETTLE_MS       = 300;
-    const HOLD_MS         = 750;  
-    const BASE_DELAY      = 60;
-    const DIST_FACTOR     = isMobile ? 0.22 : 0.30;
-    const MAX_RAND_DELAY  = isMobile ? 70 : 120;
-
-    function initParticles() {
-        const fontSize = Math.min(W * 0.16, 190);
-        const gap = Math.max(isMobile ? 6 : 4, Math.round(fontSize / (isMobile ? 30 : 42)));
-        const points = getTextPoints('Welcome', fontSize, gap);
-        const cx = W / 2, cy = H / 2;
-
-        particles = points.map(p => {
-            const angle = Math.random() * Math.PI * 2;
-            const dist  = Math.max(W, H) * (0.5 + Math.random() * 0.35);
-            const distFromCenter = Math.hypot(p.x - cx, p.y - cy);
-            return {
-                x: cx + Math.cos(angle) * dist,
-                y: cy + Math.sin(angle) * dist,
-                tx: p.x, ty: p.y,
-                r: Math.random() * 1.1 + 0.8,
-                delay: BASE_DELAY + distFromCenter * DIST_FACTOR + Math.random() * MAX_RAND_DELAY
-            };
-        });
-    }
-
-    function easeOutQuint(t) { return 1 - Math.pow(1 - t, 5); }
-
-    function drawRotatingSphere(elapsed) {
-        const centerX = W / 2;
-        const centerY = H / 2;
-        const radius = Math.min(W * 0.31, H * 0.38, 310);
-        const rotation = 0;
-
-        ctx.save();
-        ctx.translate(centerX, centerY);
-        const glow = ctx.createRadialGradient(-radius * 0.28, -radius * 0.35, radius * 0.08, 0, 0, radius);
-        glow.addColorStop(0, 'rgba(159, 232, 220, 0.14)');
-        glow.addColorStop(0.55, 'rgba(159, 232, 220, 0.035)');
-        glow.addColorStop(1, 'rgba(159, 232, 220, 0)');
-        ctx.fillStyle = glow;
-        ctx.beginPath();
-        ctx.arc(0, 0, radius, 0, Math.PI * 2);
-        ctx.fill();
-
-        ctx.strokeStyle = 'rgba(159, 232, 220, 0.24)';
-        ctx.lineWidth = 1;
-        ctx.shadowColor = 'rgba(159, 232, 220, 0.45)';
-        ctx.shadowBlur = 18;
-        ctx.beginPath();
-        ctx.arc(0, 0, radius, 0, Math.PI * 2);
-        ctx.stroke();
-
-        ctx.shadowBlur = 12;
-        ctx.strokeStyle = 'rgba(203, 255, 247, 0.58)';
-        ctx.lineWidth = 2;
-        ctx.beginPath();
-        ctx.arc(0, 0, radius, rotation, rotation + Math.PI * 0.34);
-        ctx.stroke();
-        ctx.restore();
-    }
-
-    function drawMountainMark(elapsed) {
-        const centerX = W / 2;
-        const baseY = H / 2 + Math.min(H * 0.13, 115);
-        const width = Math.min(W * 0.58, 620);
-        const height = Math.min(H * 0.12, 100);
-        const drift = Math.sin(elapsed * 0.0012) * 3;
-        const left = centerX - width / 2;
-        const points = [
-            [left, baseY],
-            [left + width * 0.18, baseY - height * 0.42],
-            [left + width * 0.3, baseY - height * 0.2],
-            [left + width * 0.47, baseY - height],
-            [left + width * 0.62, baseY - height * 0.3],
-            [left + width * 0.76, baseY - height * 0.58],
-            [left + width, baseY]
-        ];
-
-        ctx.save();
-        ctx.translate(0, drift);
-        ctx.strokeStyle = 'rgba(93, 225, 210, 0.92)';
-        ctx.lineWidth = 1.2;
-        ctx.shadowColor = 'rgba(93, 225, 210, 0.9)';
-        ctx.shadowBlur = 16;
-        ctx.beginPath();
-        points.forEach(([x, y], index) => index ? ctx.lineTo(x, y) : ctx.moveTo(x, y));
-        ctx.stroke();
-
-        ctx.shadowBlur = 0;
-        ctx.strokeStyle = 'rgba(172, 255, 244, 0.82)';
-        ctx.lineWidth = 1;
-        ctx.beginPath();
-        ctx.moveTo(centerX - width * 0.22, baseY - height * 0.47);
-        ctx.lineTo(centerX - width * 0.04, baseY - height * 0.7);
-        ctx.lineTo(centerX + width * 0.08, baseY - height * 0.45);
-        ctx.moveTo(centerX + width * 0.17, baseY - height * 0.48);
-        ctx.lineTo(centerX + width * 0.3, baseY - height * 0.3);
-        ctx.stroke();
-
-        const beamOriginY = baseY - height * 0.88;
-        ctx.strokeStyle = 'rgba(255, 255, 255, 0.42)';
-        ctx.lineWidth = 1;
-        ctx.setLineDash([3, 7]);
-        [-0.42, -0.26, -0.1, 0.1, 0.26, 0.42].forEach(offset => {
-            ctx.beginPath();
-            ctx.moveTo(centerX + offset * width, beamOriginY);
-            ctx.lineTo(centerX + offset * width * 1.65, baseY + height * 0.02);
-            ctx.stroke();
-        });
-
-        ctx.setLineDash([2, 8]);
-        ctx.strokeStyle = 'rgba(93, 225, 210, 0.72)';
-        ctx.beginPath();
-        ctx.ellipse(centerX, baseY - height * 0.35, width * 0.62, height * 0.22, -0.06, Math.PI * 1.08, Math.PI * 1.92);
-        ctx.stroke();
-        ctx.restore();
-    }
+    const FORM_MS        = 1200;
+    const SETTLE_MS      = 300;
+    const HOLD_MS        = 500;
+    const TOTAL_DURATION = FORM_MS + SETTLE_MS + HOLD_MS;
 
     let start = null;
-    let maxDelay = 0;
     let introFinished = false;
 
     function finishIntro() {
@@ -175,109 +45,155 @@
         introFinished = true;
         if (progressBar) progressBar.style.width = '100%';
         if (progressTrack) progressTrack.setAttribute('aria-valuenow', '100');
+        if (loaderPercent) loaderPercent.textContent = '100%';
         introEl.classList.add('fade-out');
         document.body.style.overflow = '';
-        setTimeout(() => introEl.remove(), 1100);
+        setTimeout(() => {
+            if (introEl.parentNode) introEl.remove();
+        }, 900);
+    }
+
+    function updateTelemetry(progress) {
+        if (progressBar) progressBar.style.width = `${progress}%`;
+        if (progressTrack) progressTrack.setAttribute('aria-valuenow', String(Math.round(progress)));
+        if (loaderPercent) {
+            loaderPercent.textContent = String(Math.min(100, Math.round(progress))).padStart(2, '0') + '%';
+        }
+        if (loaderStatus) {
+            if (progress < 28) {
+                loaderStatus.textContent = 'INITIALIZING SYSTEM';
+            } else if (progress < 60) {
+                loaderStatus.textContent = 'PREPARING EXPERIENCE';
+            } else if (progress < 90) {
+                loaderStatus.textContent = 'CONFIGURING SHADERS';
+            } else if (progress < 100) {
+                loaderStatus.textContent = 'CALIBRATING ENVIRONMENT';
+            } else {
+                loaderStatus.textContent = 'SYSTEM READY';
+            }
+        }
+    }
+
+    function drawAmbientLighting(elapsed) {
+        ctx.clearRect(0, 0, W, H);
+        const cx = W / 2;
+        const cy = H / 2;
+
+        // Smooth subtle cursor tracking spotlight
+        if (isPointerActive) {
+            const spotGrad = ctx.createRadialGradient(smoothPointerX, smoothPointerY, 0, smoothPointerX, smoothPointerY, Math.max(W, H) * 0.45);
+            spotGrad.addColorStop(0, 'rgba(255, 255, 255, 0.12)');
+            spotGrad.addColorStop(0.5, 'rgba(255, 255, 255, 0.03)');
+            spotGrad.addColorStop(1, 'rgba(0, 0, 0, 0)');
+            ctx.fillStyle = spotGrad;
+            ctx.fillRect(0, 0, W, H);
+        }
+
+        // Center ambient luxury pulse behind the title
+        const pulse = Math.sin(elapsed * 0.0018) * 0.03 + 0.10;
+        const centerGrad = ctx.createRadialGradient(cx, cy, 0, cx, cy, Math.min(W, H) * 0.42);
+        centerGrad.addColorStop(0, `rgba(255, 255, 255, ${pulse})`);
+        centerGrad.addColorStop(0.6, 'rgba(255, 255, 255, 0.02)');
+        centerGrad.addColorStop(1, 'rgba(0, 0, 0, 0)');
+        ctx.fillStyle = centerGrad;
+        ctx.fillRect(0, 0, W, H);
     }
 
     function animate(ts) {
         if (introFinished) return;
         if (!start) start = ts;
         const elapsed = ts - start;
-        const totalDuration = maxDelay + FORM_MS + SETTLE_MS + HOLD_MS;
-        const progress = Math.min(100, (elapsed / totalDuration) * 100);
-        if (progressBar) progressBar.style.width = `${progress}%`;
-        if (progressTrack) progressTrack.setAttribute('aria-valuenow', String(Math.round(progress)));
-        if (pointerX < 0 || pointerY < 0) {
-            smoothPointerX += (W / 2 - smoothPointerX) * 0.08;
-            smoothPointerY += (H / 2 - smoothPointerY) * 0.08;
+        const rawProgress = (elapsed / TOTAL_DURATION) * 100;
+        const progress = Math.min(100, rawProgress);
+
+        updateTelemetry(progress);
+
+        // Smooth pointer tracking
+        if (!isPointerActive) {
+            smoothPointerX += (W / 2 - smoothPointerX) * 0.05;
+            smoothPointerY += (H / 2 - smoothPointerY) * 0.05;
         } else {
             smoothPointerX += (pointerX - smoothPointerX) * 0.08;
             smoothPointerY += (pointerY - smoothPointerY) * 0.08;
         }
+
+        const isReady = progress >= 100;
+        if (consoleDock) {
+            consoleDock.classList.toggle('is-ready', isReady);
+        }
         if (loadButton) {
-            const ready = progress >= 100;
-            loadButton.disabled = !ready;
-            loadButton.textContent = ready ? 'Swipe Down ↓' : 'Just a moment..';
-            loadButton.classList.toggle('is-ready', ready);
+            loadButton.disabled = !isReady;
         }
-        ctx.clearRect(0, 0, W, H);
-        drawRotatingSphere(elapsed);
 
-        particles.forEach(p => {
-            const localT = (elapsed - p.delay) / FORM_MS;
-            const t = Math.max(0, Math.min(1, localT));
-            const eased = easeOutQuint(t);
-            const settleT = Math.max(0, Math.min(1, (elapsed - p.delay - FORM_MS) / SETTLE_MS));
-            const overshoot = t >= 1 ? Math.sin(settleT * Math.PI) * (1 - settleT) * 3 : 0;
-            const parallaxX = (smoothPointerX - W / 2) * 0.018;
-            const parallaxY = (smoothPointerY - H / 2) * 0.018;
-            const x = p.x + (p.tx - p.x) * eased + parallaxX;
-            const y = p.y + (p.ty - p.y) * eased - overshoot + parallaxY;
-            const glowStrength = 0.35 + eased * 0.65;
-
-            ctx.beginPath();
-            ctx.arc(x, y, p.r * 1.8, 0, Math.PI * 2);
-            ctx.fillStyle = `rgba(255,255,255,${glowStrength * 0.16})`;
-            ctx.fill();
-
-            ctx.beginPath();
-            ctx.arc(x, y, p.r, 0, Math.PI * 2);
-            ctx.fillStyle = `rgba(255,255,255,${0.62 + eased * 0.34})`;
-            ctx.fill();
-        });
-
-        drawMountainMark(elapsed);
-
-        if (elapsed < totalDuration) {
-            requestAnimationFrame(animate);
-        } else {
-            if (progressBar) progressBar.style.width = '100%';
-            if (progressTrack) progressTrack.setAttribute('aria-valuenow', '100');
-            requestAnimationFrame(animate);
-        }
+        drawAmbientLighting(elapsed);
+        requestAnimationFrame(animate);
     }
 
     function startIntro() {
         resize();
-        initParticles();
         smoothPointerX = W / 2;
         smoothPointerY = H / 2;
 
-        const maxDistFromCenter = Math.hypot(W / 2, H / 2);
-        maxDelay = BASE_DELAY + maxDistFromCenter * DIST_FACTOR + MAX_RAND_DELAY;
-        window.addEventListener('resize', () => { resize(); initParticles(); });
+        window.addEventListener('resize', resize);
+
         window.addEventListener('pointermove', event => {
             pointerX = event.clientX;
             pointerY = event.clientY;
+            isPointerActive = true;
         });
+
         window.addEventListener('pointerleave', () => {
-            pointerX = -1;
-            pointerY = -1;
+            isPointerActive = false;
         });
+
+        // Click / Tap on Enter button
+        if (loadButton) {
+            loadButton.addEventListener('click', (e) => {
+                e.stopPropagation();
+                finishIntro();
+            });
+        }
+
+        // Click anywhere when loaded
+        introEl.addEventListener('click', () => {
+            if (consoleDock && consoleDock.classList.contains('is-ready')) {
+                finishIntro();
+            }
+        });
+
+        // Mouse wheel scroll down
         window.addEventListener('wheel', event => {
-            if (loadButton && !loadButton.disabled && event.deltaY > 0) finishIntro();
+            if (event.deltaY > 0 && consoleDock && consoleDock.classList.contains('is-ready')) {
+                finishIntro();
+            }
         }, { passive: true });
+
+        // Touch swipe down / up
         window.addEventListener('touchstart', event => {
             touchStartY = event.touches[0]?.clientY ?? null;
         }, { passive: true });
+
         window.addEventListener('touchend', event => {
             const touchEndY = event.changedTouches[0]?.clientY;
-            if (loadButton && !loadButton.disabled && touchStartY !== null && touchEndY < touchStartY - 30) {
-                finishIntro();
+            if (touchStartY !== null && touchEndY !== undefined && consoleDock && consoleDock.classList.contains('is-ready')) {
+                if (Math.abs(touchEndY - touchStartY) > 30) {
+                    finishIntro();
+                }
             }
             touchStartY = null;
         }, { passive: true });
+
+        // Keyboard Space / Enter
+        window.addEventListener('keydown', event => {
+            if ((event.key === ' ' || event.key === 'Enter') && consoleDock && consoleDock.classList.contains('is-ready')) {
+                finishIntro();
+            }
+        });
+
         requestAnimationFrame(animate);
     }
-    if (document.fonts && document.fonts.ready) {
-        let started = false;
-        const begin = () => { if (!started) { started = true; startIntro(); } };
-        document.fonts.load('700 190px Orbitron').then(begin).catch(begin);
-        setTimeout(begin, 400);
-    } else {
-        startIntro();
-    }
+
+    startIntro();
 })();
 VANTA.BIRDS({
     el: "#vanta-birds",
