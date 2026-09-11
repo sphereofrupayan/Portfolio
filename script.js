@@ -998,13 +998,6 @@ suggestionChips.forEach(chip => {
     });
 });
 
-let lastScrollPosition = window.scrollY;
-window.addEventListener("scroll", () => {
-    if (Math.abs(window.scrollY - lastScrollPosition) > 4) minimizeBot();
-    lastScrollPosition = window.scrollY;
-}, { passive: true });
-
-
 userInput.addEventListener("input", () => {
     userInput.style.height = "auto";
     userInput.style.height = Math.min(userInput.scrollHeight, 100) + "px";
