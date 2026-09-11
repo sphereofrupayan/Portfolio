@@ -3841,16 +3841,17 @@ nav ul li.nav-links a:hover {
 }
 
 @media (max-width: 480px) {
-    #rusho-bot { bottom: 16px; right: 16px; }
-    #bot-window {
     html,
     body {
         overflow-x: clip;
     }
+
+    #rusho-bot { bottom: 16px; right: 16px; }
+    #bot-window {
         width: calc(100vw - 32px);
         height: min(72vh, 620px);
         bottom: 74px;
-    contain: layout;
+        contain: layout;
     }
 }
 .msg-bubble a{
@@ -4674,6 +4675,10 @@ nav ul li.nav-links a:hover {
 }
 
 .telemetry-status {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
     font-family: 'Rajdhani', sans-serif;
     font-size: 0.72rem;
     font-weight: 700;
@@ -4683,6 +4688,7 @@ nav ul li.nav-links a:hover {
 }
 
 .telemetry-percent {
+    flex: 0 0 auto;
     font-family: 'Orbitron', monospace;
     font-size: 0.82rem;
     font-weight: 700;
@@ -5152,12 +5158,66 @@ body:has(#hello-intro) #cursor-spotlight {
 
 @media (max-width: 700px) {
     .kinetic-projects-container { padding: 12px 12px 72px; }
-    .kinetic-projects-container { overflow: clip; }
+    .kinetic-projects-container { overflow: visible; }
+    .carousel-3d-scroll { height: 220vh; }
     .carousel-3d-wrapper { width: 100%; }
-    .carousel-3d-stage { height: 660px; }
-    .carousel-3d-card { width: min(320px, calc(100vw - 56px)); padding: 22px 18px; }
+    .carousel-3d-wrapper {
+        justify-content: flex-start;
+        padding-top: 18px;
+    }
+    .carousel-3d-stage {
+        flex: 0 0 500px;
+        height: 500px;
+    }
+    .carousel-3d-card {
+        width: min(320px, calc(100vw - 56px));
+        padding: 12px 16px;
+    }
+    .carousel-3d-card .kinetic-visual-wrapper {
+        width: 84px;
+        height: 72px;
+        margin-bottom: 8px;
+    }
+    .carousel-3d-card .kinetic-logo,
+    .carousel-3d-card .kinetic-logo-va {
+        width: 54px;
+        height: 54px;
+    }
+    .carousel-3d-card .kinetic-title {
+        font-size: 1.28rem;
+        margin-bottom: 8px;
+    }
+    .carousel-3d-card .kinetic-divider {
+        width: 86px;
+        margin-bottom: 10px;
+    }
+    .carousel-3d-card .kinetic-desc {
+        min-height: 0;
+        margin-bottom: 12px;
+        font-size: 0.78rem;
+        line-height: 1.45;
+    }
+    .carousel-3d-card .project-stack {
+        gap: 5px;
+        margin-bottom: 0;
+    }
+    .carousel-3d-card .project-stack-group {
+        gap: 4px;
+    }
+    .carousel-3d-card .project-stack-group > span {
+        font-size: 0.56rem;
+    }
+    .carousel-3d-card .project-stack-group b {
+        padding: 4px 7px;
+        font-size: 0.62rem;
+    }
     .carousel-3d-nav { width: 42px; height: 42px; font-size: 1.6rem; }
-    .project-links { width: calc(100% - 34px); margin-top: 14px; padding: 0 8px; }
+    .project-links {
+        width: calc(100% - 34px);
+        min-height: 70px;
+        margin-top: 8px;
+        padding: 0 8px;
+    }
     .project-links-track { gap: 10px; padding-left: 10px; }
     .project-links a { gap: 8px; }
     .project-links a small { font-size: 0.55rem; }
@@ -5406,4 +5466,489 @@ body:has(#hello-intro) #cursor-spotlight {
     font-family: 'Poppins', sans-serif;
     font-size: clamp(0.78rem, 1.25vw, 0.92rem);
     line-height: 1.75;
+}
+
+/* Final viewport guardrails for phones. */
+@media (max-width: 600px) {
+    html,
+    body {
+        width: 100%;
+        max-width: 100%;
+        overflow-x: clip;
+    }
+
+    img,
+    canvas,
+    video,
+    svg {
+        max-width: 100%;
+    }
+
+    .cover-section {
+        height: var(--viewport-height, 100dvh);
+        min-height: 520px;
+        max-height: none;
+    }
+
+    nav ul {
+        gap: 8px;
+        padding-inline: 12px;
+    }
+
+    nav ul li.nav-links {
+        min-width: 0;
+        overflow-x: auto;
+        scrollbar-width: none;
+    }
+
+    nav ul li.nav-links::-webkit-scrollbar {
+        display: none;
+    }
+
+    nav ul li.nav-links a {
+        flex: 0 0 auto;
+    }
+
+    .hero {
+        padding: 72px 12px 0;
+    }
+
+    .hero-left {
+        padding: 12px 4px;
+    }
+
+    .hero-name-line {
+        white-space: normal;
+    }
+
+    .bottom-info {
+        bottom: max(12px, env(safe-area-inset-bottom));
+    }
+
+    .bottom-row {
+        align-items: flex-end;
+        gap: 12px;
+    }
+
+    .right.corner {
+        max-width: 48%;
+    }
+
+    .right.corner p {
+        letter-spacing: 1px;
+        overflow-wrap: anywhere;
+    }
+
+    .questions-container,
+    .about-split,
+    .education-wrapper,
+    .tech-orbit-wrapper,
+    .focus-section,
+    #contact {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .questions-container {
+        gap: 18px;
+        padding: 36px 16px;
+    }
+
+    .questions-visuals dotlottie-wc {
+        width: min(240px, 72vw);
+        height: min(240px, 72vw);
+    }
+
+    .tech-title {
+        white-space: normal;
+        overflow-wrap: anywhere;
+    }
+
+    .leetcode-card {
+        width: calc(100% - 32px);
+        max-width: 420px;
+    }
+
+    .leetcode-content {
+        min-width: 0;
+        width: 100%;
+    }
+
+    .leetcode-title,
+    .leetcode-desc {
+        white-space: normal;
+        overflow-wrap: anywhere;
+    }
+
+    .leetcode-btn {
+        max-width: 100%;
+    }
+
+    .hackathon-section,
+    .internship-section,
+    .offer-letters-section,
+    .questions-section {
+        overflow-x: clip;
+    }
+
+    .hackathon-heading h2,
+    .resume-heading,
+    .internship-role {
+        overflow-wrap: anywhere;
+    }
+
+    .hackathon-description,
+    .internship-points,
+    .resume-text {
+        overflow-wrap: anywhere;
+    }
+
+    .carousel-3d-wrapper {
+        min-width: 0;
+    }
+
+    .carousel-3d-nav.prev { left: 2px; }
+    .carousel-3d-nav.next { right: 2px; }
+
+    #rusho-bot {
+        right: max(12px, env(safe-area-inset-right));
+        bottom: max(12px, env(safe-area-inset-bottom));
+    }
+
+    #bot-window {
+        position: fixed;
+        left: max(12px, env(safe-area-inset-left));
+        right: max(12px, env(safe-area-inset-right));
+        bottom: calc(76px + env(safe-area-inset-bottom));
+        width: auto;
+        max-width: 390px;
+        height: min(70dvh, 560px);
+        max-height: calc(var(--viewport-height, 100dvh) - 92px);
+        border-radius: 20px;
+    }
+
+    .bot-header {
+        padding: 16px 16px 14px;
+    }
+
+    .bot-model-row {
+        padding: 10px 16px 12px;
+    }
+
+    #chat-box {
+        min-height: 0;
+        padding: 16px 14px 12px;
+        gap: 12px;
+    }
+
+    .msg {
+        align-items: flex-start;
+        max-width: 100%;
+    }
+
+    .msg-bubble,
+    .msg.bot .msg-bubble,
+    .msg.user .msg-bubble {
+        min-width: 0;
+        max-width: calc(100% - 32px);
+        overflow-wrap: anywhere;
+    }
+
+    .bot-suggestions {
+        gap: 6px;
+    }
+
+    .suggestion-chip {
+        max-width: 100%;
+        white-space: normal;
+    }
+
+    .bot-input-row {
+        padding: 10px 14px max(12px, env(safe-area-inset-bottom));
+    }
+
+    #user-input {
+        min-width: 0;
+        max-height: 84px;
+    }
+}
+
+@media (max-width: 380px) {
+    .welcome-container {
+        padding-inline: 14px;
+    }
+
+    .welcome-status-pill span:not(.status-pulse-dot) {
+        max-width: 170px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .welcome-kicker-row {
+        gap: 8px;
+    }
+
+    .welcome-kicker-text {
+        font-size: 0.68rem;
+        letter-spacing: 0.2em;
+    }
+
+    .welcome-sub-row {
+        max-width: 280px;
+        gap: 6px;
+    }
+
+    .sub-role {
+        font-size: 0.58rem;
+        letter-spacing: 0.12em;
+    }
+
+    .welcome-console-dock {
+        width: min(100%, 320px);
+        padding-inline: 0;
+    }
+
+    .telemetry-status {
+        font-size: 0.62rem;
+        letter-spacing: 0.12em;
+    }
+}
+
+@media (max-width: 600px) {
+    .skills-section,
+    .tech-section,
+    .focus-section,
+    .resume-section,
+    .hackathon-section,
+    .questions-section,
+    .Projects,
+    .internship-section,
+    .offer-letters-section,
+    #Testimonials,
+    #contact {
+        text-align: center;
+    }
+
+    .section-title,
+    .tech-header,
+    .focus-label,
+    .resume-left,
+    .hackathon-heading,
+    .hackathon-story,
+    .questions-content,
+    .internship-card-inner,
+    .offer-letters-heading,
+    #below,
+    #contact .side {
+        text-align: center;
+    }
+
+    .education-container,
+    .education-animation,
+    .about-card,
+    .skill-category,
+    .resume-right,
+    .hackathon-meta,
+    .questions-content,
+    .questions-form,
+    .internship-card,
+    .offer-letters-grid,
+    .testimonials-container,
+    #contact form {
+        align-items: center;
+        margin-inline: auto;
+    }
+
+    .education-container,
+    .skill-category,
+    .questions-form,
+    #contact form {
+        width: 100%;
+    }
+
+    .edu-highlights,
+    .resume-stats-row,
+    .resume-buttons,
+    .internship-stack,
+    .stack-chips,
+    .questions-footer,
+    .offer-letters-grid,
+    .socialmedia {
+        justify-content: center;
+    }
+
+    .edu-highlights,
+    .internship-points,
+    .resume-text,
+    .hackathon-meta,
+    .questions-footer,
+    .offer-letter-content,
+    .internship-points {
+        text-align: center;
+    }
+
+    .internship-points {
+        padding-left: 0;
+        list-style-position: inside;
+    }
+
+    .hackathon-meta {
+        padding: 22px 0 0;
+        border-left: 0;
+        border-top: 1px solid rgba(255,59,48,0.45);
+    }
+
+    .hackathon-github,
+    .resume-btn,
+    .submit-btn,
+    #contact button {
+        margin-inline: auto;
+    }
+
+    .questions-footer {
+        flex-wrap: wrap;
+        gap: 14px;
+    }
+
+    .field-group,
+    .field-label,
+    #contact input,
+    #contact textarea {
+        text-align: center;
+    }
+
+    .right-side,
+    .left-side,
+    .changing-text-wrapper {
+        width: 100%;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+    }
+
+    .left-side ul {
+        padding-left: 0;
+        list-style-position: inside;
+    }
+
+    .resume-right {
+        justify-content: center;
+        width: 100%;
+    }
+
+    .bot-header,
+    .bot-model-row,
+    .bot-input-row,
+    .msg,
+    .suggestions-label {
+        text-align: center;
+    }
+
+    .bot-header,
+    .bot-model-row,
+    .bot-input-row {
+        justify-content: center;
+    }
+
+    .msg {
+        justify-content: center;
+    }
+
+    .msg.user {
+        margin-inline: auto;
+    }
+
+    .bot-suggestions {
+        justify-content: center;
+        margin-inline: auto;
+    }
+
+    #user-input {
+        text-align: center;
+    }
+}
+
+/* Minimal welcome treatment. */
+#hello-intro {
+    background:
+        radial-gradient(circle at 50% 42%, rgba(255,255,255,0.12), transparent 34%),
+        linear-gradient(145deg, #050505 0%, #151515 58%, #292929 100%);
+}
+
+.welcome-container,
+.welcome-header,
+.welcome-center,
+.welcome-footer {
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', sans-serif;
+}
+
+.welcome-header {
+    gap: 24px;
+}
+
+.welcome-status-pill,
+.welcome-meta-pill,
+.welcome-location-pill {
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+}
+
+.welcome-status-pill,
+.welcome-meta-pill {
+    text-shadow: 0 1px 18px rgba(0,0,0,0.55);
+}
+
+.welcome-emblem-img {
+    filter: drop-shadow(0 8px 22px rgba(0,0,0,0.48))
+            drop-shadow(0 0 12px rgba(255,255,255,0.18));
+}
+
+.welcome-kicker-text {
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif;
+    font-size: clamp(0.7rem, 1vw, 0.82rem);
+    letter-spacing: 0.24em;
+}
+
+.welcome-sub-row {
+    gap: clamp(7px, 1.2vw, 12px);
+}
+
+.sub-role {
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif;
+    font-size: clamp(0.62rem, 0.9vw, 0.76rem);
+    letter-spacing: 0.16em;
+}
+
+.welcome-interaction-hint {
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif;
+    font-size: 0.68rem;
+    letter-spacing: 0.14em;
+    color: rgba(255,255,255,0.48);
+}
+
+.welcome-interaction-hint kbd {
+    padding: 0;
+    background: transparent;
+    border: 0;
+    border-radius: 0;
+    font-family: inherit;
+    color: rgba(255,255,255,0.7);
+}
+
+.hint-dot {
+    color: rgba(255,255,255,0.28);
+}
+
+.telemetry-status,
+.telemetry-percent {
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif;
+    letter-spacing: 0.14em;
+}
+
+.enter-btn-text {
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif;
+    font-size: 0.84rem;
+    letter-spacing: 0.2em;
 }
