@@ -1,10 +1,11 @@
 ===========================================================
 RUPAYAN CHATTERAJ - PORTFOLIO KNOWLEDGE BASE
-===========================================================
+============================================
 
-PERSONAL INFORMATION
---------------------
-Name: Rupayan Chattaraj
+## PERSONAL INFORMATION
+
+Name:
+Rupayan Chattaraj
 
 Also Known As:
 Rupayan
@@ -25,7 +26,7 @@ Nationality:
 Indian
 
 Email:
-rupayanchattaraj@gmail.com
+[rupayanchattaraj@gmail.com](mailto:rupayanchattaraj@gmail.com)
 
 GitHub:
 https://github.com/DevRC891
@@ -39,10 +40,10 @@ https://x.com/rupayan_01
 Portfolio:
 This website is the official portfolio of Rupayan Chattaraj.
 
------------------------------------------------------------
+---
 
-EDUCATION
---------------------
+## EDUCATION
+
 Degree:
 Bachelor of Technology (B.Tech)
 
@@ -61,11 +62,11 @@ DAV Model School, Durgapur
 Higher Secondary Completion:
 2024
 
------------------------------------------------------------
+---
 
-ABOUT RUPAYAN
---------------------
-Rupayan is a passionate Software Engineer and Full Stack Developer who enjoys creating modern, scalable and responsive web applications.
+## ABOUT RUPAYAN
+
+Rupayan Chattaraj is a passionate Software Engineer and Full Stack Developer who enjoys creating modern, scalable and responsive web applications.
 
 He enjoys learning new technologies and solving real-world problems through software.
 
@@ -75,86 +76,295 @@ He continuously works on improving his programming, development and problem-solv
 
 He enjoys building creative user interfaces with smooth animations and excellent user experience.
 
------------------------------------------------------------
+His interests include Artificial Intelligence, Machine Learning, Computer Vision, Full Stack Development, Software Engineering and UI/UX Design.
 
-TECHNICAL SKILLS
---------------------
+Rupayan also enjoys participating in hackathons and working on real-world software solutions under time constraints.
 
-Programming Languages
-- Python
-- Java
-- C
-- C++
-- JavaScript
+---
 
-Frontend
-- HTML
-- CSS
-- React
+## TECHNICAL SKILLS
 
-Backend
-- Flask
-- Node.js
+Programming Languages:
 
-Database
-- MySQL
-- Oracle Database 21c
+* Python
+* Java
+* C
+* C++
+* JavaScript
 
-Tools
-- Git
-- GitHub
-- VS Code
-- Postman
-- Render
-- Canva
-- Figma
+Frontend:
 
-Libraries
-- OpenCV
-- MediaPipe
-- NumPy
-- PyAutoGUI
+* HTML
+* CSS
+* React
 
-Other Technologies
-- EmailJS
-- REST APIs
-- Responsive Web Design
+Backend:
 
------------------------------------------------------------
+* Flask
+* Node.js
 
-PROJECTS
---------------------
+Database:
 
-Projects:
+* MySQL
+* Oracle Database 21c
+
+Tools:
+
+* Git
+* GitHub
+* VS Code
+* Postman
+* Render
+* Canva
+* Figma
+
+Libraries:
+
+* OpenCV
+* MediaPipe
+* NumPy
+* PyAutoGUI
+
+Other Technologies:
+
+* EmailJS
+* REST APIs
+* Responsive Web Design
+* AI APIs
+* Email APIs
+* Calendar APIs
+
+---
+
+## PROJECTS
 
 1. Wavify
-- A modern music streaming web application with a clean and responsive user interface.
-- Built using HTML, CSS, JavaScript, Python, Flask, and the Groq API.
-- Features seamless music playback, custom playlists, and an attractive UI.
-- Live Demo: https://wavify18.netlify.app/
+
+* A modern music streaming web application with a clean and responsive user interface.
+* Built using HTML, CSS, JavaScript, Python, Flask, and the Groq API.
+* Features seamless music playback, custom playlists, and an attractive UI.
+* Designed with a focus on responsive web design and user experience.
+* Live Demo:
+  https://wavify18.netlify.app/
 
 2. Rusho.Bot
-- A personal AI portfolio assistant developed for my portfolio website.
-- Built using HTML, CSS, JavaScript, Python (Flask), and the Groq API.
-- Answers questions about my education, skills, projects, achievements, and experience.
-- Supports multiple AI models, weather updates, live cricket scores, and portfolio knowledge.
-- Live Demo: https://rushobot.onrender.com/
+
+* A personal AI portfolio assistant developed for the portfolio website.
+* Built using HTML, CSS, JavaScript, Python (Flask), and the Groq API.
+* Answers questions about Rupayan's education, skills, projects, achievements, and experience.
+* Supports multiple AI models, weather updates, live cricket scores, and portfolio knowledge.
+* Demonstrates practical experience with frontend development, backend development, API integration and LLM-based applications.
+* Live Demo:
+  https://rushobot.onrender.com/
 
 3. Eye Controlled Mouse
-- A computer vision project that allows users to control the mouse cursor using eye movements.
-- Developed using Python, OpenCV, MediaPipe, NumPy, and PyAutoGUI.
-- Includes click detection and smooth cursor tracking.
-- Download App : https://drive.google.com/file/d/1oF2B1ap2t7eguH_3mSvMo_0H1tpLOkJ0/view?usp=sharing
+
+* A computer vision project that allows users to control the mouse cursor using eye movements.
+* Developed using Python, OpenCV, MediaPipe, NumPy, and PyAutoGUI.
+* Includes eye movement based cursor tracking and click detection.
+* The project demonstrates the use of computer vision for human-computer interaction.
+* Download App:
+  https://drive.google.com/file/d/1oF2B1ap2t7eguH_3mSvMo_0H1tpLOkJ0/view?usp=sharing
 
 4. Hand Gesture Control
-- A real-time hand gesture recognition system for controlling the computer.
-- Built using Python, OpenCV, MediaPipe, NumPy, and PyAutoGUI.
-- Supports mouse movement, clicking, volume control, window management, and other gesture-based actions.
-- Download App : https://drive.google.com/file/d/1hDJE7NqAKrK4h5K5YsDQqcEi_V-6ryej/view?usp=sharing
------------------------------------------------------------
 
-INTERESTS
---------------------
+* A real-time hand gesture recognition system for controlling the computer.
+* Built using Python, OpenCV, MediaPipe, NumPy, and PyAutoGUI.
+* Supports mouse movement, clicking, volume control, window management, and other gesture-based actions.
+* Demonstrates real-time computer vision and gesture-based human-computer interaction.
+* Download App:
+  https://drive.google.com/file/d/1hDJE7NqAKrK4h5K5YsDQqcEi_V-6ryej/view?usp=sharing
+
+---
+
+## HACKATHON EXPERIENCE
+
+Hackathon:
+Code2Create
+
+Team Name:
+CipherSquad
+
+Project Name:
+MailMate
+
+Role:
+Group Leader / Team Leader
+
+Hackathon Focus:
+AI and Email Workflow Management
+
+---
+
+## MAILMATE
+
+MailMate is a productivity-focused email workflow application developed during the Code2Create hackathon.
+
+The project focuses on converting information from email conversations into structured and actionable workflow information.
+
+Problem Statement:
+
+Important tasks, deadlines, blockers, dependencies and other actionable information are often buried inside lengthy email conversations.
+
+Users may need to manually read through multiple emails to understand:
+
+* What needs to be done
+* Who needs to do it
+* What the deadline is
+* Which tasks depend on other tasks
+* Which issues are blocking progress
+* What actions should be taken next
+
+MailMate was designed to make this process more organized and efficient.
+
+Core Concept:
+
+MailMate helps transform unstructured email communication into actionable workflow information.
+
+The system can focus on identifying:
+
+* Tasks
+* Action items
+* Deadlines
+* Dependencies
+* Blockers
+* Important information
+* Follow-up actions
+
+Key Features:
+
+* Email workflow management
+* Email analysis
+* Action-item identification
+* Task extraction
+* Deadline identification
+* Dependency tracking
+* Blocker identification
+* Task organization
+* Workflow management
+* Reminder-oriented workflow
+* Calendar-oriented actions
+* Centralized productivity interface
+
+Project Goal:
+
+The goal of MailMate is to reduce the amount of manual effort required to understand and organize important information contained in emails.
+
+Instead of treating an inbox only as a collection of messages, MailMate focuses on turning email communication into actionable work.
+
+---
+
+## RUPAYAN'S ROLE IN CIPHERSQUAD
+
+Rupayan Chattaraj was the Group Leader of CipherSquad during the Code2Create hackathon.
+
+As the group leader, Rupayan was responsible for overseeing the overall technical development and coordination of the project.
+
+His responsibilities included:
+
+* Leading the development team
+* Managing the overall project framework
+* Making important technical decisions
+* Coordinating different parts of the project
+* Managing framework-level implementation
+* Handling major debugging tasks
+* Identifying and resolving technical issues
+* Integrating different components of the project
+* Reviewing the implementation
+* Maintaining the overall development flow
+* Ensuring that different parts of the application worked together
+* Contributing to the overall project architecture
+* Managing important technical requirements
+* Helping the team deliver the working project within the hackathon timeframe
+
+Rupayan had an active role across the overall development lifecycle rather than working on only one isolated module.
+
+His leadership involved both technical decision-making and team coordination.
+
+---
+
+## HACKATHON LEADERSHIP EXPERIENCE
+
+The Code2Create hackathon gave Rupayan practical experience in building a software product under a limited timeframe.
+
+As the leader of CipherSquad, he gained experience in:
+
+* Technical leadership
+* Team coordination
+* Rapid development
+* Framework management
+* Debugging
+* Problem solving
+* Project architecture
+* Feature integration
+* Time management
+* Decision making
+* Working under pressure
+* Collaborative development
+* Delivering a working software solution
+
+The experience strengthened his ability to take responsibility for a project from development and debugging through integration and final delivery.
+
+---
+
+## HACKATHON FAQ
+
+Has Rupayan participated in a hackathon?
+
+Yes. Rupayan participated in the Code2Create hackathon as the Group Leader of Team CipherSquad.
+
+What was Rupayan's hackathon team called?
+
+His hackathon team was called CipherSquad.
+
+What was the project built by CipherSquad?
+
+CipherSquad built MailMate during the Code2Create hackathon.
+
+What is MailMate?
+
+MailMate is an email workflow and productivity application designed to turn information from email conversations into structured and actionable workflow information.
+
+What problem does MailMate solve?
+
+MailMate addresses the difficulty of finding tasks, deadlines, blockers, dependencies and other actionable information hidden inside email conversations.
+
+What was Rupayan's role in Code2Create?
+
+Rupayan was the Group Leader of CipherSquad.
+
+What did Rupayan do as the group leader?
+
+He managed the overall framework, handled important technical decisions, coordinated development, worked on debugging, managed integration and took responsibility for important technical aspects of the project.
+
+Was Rupayan involved in debugging?
+
+Yes. Debugging was one of his major responsibilities during the hackathon. He handled important framework-level and technical debugging tasks to keep the project functional.
+
+Was Rupayan responsible only for one part of MailMate?
+
+No. As the group leader, Rupayan was involved in the overall framework, technical coordination, debugging, integration and other important parts of the project.
+
+What did Rupayan learn from the hackathon?
+
+The hackathon strengthened his practical experience in technical leadership, debugging, rapid development, project coordination, architecture, integration, problem solving and working under time constraints.
+
+Did Rupayan work with a team?
+
+Yes. He worked as the Group Leader of CipherSquad during Code2Create.
+
+What is CipherSquad?
+
+CipherSquad was Rupayan's team during the Code2Create hackathon.
+
+What is the difference between MailMate and Rusho.Bot?
+
+MailMate was the project developed by CipherSquad for the Code2Create hackathon, while Rusho.Bot is Rupayan's personal AI portfolio assistant.
+
+---
+
+## INTERESTS
+
 Web Development
 
 Artificial Intelligence
@@ -175,10 +385,14 @@ UI/UX Design
 
 Open Source
 
------------------------------------------------------------
+Hackathons
 
-HOBBIES
---------------------
+AI-Powered Applications
+
+---
+
+## HOBBIES
+
 Learning new technologies
 
 Building software projects
@@ -195,10 +409,12 @@ Exploring AI tools
 
 Improving coding skills
 
------------------------------------------------------------
+Participating in technical events and hackathons
 
-PERSONALITY
---------------------
+---
+
+## PERSONALITY
+
 Creative
 
 Curious
@@ -221,10 +437,12 @@ Detail Oriented
 
 Passionate about Technology
 
------------------------------------------------------------
+Leadership Oriented
 
-CAREER GOALS
---------------------
+---
+
+## CAREER GOALS
+
 Become an excellent Software Engineer.
 
 Build impactful software that solves real-world problems.
@@ -237,49 +455,148 @@ Continuously learn modern technologies.
 
 Create high-quality full-stack applications.
 
------------------------------------------------------------
+Develop software that solves practical real-world problems.
 
-FREQUENTLY ASKED QUESTIONS
---------------------
+Continue improving expertise in Artificial Intelligence, Full Stack Development and Software Engineering.
+
+Develop stronger technical leadership and system design skills.
+
+Work on challenging software engineering and AI projects.
+
+---
+
+## FREQUENTLY ASKED QUESTIONS
 
 Who is Rupayan?
-Rupayan Chattaraj is a Computer Science Engineering student at VIT Vellore and a Full Stack Developer.
+
+Rupayan Chattaraj is a Computer Science Engineering student at VIT Vellore and a Full Stack Developer interested in software engineering, AI, computer vision and web development.
 
 Where does Rupayan study?
-VIT Vellore.
+
+Rupayan studies at Vellore Institute of Technology (VIT), Vellore.
 
 What is Rupayan studying?
-Bachelor of Technology in Computer Science and Engineering.
+
+He is pursuing a Bachelor of Technology in Computer Science and Engineering.
 
 When will Rupayan graduate?
-Expected graduation is 2028.
+
+His expected graduation year is 2028.
 
 What programming languages does Rupayan know?
-Python, Java, C, C++, JavaScript.
+
+Rupayan knows Python, Java, C, C++ and JavaScript.
 
 What frontend technologies does Rupayan know?
-HTML, CSS and React.
+
+He works with HTML, CSS and React.
 
 What backend technologies does Rupayan know?
-Flask and Node.js.
+
+He works with Flask and Node.js.
 
 Which databases does Rupayan use?
-MySQL and Oracle Database.
+
+He works with MySQL and Oracle Database 21c.
 
 What projects has Rupayan built?
-Wavify, Rusho.Bot, Eye Controlled Mouse and Hand Gesture Control.
 
-Does Rupayan know AI?
-Yes. He has experience integrating AI APIs and building AI-powered applications.
+Rupayan has built Wavify, Rusho.Bot, Eye Controlled Mouse and Hand Gesture Control. He has also worked on MailMate as part of the CipherSquad team during Code2Create.
+
+What is Rusho.Bot?
+
+Rusho.Bot is a personal AI portfolio assistant designed to answer questions about Rupayan's education, skills, projects, achievements and experience.
+
+Does Rupayan have experience with AI?
+
+Yes. Rupayan has experience integrating AI APIs and building AI-powered applications such as Rusho.Bot. He also participated in an AI-focused hackathon project through MailMate.
+
+Does Rupayan have experience with LLMs?
+
+Yes. Rupayan has practical experience integrating large language model APIs into applications, including his AI portfolio assistant Rusho.Bot.
 
 Does Rupayan know Computer Vision?
-Yes. He has built Eye Controlled Mouse and Hand Gesture Control using OpenCV and MediaPipe.
 
-Can I contact Rupayan?
-Yes.
+Yes. He has built computer vision projects including Eye Controlled Mouse and Hand Gesture Control using OpenCV and MediaPipe.
+
+What is Eye Controlled Mouse?
+
+It is a computer vision application that allows users to control the mouse using eye movements, including cursor tracking and click detection.
+
+What is Hand Gesture Control?
+
+It is a real-time computer vision system that recognizes hand gestures and uses them to control computer functions such as mouse actions, volume and window management.
+
+Has Rupayan participated in hackathons?
+
+Yes. Rupayan participated in the Code2Create hackathon as the Group Leader of CipherSquad.
+
+What was Rupayan's hackathon team?
+
+His team was CipherSquad.
+
+What was CipherSquad's project?
+
+CipherSquad developed MailMate during Code2Create.
+
+What was Rupayan's position in CipherSquad?
+
+Rupayan was the Group Leader.
+
+What were Rupayan's responsibilities as Group Leader?
+
+He managed the overall framework, handled important technical decisions, coordinated development, worked on major debugging tasks, managed integration and oversaw important technical aspects of the project.
+
+Did Rupayan handle debugging during the hackathon?
+
+Yes. He handled important debugging and framework-level technical issues during the development of MailMate.
+
+Does Rupayan have leadership experience?
+
+Yes. His role as Group Leader of CipherSquad gave him practical experience in technical leadership, team coordination, project management, debugging and decision making.
+
+Does Rupayan have experience building practical software solutions?
+
+Yes. His projects demonstrate experience in web development, AI-powered applications, computer vision and real-world software problem solving.
+
+Does Rupayan work with APIs?
+
+Yes. He has experience working with AI APIs, REST APIs, EmailJS and email/calendar integrations.
+
+Does Rupayan know full-stack development?
+
+Yes. His technical skills include frontend technologies such as HTML, CSS and React and backend technologies such as Flask and Node.js.
+
+Does Rupayan have experience with UI/UX?
+
+Yes. Rupayan is interested in UI/UX design and enjoys creating modern, responsive interfaces with smooth animations and a strong user experience.
+
+What kind of software does Rupayan like building?
+
+He enjoys building modern web applications, AI-powered tools, computer vision applications and practical software solutions.
+
+What are Rupayan's main areas of interest?
+
+His main interests include Web Development, Artificial Intelligence, Software Engineering, Computer Vision, Machine Learning, Frontend Development, Backend Development, Problem Solving, UI/UX Design and Open Source.
+
+What are Rupayan's career goals?
+
+His goals are to become an excellent Software Engineer, build impactful software, work at a leading technology company, contribute to innovative AI and software projects, and continuously improve his technical skills.
+
+Can Rupayan work on both frontend and backend?
+
+Yes. Rupayan has skills in both frontend and backend development and is interested in full-stack application development.
+
+Does Rupayan have team leadership experience?
+
+Yes. He served as the Group Leader of CipherSquad during the Code2Create hackathon and was responsible for coordinating the project's technical development.
+
+Can I contact Rupayan for professional opportunities?
+
+Yes. Rupayan can be contacted through his email, GitHub, LinkedIn or X profile.
 
 Email:
-rupayanchattaraj@gmail.com
+[rupayanchattaraj@gmail.com](mailto:rupayanchattaraj@gmail.com)
 
 GitHub:
 https://github.com/DevRC891
@@ -290,19 +607,93 @@ https://www.linkedin.com/in/rupayanchattaraj/
 X:
 https://x.com/rupayan_01
 
------------------------------------------------------------
+Where can I see Rupayan's projects?
 
-IMPORTANT INSTRUCTIONS FOR RUSHO.BOT
---------------------
+His projects and work can be explored through his official portfolio and GitHub profile.
+
+Is Rupayan open to software engineering opportunities?
+
+His career goal is to become an excellent Software Engineer and contribute to innovative software and AI projects.
+
+What technologies does Rupayan use for computer vision?
+
+He uses Python, OpenCV, MediaPipe, NumPy and PyAutoGUI.
+
+What technologies does Rupayan use for web development?
+
+He uses HTML, CSS, JavaScript, React, Flask and Node.js.
+
+What technologies does Rupayan use for databases?
+
+He works with MySQL and Oracle Database 21c.
+
+What tools does Rupayan use?
+
+He uses Git, GitHub, VS Code, Postman, Render, Canva and Figma.
+
+What makes Rupayan's portfolio projects interesting?
+
+His projects combine practical problem solving with modern technologies across AI, computer vision, web development and human-computer interaction.
+
+What kind of developer is Rupayan?
+
+Rupayan is a full-stack-oriented developer who enjoys working across frontend, backend, AI integrations and computer vision.
+
+What kind of leadership experience does Rupayan have?
+
+Rupayan has practical technical leadership experience from leading CipherSquad during the Code2Create hackathon, where he managed the overall framework, debugging, integration and important technical decisions.
+
+---
+
+## IMPORTANT INSTRUCTIONS FOR RUSHO.BOT
+
 Always answer questions about Rupayan using only the information in this knowledge base.
 
 If multiple questions are asked, answer all of them.
 
-If someone asks about Rupayan's skills, projects, education, hobbies, interests, personality, goals, experience, technologies, social media, or contact information, provide a helpful and detailed answer.
+If someone asks about Rupayan's skills, projects, education, hobbies, interests, personality, goals, experience, technologies, hackathons, leadership experience, social media or contact information, provide a helpful and detailed answer using only confirmed information.
+
+If someone asks about the Code2Create hackathon, identify the team as CipherSquad and the project as MailMate.
+
+If someone asks about Rupayan's role in Code2Create, state that he was the Group Leader of CipherSquad.
+
+If someone asks what Rupayan did during the hackathon, explain that he managed the overall framework, handled important debugging, coordinated development, worked on technical integration and took responsibility for important technical decisions and project components.
+
+Never reduce Rupayan's hackathon role to simply "a team member."
+
+Never invent a hackathon result, award, ranking, date, team member, internship, job, achievement or personal detail that is not present in this knowledge base.
 
 If information is unavailable, politely say:
+
 "I don't have that information yet."
 
-Never invent personal information that is not present in this knowledge base.
-
 Always be professional, friendly and concise.
+
+When describing projects, focus on:
+
+* What the project does
+* The problem it addresses
+* Technologies used
+* Main features
+* Rupayan's contribution where available
+
+When describing the Code2Create experience, emphasize:
+
+* Team: CipherSquad
+* Project: MailMate
+* Role: Group Leader
+* Overall framework management
+* Technical decision making
+* Debugging
+* Integration
+* Development coordination
+* Problem solving
+* Working under hackathon time constraints
+
+When answering questions about skills, distinguish between technologies explicitly listed in the knowledge base and technologies that are only potential or planned integrations.
+
+Never present potential or suggested technologies as confirmed technologies used in a completed project.
+
+===========================================================
+END OF KNOWLEDGE BASE
+=====================
