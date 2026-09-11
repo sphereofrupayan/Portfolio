@@ -25,6 +25,7 @@
         dpr = Math.min(window.devicePixelRatio || 1, isMobile ? 1.5 : 2);
         W = window.innerWidth;
         H = window.innerHeight;
+        document.documentElement.style.setProperty('--viewport-height', `${H}px`);
         canvas.width  = W * dpr;
         canvas.height = H * dpr;
         canvas.style.width  = W + 'px';
@@ -135,6 +136,9 @@
         smoothPointerY = H / 2;
 
         window.addEventListener('resize', resize);
+        if (window.visualViewport) {
+            window.visualViewport.addEventListener('resize', resize, { passive: true });
+        }
 
         window.addEventListener('pointermove', event => {
             pointerX = event.clientX;
@@ -1555,7 +1559,9 @@ ctx.arc(drawX, drawY, p.r, 0, Math.PI * 2);
     const nextBtn = document.getElementById('carousel3dNext');
     const dotsWrap = document.getElementById('carousel3dDots');
     const projectLinks = Array.from(document.querySelectorAll('[data-project-link]'));
+    const carouselWrapper = stage.parentElement;
     const total = cards.length;
+    const mobileCarousel = window.matchMedia('(max-width: 700px)');
 
     cards.forEach((_, i) => {
         const dot = document.createElement('span');
@@ -1605,6 +1611,30 @@ ctx.arc(drawX, drawY, p.r, 0, Math.PI * 2);
 
         activeFloat = progress * (total - 1);
         layout(activeFloat);
+
+        if (mobileCarousel.matches) {
+            if (rect.top <= 0 && rect.bottom >= window.innerHeight) {
+                carouselWrapper.style.position = 'fixed';
+                carouselWrapper.style.top = '0';
+                carouselWrapper.style.left = `${scrollSection.getBoundingClientRect().left}px`;
+                carouselWrapper.style.width = `${scrollSection.getBoundingClientRect().width}px`;
+                carouselWrapper.style.zIndex = '10';
+            } else if (rect.top > 0) {
+                carouselWrapper.style.position = 'relative';
+                carouselWrapper.style.top = '';
+                carouselWrapper.style.left = '';
+                carouselWrapper.style.width = '';
+                carouselWrapper.style.zIndex = '';
+            } else {
+                carouselWrapper.style.position = 'absolute';
+                carouselWrapper.style.top = 'auto';
+                carouselWrapper.style.left = '0';
+                carouselWrapper.style.bottom = '0';
+                carouselWrapper.style.width = '100%';
+                carouselWrapper.style.zIndex = '10';
+            }
+        }
+
         ticking = false;
     }
 
@@ -1616,6 +1646,7 @@ ctx.arc(drawX, drawY, p.r, 0, Math.PI * 2);
     }, { passive: true });
 
     window.addEventListener('resize', updateFromScroll);
+    mobileCarousel.addEventListener('change', updateFromScroll);
 
     function scrollToIndex(index) {
         const scrollableDist = scrollSection.offsetHeight - window.innerHeight;
