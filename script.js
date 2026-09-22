@@ -152,11 +152,15 @@
 
         // Click / Tap on Enter button
         if (loadButton) {
-            loadButton.addEventListener('click', (e) => {
-                e.stopPropagation();
-                finishIntro();
-            });
+    loadButton.addEventListener('click', (e) => {
+        e.stopPropagation();
+        finishIntro();
+        const cubeSection = document.getElementById('portfolio-cube-section');
+        if (cubeSection) {
+            cubeSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
+    });
+}
 
         // Click anywhere when loaded
         introEl.addEventListener('click', () => {
@@ -2002,4 +2006,122 @@ class CardAurora {
 
     
     onScroll();
+})();
+(function initPortfolioCube(){
+    const section = document.getElementById('portfolio-cube-section');
+    const cube = document.getElementById('portfolio-cube');
+    const stage = document.getElementById('cube-stage');
+
+    if (!section || !cube || !stage) return;
+
+    const faces = [...section.querySelectorAll('.cube-face')];
+    const rotations = [
+        { x: 0, y: 0 },
+        { x: 0, y: -90 },
+        { x: 0, y: -180 },
+        { x: 0, y: 90 },
+        { x: -90, y: 0 },
+        { x: 90, y: 0 }
+    ];
+    let rotationX = 0;
+    let rotationY = 0;
+    let pointer = null;
+    let moved = false;
+
+    function render() {
+        cube.style.setProperty('--cube-rotate-x', `${rotationX}deg`);
+        cube.style.setProperty('--cube-rotate-y', `${rotationY}deg`);
+    }
+
+    function angularDistance(a, b) {
+        return Math.abs((((a - b) % 360) + 540) % 360 - 180);
+    }
+
+    function nearestFaceIndex() {
+        let bestIndex = 0;
+        let bestDistance = Infinity;
+        rotations.forEach((candidate, index) => {
+            const distance = angularDistance(rotationX, candidate.x) + angularDistance(rotationY, candidate.y);
+            if (distance < bestDistance) {
+                bestDistance = distance;
+                bestIndex = index;
+            }
+        });
+        return bestIndex;
+    }
+
+    function snapToFace() {
+        const index = nearestFaceIndex();
+        rotationX = rotations[index].x;
+        rotationY = rotations[index].y;
+        render();
+        return index;
+    }
+
+    function navigateToFace(face) {
+        if (!face) return;
+        const targetSelector = face.getAttribute('href');
+        const targetEl = targetSelector ? document.querySelector(targetSelector) : null;
+        if (targetEl) {
+            targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    }
+
+    stage.addEventListener('dragstart', event => event.preventDefault());
+
+    stage.addEventListener('pointerdown', event => {
+        pointer = {
+            x: event.clientX,
+            y: event.clientY,
+            rotationX,
+            rotationY
+        };
+        moved = false;
+        stage.classList.add('is-dragging');
+        cube.classList.add('is-dragging');
+
+        if (stage.setPointerCapture) {
+            stage.setPointerCapture(event.pointerId);
+        }
+    });
+
+    stage.addEventListener('pointermove', event => {
+        if (!pointer) return;
+
+        const dx = event.clientX - pointer.x;
+        const dy = event.clientY - pointer.y;
+
+        if (Math.abs(dx) > 4 || Math.abs(dy) > 4) {
+            moved = true;
+        }
+
+        rotationY = pointer.rotationY + dx * .32;
+        rotationX = Math.max(-115, Math.min(115, pointer.rotationX - dy * .32));
+        render();
+    });
+
+    function finishDrag() {
+        if (!pointer) return;
+        const wasMoved = moved;
+        pointer = null;
+        stage.classList.remove('is-dragging');
+        cube.classList.remove('is-dragging');
+        const index = snapToFace();
+        if (!wasMoved) {
+            navigateToFace(faces[index]);
+        }
+    }
+
+    stage.addEventListener('pointerup', finishDrag);
+    stage.addEventListener('pointercancel', finishDrag);
+    faces.forEach(face => {
+        face.addEventListener('click', event => {
+            if (event.detail === 0) return;
+            event.preventDefault();
+        });
+    });
+
+    requestAnimationFrame(() => {
+        section.classList.add('cube-ready');
+    });
 })();
