@@ -6078,6 +6078,46 @@ body:has(#hello-intro) #cursor-spotlight {
 }
 
 /* ---------- Stage / cube shell ---------- */
+/* Docked mini-cube nav, anchored above the chatbot toggle. Cube only — no label, no circle. */
+/* Docked mini-cube nav — bottom-left, cube only, no label, no circle */
+.cube-stage.cube-docked {
+    position: fixed;
+    left: 25px;
+    bottom: 25px;
+    right: auto;
+    width: 60px;
+    height: 60px;
+    --cube-size: 40px;
+    --cube-depth: 20px;
+    perspective: 300px;
+    margin: 0;
+    z-index: 9997;
+    animation: none;
+    cursor: pointer;
+}
+.cube-docked .cube-shadow { display: none; }
+.cube-docked .cube-face-index,
+.cube-docked .cube-face-kicker,
+.cube-docked .cube-face-copy,
+.cube-docked .cube-face-action,
+.cube-docked .cube-face strong { display: none; }
+.cube-docked .cube-face {
+    padding: 0;
+    border-radius: 6px;
+    border-width: 2px;
+    pointer-events: none; /* clicks go to the stage wrapper, not individual face links */
+}
+
+@media (max-width: 600px) {
+    .cube-stage.cube-docked {
+        left: 16px;
+        bottom: 16px;
+        width: 48px;
+        height: 48px;
+        --cube-size: 32px;
+        --cube-depth: 16px;
+    }
+}
 .cube-stage {
     position: relative;
     width: calc(var(--cube-size) * 1.42);
@@ -6086,6 +6126,10 @@ body:has(#hello-intro) #cursor-spotlight {
     perspective: 1500px;
     perspective-origin: 50% 47%;
     overflow: visible;
+    transition:
+    opacity 0.9s cubic-bezier(.16,1,.3,1),
+    transform 0.9s cubic-bezier(.16,1,.3,1),
+    left .5s ease, bottom .5s ease, width .5s ease, height .5s ease;
     touch-action: none;
     cursor: grab;
     user-select: none;
