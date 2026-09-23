@@ -2014,6 +2014,10 @@ class CardAurora {
 
     if (!section || !cube || !stage) return;
 
+    // Remember where the cube lives in the document so we can put it back exactly.
+    const homeParent = stage.parentNode;
+    const homeNextSibling = stage.nextSibling;
+
     const faces = [...section.querySelectorAll('.cube-face')];
     const rotations = [
         { x: 0, y: 0 },
@@ -2027,6 +2031,9 @@ class CardAurora {
     let rotationY = 0;
     let pointer = null;
     let moved = false;
+    let revealed = false;
+    let docked = false;
+    let spyObserver = null;
 
     function render() {
         cube.style.setProperty('--cube-rotate-x', `${rotationX}deg`);
@@ -2058,6 +2065,57 @@ class CardAurora {
         return index;
     }
 
+    function setupScrollSpy() {
+        if (spyObserver) spyObserver.disconnect();
+
+        const targets = faces
+            .map((face, i) => ({ index: i, rotation: rotations[i], el: document.querySelector(face.getAttribute('href')) }))
+            .filter(t => t.el);
+
+        spyObserver = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (!entry.isIntersecting) return;
+                const t = targets.find(x => x.el === entry.target);
+                if (!t) return;
+                rotationX = t.rotation.x;
+                rotationY = t.rotation.y;
+                render();
+            });
+        }, { threshold: 0.4, rootMargin: '-20% 0px -20% 0px' });
+
+        targets.forEach(t => spyObserver.observe(t.el));
+    }
+
+    function dockCube() {
+        if (docked) return;
+        docked = true;
+        document.body.appendChild(stage); // escape any clipping ancestor so it survives every scroll position
+        stage.classList.add('cube-docked');
+        setupScrollSpy();
+    }
+
+    function undockCube() {
+        docked = false;
+        stage.classList.remove('cube-docked');
+        if (spyObserver) { spyObserver.disconnect(); spyObserver = null; }
+
+        // Put the cube back exactly where it started in the DOM.
+        if (homeNextSibling) {
+            homeParent.insertBefore(stage, homeNextSibling);
+        } else {
+            homeParent.appendChild(stage);
+        }
+
+        section.classList.remove('cube-visible', 'cube-intro-faded', 'cube-ready');
+        revealed = false;
+        rotationX = 0;
+        rotationY = 0;
+        render();
+
+        section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        revealObserver.observe(section);
+    }
+
     function navigateToFace(face) {
         if (!face) return;
         const targetSelector = face.getAttribute('href');
@@ -2065,47 +2123,45 @@ class CardAurora {
         if (targetEl) {
             targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
+        dockCube();
     }
+
+    // A plain click on the docked cube always sends it back — simple, reliable,
+    // independent of the drag bookkeeping used for the big interactive cube.
+    stage.addEventListener('click', event => {
+        if (!docked) return;
+        event.preventDefault();
+        undockCube();
+    });
 
     stage.addEventListener('dragstart', event => event.preventDefault());
 
     stage.addEventListener('pointerdown', event => {
-        pointer = {
-            x: event.clientX,
-            y: event.clientY,
-            rotationX,
-            rotationY
-        };
+        if (docked || !revealed) return; // docked cube doesn't drag; inert until first reveal
+        pointer = { x: event.clientX, y: event.clientY, rotationX, rotationY };
         moved = false;
         stage.classList.add('is-dragging');
         cube.classList.add('is-dragging');
-
-        if (stage.setPointerCapture) {
-            stage.setPointerCapture(event.pointerId);
-        }
+        if (stage.setPointerCapture) stage.setPointerCapture(event.pointerId);
     });
 
     stage.addEventListener('pointermove', event => {
-        if (!pointer) return;
-
+        if (!pointer || docked) return;
         const dx = event.clientX - pointer.x;
         const dy = event.clientY - pointer.y;
-
-        if (Math.abs(dx) > 4 || Math.abs(dy) > 4) {
-            moved = true;
-        }
-
+        if (Math.abs(dx) > 4 || Math.abs(dy) > 4) moved = true;
         rotationY = pointer.rotationY + dx * .32;
         rotationX = Math.max(-115, Math.min(115, pointer.rotationX - dy * .32));
         render();
     });
 
     function finishDrag() {
-        if (!pointer) return;
+        if (!pointer || docked) { pointer = null; return; }
         const wasMoved = moved;
         pointer = null;
         stage.classList.remove('is-dragging');
         cube.classList.remove('is-dragging');
+
         const index = snapToFace();
         if (!wasMoved) {
             navigateToFace(faces[index]);
@@ -2114,14 +2170,27 @@ class CardAurora {
 
     stage.addEventListener('pointerup', finishDrag);
     stage.addEventListener('pointercancel', finishDrag);
+
     faces.forEach(face => {
         face.addEventListener('click', event => {
-            if (event.detail === 0) return;
-            event.preventDefault();
+            if (docked) { event.preventDefault(); return; } // stage's own click listener handles undocking
+            if (event.detail === 0) {
+                navigateToFace(face); // keyboard (Tab + Enter) activation
+                return;
+            }
+            event.preventDefault(); // real pointer clicks are handled by pointerup above
         });
     });
 
-    requestAnimationFrame(() => {
-        section.classList.add('cube-ready');
-    });
+    const revealObserver = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting && !revealed) {
+                revealed = true;
+                section.classList.add('cube-visible', 'cube-ready');
+                setTimeout(() => section.classList.add('cube-intro-faded'), 900);
+                revealObserver.disconnect();
+            }
+        });
+    }, { threshold: 0.35 });
+    revealObserver.observe(section);
 })();
