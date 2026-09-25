@@ -1,207 +1,74 @@
 (function () {
     const introEl = document.getElementById('hello-intro');
-    const canvas  = document.getElementById('hello-canvas');
-    const progressBar = document.getElementById('hello-progress-bar');
-    const progressTrack = document.querySelector('.hello-progress');
     const loadButton = document.getElementById('load-website');
-    const consoleDock = document.querySelector('.welcome-console-dock');
-    const loaderStatus = document.getElementById('loader-status');
-    const loaderPercent = document.getElementById('loader-percent');
-    if (!introEl || !canvas) return;
+    if (!introEl) return;
 
-    const ctx = canvas.getContext('2d');
-    document.body.style.overflow = 'hidden';
-    const isMobile = window.innerWidth < 640;
-
-    let W, H, dpr;
-    let pointerX = -1000;
-    let pointerY = -1000;
-    let smoothPointerX = -1000;
-    let smoothPointerY = -1000;
-    let isPointerActive = false;
-    let touchStartY = null;
-
-    function resize() {
-        dpr = Math.min(window.devicePixelRatio || 1, isMobile ? 1.5 : 2);
-        W = window.innerWidth;
-        H = window.innerHeight;
-        document.documentElement.style.setProperty('--viewport-height', `${H}px`);
-        canvas.width  = W * dpr;
-        canvas.height = H * dpr;
-        canvas.style.width  = W + 'px';
-        canvas.style.height = H + 'px';
-        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    }
-
-    const FORM_MS        = 1200;
-    const SETTLE_MS      = 300;
-    const HOLD_MS        = 500;
-    const TOTAL_DURATION = FORM_MS + SETTLE_MS + HOLD_MS;
-
-    let start = null;
-    let introFinished = false;
-
-    function finishIntro() {
-        if (introFinished) return;
-        introFinished = true;
-        if (progressBar) progressBar.style.width = '100%';
-        if (progressTrack) progressTrack.setAttribute('aria-valuenow', '100');
-        if (loaderPercent) loaderPercent.textContent = '100%';
-        introEl.classList.add('fade-out');
-        document.body.style.overflow = '';
-        setTimeout(() => {
-            if (introEl.parentNode) introEl.remove();
-        }, 900);
-    }
-
-    function updateTelemetry(progress) {
-        if (progressBar) progressBar.style.width = `${progress}%`;
-        if (progressTrack) progressTrack.setAttribute('aria-valuenow', String(Math.round(progress)));
-        if (loaderPercent) {
-            loaderPercent.textContent = String(Math.min(100, Math.round(progress))).padStart(2, '0') + '%';
-        }
-        if (loaderStatus) {
-            if (progress < 28) {
-                loaderStatus.textContent = 'INITIALIZING SYSTEM';
-            } else if (progress < 60) {
-                loaderStatus.textContent = 'PREPARING EXPERIENCE';
-            } else if (progress < 90) {
-                loaderStatus.textContent = 'CONFIGURING SHADERS';
-            } else if (progress < 100) {
-                loaderStatus.textContent = 'CALIBRATING ENVIRONMENT';
-            } else {
-                loaderStatus.textContent = 'SYSTEM READY';
-            }
-        }
-    }
-
-    function drawAmbientLighting(elapsed) {
-        ctx.clearRect(0, 0, W, H);
-        const cx = W / 2;
-        const cy = H / 2;
-
-        // Smooth subtle cursor tracking spotlight
-        if (isPointerActive) {
-            const spotGrad = ctx.createRadialGradient(smoothPointerX, smoothPointerY, 0, smoothPointerX, smoothPointerY, Math.max(W, H) * 0.45);
-            spotGrad.addColorStop(0, 'rgba(255, 255, 255, 0.12)');
-            spotGrad.addColorStop(0.5, 'rgba(255, 255, 255, 0.03)');
-            spotGrad.addColorStop(1, 'rgba(0, 0, 0, 0)');
-            ctx.fillStyle = spotGrad;
-            ctx.fillRect(0, 0, W, H);
-        }
-
-        // Center ambient luxury pulse behind the title
-        const pulse = Math.sin(elapsed * 0.0018) * 0.03 + 0.10;
-        const centerGrad = ctx.createRadialGradient(cx, cy, 0, cx, cy, Math.min(W, H) * 0.42);
-        centerGrad.addColorStop(0, `rgba(255, 255, 255, ${pulse})`);
-        centerGrad.addColorStop(0.6, 'rgba(255, 255, 255, 0.02)');
-        centerGrad.addColorStop(1, 'rgba(0, 0, 0, 0)');
-        ctx.fillStyle = centerGrad;
-        ctx.fillRect(0, 0, W, H);
-    }
-
-    function animate(ts) {
-        if (introFinished) return;
-        if (!start) start = ts;
-        const elapsed = ts - start;
-        const rawProgress = (elapsed / TOTAL_DURATION) * 100;
-        const progress = Math.min(100, rawProgress);
-
-        updateTelemetry(progress);
-
-        // Smooth pointer tracking
-        if (!isPointerActive) {
-            smoothPointerX += (W / 2 - smoothPointerX) * 0.05;
-            smoothPointerY += (H / 2 - smoothPointerY) * 0.05;
-        } else {
-            smoothPointerX += (pointerX - smoothPointerX) * 0.08;
-            smoothPointerY += (pointerY - smoothPointerY) * 0.08;
-        }
-
-        const isReady = progress >= 100;
-        if (consoleDock) {
-            consoleDock.classList.toggle('is-ready', isReady);
-        }
-        if (loadButton) {
-            loadButton.disabled = !isReady;
-        }
-
-        drawAmbientLighting(elapsed);
-        requestAnimationFrame(animate);
-    }
-
-    function startIntro() {
-        resize();
-        smoothPointerX = W / 2;
-        smoothPointerY = H / 2;
-
-        window.addEventListener('resize', resize);
-        if (window.visualViewport) {
-            window.visualViewport.addEventListener('resize', resize, { passive: true });
-        }
-
-        window.addEventListener('pointermove', event => {
-            pointerX = event.clientX;
-            pointerY = event.clientY;
-            isPointerActive = true;
-        });
-
-        window.addEventListener('pointerleave', () => {
-            isPointerActive = false;
-        });
-
-        // Click / Tap on Enter button
-        if (loadButton) {
-    loadButton.addEventListener('click', (e) => {
-        e.stopPropagation();
-        finishIntro();
-        const cubeSection = document.getElementById('portfolio-cube-section');
-        if (cubeSection) {
-            cubeSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
+    document.documentElement.style.setProperty('--viewport-height', `${window.innerHeight}px`);
+    window.addEventListener('resize', () => {
+        document.documentElement.style.setProperty('--viewport-height', `${window.innerHeight}px`);
     });
+
+    document.body.style.overflow = 'hidden';
+    let finished = false;
+
+   function finishIntro() {
+    if (finished) return;
+    finished = true;
+    introEl.classList.add('fade-out');
+    document.body.style.overflow = '';
+    setTimeout(() => introEl.remove(), 1150); // matches the 1.1s CSS transition + buffer
 }
 
-        // Click anywhere when loaded
-        introEl.addEventListener('click', () => {
-            if (consoleDock && consoleDock.classList.contains('is-ready')) {
-                finishIntro();
-            }
+    if (loadButton) {
+        loadButton.addEventListener('click', (e) => {
+            e.stopPropagation();
+            finishIntro();
+            document.getElementById('portfolio-cube-section')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
         });
-
-        // Mouse wheel scroll down
-        window.addEventListener('wheel', event => {
-            if (event.deltaY > 0 && consoleDock && consoleDock.classList.contains('is-ready')) {
-                finishIntro();
-            }
-        }, { passive: true });
-
-        // Touch swipe down / up
-        window.addEventListener('touchstart', event => {
-            touchStartY = event.touches[0]?.clientY ?? null;
-        }, { passive: true });
-
-        window.addEventListener('touchend', event => {
-            const touchEndY = event.changedTouches[0]?.clientY;
-            if (touchStartY !== null && touchEndY !== undefined && consoleDock && consoleDock.classList.contains('is-ready')) {
-                if (Math.abs(touchEndY - touchStartY) > 30) {
-                    finishIntro();
-                }
-            }
-            touchStartY = null;
-        }, { passive: true });
-
-        // Keyboard Space / Enter
-        window.addEventListener('keydown', event => {
-            if ((event.key === ' ' || event.key === 'Enter') && consoleDock && consoleDock.classList.contains('is-ready')) {
-                finishIntro();
-            }
-        });
-
-        requestAnimationFrame(animate);
     }
 
-    startIntro();
+    window.addEventListener('keydown', e => {
+        if (e.key === ' ' || e.key === 'Enter') finishIntro();
+    });
+    window.addEventListener('wheel', e => { if (e.deltaY > 0) finishIntro(); }, { passive: true });
+
+    let touchStartY = null;
+    window.addEventListener('touchstart', e => { touchStartY = e.touches[0]?.clientY ?? null; }, { passive: true });
+    window.addEventListener('touchend', e => {
+        const endY = e.changedTouches[0]?.clientY;
+        if (touchStartY !== null && endY !== undefined && Math.abs(endY - touchStartY) > 30) finishIntro();
+        touchStartY = null;
+    }, { passive: true });
+})();
+
+/* 3D logo cursor parallax */
+(function () {
+    const wrap = document.getElementById('welcomeLogoWrap');
+    const plate = document.getElementById('welcomeLogo3d');
+    if (!wrap || !plate) return;
+
+    let targetX = 0, targetY = 0, curX = 0, curY = 0;
+    const MAX_TILT = 14;
+
+    window.addEventListener('mousemove', e => {
+        const rect = wrap.getBoundingClientRect();
+        const cx = rect.left + rect.width / 2;
+        const cy = rect.top + rect.height / 2;
+        const dx = (e.clientX - cx) / (window.innerWidth / 2);
+        const dy = (e.clientY - cy) / (window.innerHeight / 2);
+        targetY = Math.max(-1, Math.min(1, dx)) * MAX_TILT;
+        targetX = Math.max(-1, Math.min(1, -dy)) * MAX_TILT;
+    });
+
+    function loop() {
+        curX += (targetX - curX) * 0.08;
+        curY += (targetY - curY) * 0.08;
+        plate.style.transform = `rotateX(${curX}deg) rotateY(${curY}deg)`;
+        requestAnimationFrame(loop);
+    }
+
+    // wait for the entrance flip animation to finish before parallax takes over
+    setTimeout(() => requestAnimationFrame(loop), 1100);
 })();
 VANTA.BIRDS({
     el: "#vanta-birds",
@@ -1303,7 +1170,7 @@ p.dispY += (targetDispY - p.dispY) * 0.35;
     const ctx = canvas.getContext('2d');
     const wrapper = canvas.parentElement;
 
-    const BUFFER = 80;
+    const BUFFER = 100;
     let W, H, dpr;
     let particles = [];
     const mouse = { x: -9999, y: -9999, targetX: -9999, targetY: -9999 };
@@ -1368,8 +1235,8 @@ p.dispY += (targetDispY - p.dispY) * 0.35;
                 ty = Math.sin(angle) * push;
             }
 
-            p.dispX += (tx - p.dispX) * 0.35;
-            p.dispY += (ty - p.dispY) * 0.35;
+            p.dispX += (tx - p.dispX) * 0.35;   // was 0.35
+            p.dispY += (ty - p.dispY) * 0.35; 
 
             ctx.beginPath();
             ctx.arc(p.homeX + p.dispX, p.homeY + p.dispY, p.r, 0, Math.PI * 2);
@@ -2034,7 +1901,7 @@ class CardAurora {
     let revealed = false;
     let docked = false;
     let spyObserver = null;
-
+let clickedFace = null;
     function render() {
         cube.style.setProperty('--cube-rotate-x', `${rotationX}deg`);
         cube.style.setProperty('--cube-rotate-y', `${rotationY}deg`);
@@ -2087,12 +1954,12 @@ class CardAurora {
     }
 
     function dockCube() {
-        if (docked) return;
-        docked = true;
-        document.body.appendChild(stage); // escape any clipping ancestor so it survives every scroll position
-        stage.classList.add('cube-docked');
-        setupScrollSpy();
-    }
+    if (docked) return;
+    docked = true;
+    document.body.appendChild(stage); // escape any clipping ancestor so it survives every scroll position
+    stage.classList.add('cube-docked');
+    setupScrollSpy();
+}
 
     function undockCube() {
         docked = false;
@@ -2116,34 +1983,31 @@ class CardAurora {
         revealObserver.observe(section);
     }
 
-    function navigateToFace(face) {
-        if (!face) return;
-        const targetSelector = face.getAttribute('href');
-        const targetEl = targetSelector ? document.querySelector(targetSelector) : null;
-        if (targetEl) {
-            targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
-        dockCube();
+ function navigateToFace(face) {
+    if (!face) return;
+    const targetSelector = face.getAttribute('href');
+    const targetEl = targetSelector ? document.querySelector(targetSelector) : null;
+    if (targetEl) {
+        targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
-
-    // A plain click on the docked cube always sends it back — simple, reliable,
-    // independent of the drag bookkeeping used for the big interactive cube.
+}
     stage.addEventListener('click', event => {
-        if (!docked) return;
-        event.preventDefault();
-        undockCube();
-    });
+    if (!docked) return;
+    event.preventDefault();
+    undockCube(true);
+});
 
     stage.addEventListener('dragstart', event => event.preventDefault());
 
     stage.addEventListener('pointerdown', event => {
-        if (docked || !revealed) return; // docked cube doesn't drag; inert until first reveal
-        pointer = { x: event.clientX, y: event.clientY, rotationX, rotationY };
-        moved = false;
-        stage.classList.add('is-dragging');
-        cube.classList.add('is-dragging');
-        if (stage.setPointerCapture) stage.setPointerCapture(event.pointerId);
-    });
+    if (docked || !revealed) return; // docked cube doesn't drag; inert until first reveal
+    pointer = { x: event.clientX, y: event.clientY, rotationX, rotationY };
+    moved = false;
+    clickedFace = event.target.closest('.cube-face'); // NEW
+    stage.classList.add('is-dragging');
+    cube.classList.add('is-dragging');
+    if (stage.setPointerCapture) stage.setPointerCapture(event.pointerId);
+});
 
     stage.addEventListener('pointermove', event => {
         if (!pointer || docked) return;
@@ -2156,17 +2020,30 @@ class CardAurora {
     });
 
     function finishDrag() {
-        if (!pointer || docked) { pointer = null; return; }
-        const wasMoved = moved;
-        pointer = null;
-        stage.classList.remove('is-dragging');
-        cube.classList.remove('is-dragging');
+    if (!pointer || docked) { pointer = null; return; }
+    const wasMoved = moved;
+    pointer = null;
+    stage.classList.remove('is-dragging');
+    cube.classList.remove('is-dragging');
 
-        const index = snapToFace();
-        if (!wasMoved) {
-            navigateToFace(faces[index]);
+    if (!wasMoved && clickedFace) {
+        const clickedIndex = faces.indexOf(clickedFace);
+        if (clickedIndex !== -1) {
+            rotationX = rotations[clickedIndex].x;
+            rotationY = rotations[clickedIndex].y;
+            render();
+            navigateToFace(faces[clickedIndex]);
+            clickedFace = null;
+            return;
         }
     }
+
+    const index = snapToFace();
+    if (!wasMoved) {
+        navigateToFace(faces[index]);
+    }
+    clickedFace = null;
+}
 
     stage.addEventListener('pointerup', finishDrag);
     stage.addEventListener('pointercancel', finishDrag);
@@ -2182,15 +2059,323 @@ class CardAurora {
         });
     });
 
-    const revealObserver = new IntersectionObserver(entries => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting && !revealed) {
+const cubeVisibilityObserver = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+        const scrolledPastTop = entry.boundingClientRect.top < 0;
+
+        if (entry.isIntersecting && entry.intersectionRatio > 0.3) {
+            // Section is back in view — restore the cube
+            if (docked) undockCube(false);
+            if (!revealed) {
                 revealed = true;
                 section.classList.add('cube-visible', 'cube-ready');
                 setTimeout(() => section.classList.add('cube-intro-faded'), 900);
-                revealObserver.disconnect();
             }
+        } else if (!entry.isIntersecting && scrolledPastTop && revealed) {
+            // Scrolled down past it — dock the mini cube
+            if (!docked) dockCube();
+        }
+    });
+}, { threshold: [0, 0.3, 0.6] });
+
+cubeVisibilityObserver.observe(section);
+})();   
+/* 3D laptop: drag-to-orbit + working mini-OS (Start Menu, windows, shutdown) */
+(function () {
+    const rig = document.getElementById('laptopRig');
+    const wrap = document.getElementById('laptopStageWrap');
+    const stage = document.getElementById('laptopStage');
+    const showcase = document.getElementById('laptop-showcase');
+    if (!rig || !wrap || !stage) return;
+
+    /* ---------- Drag-to-orbit ---------- */
+    let yaw = -6, pitch = 13;
+    let dragging = false, lastX = 0, lastY = 0, velYaw = 0;
+
+    function applyRig() { rig.style.transform = `rotateX(${pitch}deg) rotateY(${yaw}deg)`; }
+    applyRig();
+
+    function down(x, y) { dragging = true; lastX = x; lastY = y; velYaw = 0; stage.classList.add('dragging'); }
+    function move(x, y) {
+        if (!dragging) return;
+        const dx = x - lastX, dy = y - lastY;
+        lastX = x; lastY = y;
+        yaw += dx * 0.35;
+        pitch = Math.max(4, Math.min(45, pitch - dy * 0.25));
+        velYaw = dx * 0.35;
+        applyRig();
+    }
+    function up() { dragging = false; stage.classList.remove('dragging'); }
+
+    stage.addEventListener('mousedown', e => down(e.clientX, e.clientY));
+    window.addEventListener('mousemove', e => move(e.clientX, e.clientY));
+    window.addEventListener('mouseup', up);
+    stage.addEventListener('touchstart', e => { const t = e.touches[0]; down(t.clientX, t.clientY); }, { passive: true });
+    window.addEventListener('touchmove', e => { if (!dragging) return; const t = e.touches[0]; move(t.clientX, t.clientY); }, { passive: true });
+    window.addEventListener('touchend', up);
+
+    (function idleLoop() {
+        if (!dragging && Math.abs(velYaw) > 0.01) { yaw += velYaw; velYaw *= 0.94; applyRig(); }
+        requestAnimationFrame(idleLoop);
+    })();
+
+    /* ---------- Responsive scale ---------- */
+    function resizeStage() {
+    if (!showcase) return;
+    const available = showcase.clientWidth - 40;
+    const scale = Math.min(1, Math.max(0.38, available / 760));
+    wrap.style.transform = `scale(${scale})`;
+    showcase.style.minHeight = (640 * scale + 80) + 'px';   /* was 520 */
+}
+    window.addEventListener('resize', resizeStage);
+    resizeStage();
+
+    /* ---------- Clock ---------- */
+    const clockEl = document.getElementById('laptopClock');
+    function tick() { if (clockEl) clockEl.textContent = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }); }
+    tick(); setInterval(tick, 30000);
+
+    /* ---------- Mini OS ---------- */
+    const osWindow = document.getElementById('osWindow');
+    const winIcon = document.getElementById('winIcon');
+    const winTitle = document.getElementById('winTitle');
+    const winAddr = document.getElementById('winAddr');
+    const winAddrText = document.getElementById('winAddrText');
+    const winBody = document.getElementById('winBody');
+    const winMinBtn = document.getElementById('winMinBtn');
+    const winCloseBtn = document.getElementById('winCloseBtn');
+    const startMenu = document.getElementById('startMenu');
+    const startBtn = document.getElementById('startBtn');
+    const tbRunning = document.getElementById('tbRunning');
+    const shutdownOverlay = document.getElementById('shutdownOverlay');
+    const shutdownBtn = document.getElementById('shutdownBtn');
+    const powerOnBtn = document.getElementById('powerOnBtn');
+    const osDesktop = document.getElementById('osDesktop');
+
+    if (!osWindow || !startMenu || !osDesktop) return;
+
+    const ABOUT_ME_TEXT =
+`Rupayan Chattaraj
+-----------------
+CSE student at Vellore Institute of Technology, Vellore.
+Expected graduation: 2028.
+
+Full stack developer - builds web apps, AI/ML tools and
+computer-vision projects end to end.
+
+Focus areas:
+ - Frontend: HTML, CSS, JavaScript, React
+ - Backend: Node.js, Flask, Python
+ - Computer Vision: OpenCV, MediaPipe
+ - Databases: MySQL, Oracle 21C
+
+Team Leader, CipherSquad - Code2create 7.0 hackathon
+(ACM-VIT), building MailMate.
+
+Reach out via the Contact section below, or the socials
+in the navigation bar.`;
+        const PHOTOS = [
+            'me.jpeg',
+            'me1.jpeg'
+    ];
+    let photoIndex = 0;
+    function renderPhotoApp() {
+        winBody.innerHTML = '';
+    const app = document.createElement('div');
+    app.className = 'os-photo-app';
+
+    if (!PHOTOS.length) {
+        app.innerHTML = `<div class="os-photo-stage"><span class="os-photo-empty">No photos yet.<br>Add file paths to the PHOTOS array.</span></div>`;
+        winBody.appendChild(app);
+        return;
+    }
+
+    photoIndex = Math.max(0, Math.min(photoIndex, PHOTOS.length - 1));
+
+    const stage = document.createElement('div');
+    stage.className = 'os-photo-stage';
+
+    const img = document.createElement('img');
+    img.src = PHOTOS[photoIndex];
+    img.alt = `Photo ${photoIndex + 1}`;
+    stage.appendChild(img);
+
+    if (PHOTOS.length > 1) {
+        const prevBtn = document.createElement('button');
+        prevBtn.className = 'os-photo-nav prev';
+        prevBtn.textContent = '‹';
+        prevBtn.addEventListener('click', () => { photoIndex = (photoIndex - 1 + PHOTOS.length) % PHOTOS.length; renderPhotoApp(); });
+
+        const nextBtn = document.createElement('button');
+        nextBtn.className = 'os-photo-nav next';
+        nextBtn.textContent = '›';
+        nextBtn.addEventListener('click', () => { photoIndex = (photoIndex + 1) % PHOTOS.length; renderPhotoApp(); });
+
+        stage.appendChild(prevBtn);
+        stage.appendChild(nextBtn);
+    }
+
+    app.appendChild(stage);
+
+    if (PHOTOS.length > 1) {
+        const footer = document.createElement('div');
+        footer.className = 'os-photo-footer';
+        PHOTOS.forEach((_, i) => {
+            const dot = document.createElement('span');
+            dot.className = 'os-photo-dot' + (i === photoIndex ? ' active' : '');
+            dot.addEventListener('click', () => { photoIndex = i; renderPhotoApp(); });
+            footer.appendChild(dot);
         });
-    }, { threshold: 0.35 });
-    revealObserver.observe(section);
+        app.appendChild(footer);
+    }
+
+    winBody.appendChild(app);
+}
+    let runningApp = null;
+
+    function closeStartMenu() { startMenu.classList.remove('open'); }
+    function toggleStartMenu() { startMenu.classList.toggle('open'); }
+
+    function setRunningIndicator(app) {
+        tbRunning.innerHTML = '';
+        if (!app) return;
+        const icon = document.createElement('div');
+        icon.className = 'tb-run-icon active';
+        if (app.iconSrc) {
+            const img = document.createElement('img');
+            img.src = app.iconSrc;
+            icon.appendChild(img);
+        } else {
+            icon.textContent = '📄';
+            icon.style.fontSize = '0.55rem';
+        }
+        icon.addEventListener('click', restoreWindow);
+        tbRunning.appendChild(icon);
+    }
+
+    function restoreWindow() {
+        if (!runningApp) return;
+        osWindow.classList.add('open');
+    }
+
+    function openApp(app) {
+        closeStartMenu();
+
+        if (app.type === 'scroll') {
+            const target = document.getElementById('top');
+            if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            return;
+        }
+
+        runningApp = app;
+        winTitle.textContent = app.name;
+        winIcon.innerHTML = app.iconSrc ? `<img src="${app.iconSrc}" alt="">` : '📄';
+        winBody.innerHTML = '';
+
+        if (app.type === 'site') {
+            winAddr.classList.add('visible');
+            winAddrText.textContent = app.url.replace(/^https?:\/\//, '');
+            const frame = document.createElement('iframe');
+            frame.className = 'os-live-frame';
+            frame.src = app.url;
+            frame.loading = 'lazy';
+            frame.setAttribute('sandbox', 'allow-scripts allow-same-origin allow-forms allow-popups');
+            winBody.appendChild(frame);
+        } else if (app.type === 'file') {
+            winAddr.classList.remove('visible');
+            const panel = document.createElement('div');
+            panel.className = 'os-file-panel';
+            panel.innerHTML = `
+                <div class="file-panel-icon"><img src="${app.iconSrc}" alt=""></div>
+                <p class="file-panel-name">${app.name}</p>
+                <p class="file-panel-note">This project is a downloadable desktop application.</p>
+                <a class="file-panel-btn" href="${app.url}" target="_blank" rel="noopener noreferrer">Download</a>`;
+            winBody.appendChild(panel);
+        } else if (app.type === 'text') {
+            winAddr.classList.remove('visible');
+            const textApp = document.createElement('div');
+            textApp.className = 'os-text-app';
+            const safe = ABOUT_ME_TEXT.replace(/&/g, '&amp;').replace(/</g, '&lt;');
+            textApp.innerHTML = `<div class="os-text-toolbar">${app.name} - Notepad</div><div class="os-text-content">${safe}</div>`;
+            winBody.appendChild(textApp);
+        }
+         else if (app.type === 'photos') {
+            winAddr.classList.remove('visible');
+            renderPhotoApp();
+        }
+        osWindow.classList.add('open');
+        setRunningIndicator(app);
+    }
+
+    function closeWindow() {
+        osWindow.classList.remove('open');
+        winBody.innerHTML = '';
+        runningApp = null;
+        setRunningIndicator(null);
+    }
+
+    function minimizeWindow() {
+        osWindow.classList.remove('open');
+    }
+
+    function readAppFromEl(el) {
+        return {
+            type: el.dataset.type,
+            url: el.dataset.url,
+            name: el.dataset.name || el.querySelector('span:last-child')?.textContent || '',
+            iconSrc: el.querySelector('img') ? el.querySelector('img').getAttribute('src') : null
+        };
+    }
+
+    osDesktop.querySelectorAll('.os-icon').forEach(el => {
+        el.addEventListener('click', () => openApp(readAppFromEl(el)));
+    });
+    startMenu.querySelectorAll('.start-app').forEach(el => {
+        el.addEventListener('click', () => openApp(readAppFromEl(el)));
+    });
+
+    startBtn.addEventListener('click', (e) => { e.stopPropagation(); toggleStartMenu(); });
+    osDesktop.addEventListener('click', closeStartMenu);
+    document.addEventListener('click', (e) => {
+        if (!startMenu.classList.contains('open')) return;
+        if (startMenu.contains(e.target) || startBtn.contains(e.target)) return;
+        closeStartMenu();
+    });
+
+    winCloseBtn.addEventListener('click', closeWindow);
+    winMinBtn.addEventListener('click', minimizeWindow);
+
+    shutdownBtn.addEventListener('click', () => {
+        closeStartMenu();
+        shutdownOverlay.classList.add('visible');
+    });
+    powerOnBtn.addEventListener('click', () => {
+        shutdownOverlay.classList.remove('visible');
+    });
+})();
+(function buildKeyboard() {
+    const deck = document.querySelector('.keyboard-keys');
+    if (!deck) return;
+    const rows = [
+        ['1','2','3','4','5','6','7','8','9','0','-','='],
+        ['Q','W','E','R','T','Y','U','I','O','P','[',']'],
+        ['A','S','D','F','G','H','J','K','L',';',"'",'Enter'],
+        ['Z','X','C','V','B','N','M',',','.','/','Shift'],
+        [{l:'Ctrl'},{l:'Alt'},{l:'',wide:true},{l:'Alt'},{l:'Ctrl'}]
+    ];
+    rows.forEach(rowSpec => {
+        const row = document.createElement('div');
+        row.className = 'kbd-row';
+        rowSpec.forEach(item => {
+            const label = typeof item === 'string' ? item : item.l;
+            const wide = typeof item === 'object' && item.wide;
+            const key = document.createElement('div');
+            key.className = 'kbd-key' + (wide ? ' wide' : '');
+            const span = document.createElement('span');
+            span.textContent = label;
+            key.appendChild(span);
+            row.appendChild(key);
+        });
+        deck.appendChild(row);
+    });
 })();
