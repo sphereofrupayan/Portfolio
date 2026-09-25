@@ -70,92 +70,42 @@
 
     
 
-    <div id="hello-intro" class="welcome-intro-screen">
-        <canvas id="hello-canvas"></canvas>
-        <div class="welcome-ambient-glow" aria-hidden="true"></div>
-
-        <div class="welcome-container">
-            <!-- Top Status Bar (HUD Header: 2026 Edition Centered) -->
-            <header class="welcome-header">
-                <div class="welcome-header-side left">
-                    <div class="welcome-status-pill">
-                        <span class="status-pulse-dot"></span>
-                        <span class="status-text">AVAILABLE FOR ROLES &amp; INNOVATION</span>
-                    </div>
-                </div>
-                <div class="welcome-header-center">
-                    <div class="welcome-meta-pill">
-                        <span class="meta-val">2026 Edition</span>
-                    </div>
-                </div>
-                <div class="welcome-header-side right">
-                    <div class="welcome-location-pill">
-                        <span class="loc-pin">✦</span>
-                        <span class="loc-text">VELLORE, IN</span>
-                    </div>
-                </div>
-            </header>
-
-            <!-- Center Stage -->
-            <main class="welcome-center">
-                <div class="welcome-emblem-wrap">
-                    <img src="rc_logo.png" alt="RC" class="welcome-emblem-img">
-                </div>
-
-                <div class="welcome-kicker-row">
-                    <span class="kicker-line"></span>
-                    <span class="welcome-kicker-text">RUPAYAN CHATTARAJ</span>
-                    <span class="kicker-line"></span>
-                </div>
-
-                <!-- Antigravity Particle WELCOME Canvas Slot (No Overlapping) -->
-                <div id="welcome-canvas-slot" class="welcome-particle-slot" aria-label="Welcome"></div>
-
-                <div class="welcome-sub-row" aria-label="Full Stack Developer, Creative Engineer, AI Researcher">
-                    <span class="sub-sep">✦</span>
-                    <span class="sub-role">FULL STACK DEVELOPER</span>
-                    <span class="sub-sep">✦</span>
-                    <span class="sub-role">CREATIVE ENGINEER</span>
-                    <span class="sub-sep">✦</span>
-                    <span class="sub-role">PROMPT ENGINEER</span>
-                    
-                </div>
-            </main>
-
-            <!-- Bottom Console Dock -->
-            <footer class="welcome-footer">
-                <div class="welcome-console-dock">
-                    <div class="console-telemetry">
-                        <div class="telemetry-top">
-                            <span class="telemetry-status" id="loader-status">INITIALIZING SYSTEM</span>
-                            <span class="telemetry-percent" id="loader-percent">00%</span>
-                        </div>
-                        <div class="hello-progress" role="progressbar" aria-label="Loading website" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
-                            <span id="hello-progress-bar"></span>
-                        </div>
-                    </div>
-
-                    <button id="load-website" type="button" class="welcome-enter-btn" disabled aria-label="Explore portfolio">
-                        <span class="enter-btn-glow"></span>
-                        <span class="enter-btn-content">
-                            <span class="enter-btn-text">EXPLORE PORTFOLIO</span>
-                            <svg class="enter-btn-arrow" width="14" height="14" viewBox="0 0 14 14" fill="none">
-                                <path d="M1 7H13M13 7L7.5 1.5M13 7L7.5 12.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-                            </svg>
-                        </span>
-                    </button>
-                </div>
-
-                <div class="welcome-interaction-hint" id="welcome-hint">
-                    <span class="hint-item"><kbd>CLICK</kbd></span>
-                    <span class="hint-dot">·</span>
-                    <span class="hint-item"><kbd>SCROLL</kbd></span>
-                    <span class="hint-dot">·</span>
-                    <span class="hint-item"><kbd>SPACE</kbd></span>
-                </div>
-            </footer>
+<div id="hello-intro" class="welcome-intro-screen">
+    <div class="welcome-glow-orb cyan"></div>
+    <div class="welcome-glow-orb violet"></div>
+    <div class="welcome-stars"></div>
+    <div class="welcome-container">
+            <div class="welcome-logo-wrap" id="welcomeLogoWrap">
+        <div class="welcome-logo-3d" id="welcomeLogo3d">
+            <div class="logo-edge"></div>
+            <div class="logo-face">
+                <img src="rc_logo.png" alt="RC" class="logo-img">
+                <span class="logo-sheen"></span>
+            </div>
         </div>
+        <span class="logo-ring"></span>
     </div>
+        <h1 class="welcome-word" aria-label="Developer">
+            <span class="w-letter" data-dir="tl">D</span>
+            <span class="w-letter" data-dir="tr">e</span>
+            <span class="w-letter" data-dir="bl">v</span>
+            <span class="w-letter" data-dir="br">e</span>
+            <span class="w-letter" data-dir="tl">l</span>
+            <span class="w-letter" data-dir="tr">o</span>
+            <span class="w-letter" data-dir="bl">p</span>
+            <span class="w-letter" data-dir="br">e</span>
+            <span class="w-letter" data-dir="tl">r</span>
+        </h1>
+        <span class="welcome-underline"></span>
+
+        <button id="load-website" type="button" class="welcome-enter-btn" aria-label="Enter portfolio">
+            <span class="enter-btn-text">Enter</span>
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                <path d="M1 7H13M13 7L7.5 1.5M13 7L7.5 12.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </button>
+    </div>
+</div>
 
 
     <div id="top" class="cover-section">
@@ -467,7 +417,118 @@
         <div>Communication</div>
     </div>
 </section>
+    <section id="laptop-showcase" class="laptop-showcase">
+    <div class="laptop-stage-wrap" id="laptopStageWrap">
+        <div class="laptop-stage" id="laptopStage">
+            <div class="laptop-rig" id="laptopRig">
+                <div class="laptop-body">
 
+                    <div class="lid-hinge" id="lidHinge">
+                        <div class="lid-face lid-front">
+                            <div class="screen-bezel">
+                                <span class="screen-cam"></span>
+                                <div class="screen-surface" id="screenSurface">
+                                    <div class="os-wallpaper"></div>
+                                    
+                                    <div class="os-desktop" id="osDesktop">
+                                        <button class="os-icon" data-type="scroll">
+                                            <span class="os-icon-img"><img src="mylogo.png" alt=""></span>
+                                            <span class="os-icon-label">My Portfolio</span>
+                                        </button>
+                                        <button class="os-icon" data-type="site" data-url="https://wavify18.netlify.app/" data-name="Wavify">
+                                            <span class="os-icon-img"><img src="logos/wavify.png" alt=""></span>
+                                            <span class="os-icon-label">Wavify</span>
+                                        </button>
+                                        <button class="os-icon" data-type="site" data-url="https://rushobot.onrender.com/" data-name="Rusho.Bot">
+                                            <span class="os-icon-img"><img src="logos/R.png" alt=""></span>
+                                            <span class="os-icon-label">Rusho.Bot</span>
+                                        </button>
+                                        <button class="os-icon" data-type="file" data-url="https://drive.google.com/file/d/1oF2B1ap2t7eguH_3mSvMo_0H1tpLOkJ0/view?usp=sharing" data-name="Eye Pointer">
+                                            <span class="os-icon-img"><img src="logos/exe.png" alt=""></span>
+                                            <span class="os-icon-label">Eye Pointer</span>
+                                        </button>
+                                        <button class="os-icon" data-type="file" data-url="https://drive.google.com/file/d/1hDJE7NqAKrK4h5K5YsDQqcEi_V-6ryej/view?usp=sharing" data-name="Gesture Control">
+                                            <span class="os-icon-img"><img src="logos/exe1.png" alt=""></span>
+                                            <span class="os-icon-label">Gesture Control</span>
+                                        </button>
+                                        <button class="os-icon" data-type="text" data-name="About Me.txt">
+                                            <span class="os-icon-img os-icon-file">📄</span>
+                                            <span class="os-icon-label">About Me.txt</span>
+                                        </button>
+                                    </div>
+
+                                    <div class="os-window" id="osWindow">
+                                        <div class="os-window-titlebar">
+                                            <span class="os-window-icon" id="winIcon"></span>
+                                            <span class="os-window-title" id="winTitle"></span>
+                                            <div class="os-window-controls">
+                                                <button class="os-win-btn" id="winMinBtn" aria-label="Minimize">–</button>
+                                                <button class="os-win-btn os-win-close" id="winCloseBtn" aria-label="Close">✕</button>
+                                            </div>
+                                        </div>
+                                        <div class="os-window-addr" id="winAddr">
+                                            <span class="ob-lock">🔒</span><span id="winAddrText"></span>
+                                        </div>
+                                        <div class="os-window-body" id="winBody"></div>
+                                    </div>
+
+                                    <div class="os-start-menu" id="startMenu">
+                                        <div class="start-menu-apps">
+                                            <button class="start-app" data-type="scroll"><img src="mylogo.png" alt=""><span>My Portfolio</span></button>
+                                            <button class="start-app" data-type="site" data-url="https://wavify18.netlify.app/" data-name="Wavify"><img src="logos/wavify.png" alt=""><span>Wavify</span></button>
+                                            <button class="start-app" data-type="site" data-url="https://rushobot.onrender.com/" data-name="Rusho.Bot"><img src="logos/R.png" alt=""><span>Rusho.Bot</span></button>
+                                            <button class="start-app" data-type="file" data-url="https://drive.google.com/file/d/1oF2B1ap2t7eguH_3mSvMo_0H1tpLOkJ0/view?usp=sharing" data-name="Eye Pointer"><img src="logos/exe.png" alt=""><span>Eye Pointer</span></button>
+                                            <button class="start-app" data-type="file" data-url="https://drive.google.com/file/d/1hDJE7NqAKrK4h5K5YsDQqcEi_V-6ryej/view?usp=sharing" data-name="Gesture Control"><img src="logos/exe1.png" alt=""><span>Gesture Control</span></button>
+                                            <button class="start-app" data-type="text" data-name="About Me.txt"><span class="start-app-file">📄</span><span>About Me.txt</span></button>
+                                            <button class="start-app" data-type="photos" data-name="Photos"><span class="start-app-file">🖼️</span><span>Photos</span></button>
+                                        </div>
+                                        <div class="start-menu-power">
+                                            <span class="power-user">Rupayan Chattaraj</span>
+                                            <button class="power-btn" id="shutdownBtn" title="Shut down">⏻</button>
+                                        </div>
+                                    </div>
+
+                                    <div class="os-taskbar">
+                                        <button class="tb-start" id="startBtn">
+                                            <svg viewBox="0 0 24 24" width="13" height="13">
+                                                <rect x="2" y="2" width="9" height="9" fill="#00adef"/><rect x="13" y="2" width="9" height="9" fill="#00adef"/>
+                                                <rect x="2" y="13" width="9" height="9" fill="#00adef"/><rect x="13" y="13" width="9" height="9" fill="#00adef"/>
+                                            </svg>
+                                        </button>
+                                        <div class="tb-running" id="tbRunning"></div>
+                                        <div class="tb-clock" id="laptopClock">10:41</div>
+                                    </div>
+
+                                    <div class="os-shutdown-overlay" id="shutdownOverlay">
+                                        <button class="power-on-btn" id="powerOnBtn" aria-label="Power on">⏻</button>
+                                        <span class="shutdown-label">Click to power on</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="screen-glare"></div>
+                        </div>
+                        <div class="lid-face lid-back">
+                            <img src="mylogo.png" alt="" class="lid-back-logo">
+                        </div>
+                    </div>
+
+                    <div class="base-slab">
+                        <div class="base-face base-top">
+                            <div class="keyboard-deck">
+                                <div class="keyboard-keys"></div>
+                                <div class="trackpad"></div>
+                            </div>
+                        </div>
+                        <div class="base-face base-bottom">
+                            <div class="base-vents"></div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
     <section id="experience" class="resume-section">
         <div class="resume-card reveal reveal-up">
             <div class="resume-left">
