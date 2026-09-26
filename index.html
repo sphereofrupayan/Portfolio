@@ -138,7 +138,118 @@
 
         <hr class="cover-divider">
     </div>
+        <section id="laptop-showcase" class="laptop-showcase">
+    <div class="laptop-stage-wrap" id="laptopStageWrap">
+        <div class="laptop-stage" id="laptopStage">
+            <div class="laptop-rig" id="laptopRig">
+                <div class="laptop-body">
 
+                    <div class="lid-hinge" id="lidHinge">
+                        <div class="lid-face lid-front">
+                            <div class="screen-bezel">
+                                <span class="screen-cam"></span>
+                                <div class="screen-surface" id="screenSurface">
+                                    <div class="os-wallpaper"></div>
+                                    
+                                    <div class="os-desktop" id="osDesktop">
+                                        <button class="os-icon" data-type="scroll">
+                                            <span class="os-icon-img"><img src="mylogo.png" alt=""></span>
+                                            <span class="os-icon-label">My Portfolio</span>
+                                        </button>
+                                        <button class="os-icon" data-type="site" data-url="https://wavify18.netlify.app/" data-name="Wavify">
+                                            <span class="os-icon-img"><img src="logos/wavify.png" alt=""></span>
+                                            <span class="os-icon-label">Wavify</span>
+                                        </button>
+                                        <button class="os-icon" data-type="site" data-url="https://rushobot.onrender.com/" data-name="Rusho.Bot">
+                                            <span class="os-icon-img"><img src="logos/R.png" alt=""></span>
+                                            <span class="os-icon-label">Rusho.Bot</span>
+                                        </button>
+                                        <button class="os-icon" data-type="file" data-url="https://drive.google.com/file/d/1oF2B1ap2t7eguH_3mSvMo_0H1tpLOkJ0/view?usp=sharing" data-name="Eye Pointer">
+                                            <span class="os-icon-img"><img src="logos/exe.png" alt=""></span>
+                                            <span class="os-icon-label">Eye Pointer</span>
+                                        </button>
+                                        <button class="os-icon" data-type="file" data-url="https://drive.google.com/file/d/1hDJE7NqAKrK4h5K5YsDQqcEi_V-6ryej/view?usp=sharing" data-name="Gesture Control">
+                                            <span class="os-icon-img"><img src="logos/exe1.png" alt=""></span>
+                                            <span class="os-icon-label">Gesture Control</span>
+                                        </button>
+                                        <button class="os-icon" data-type="text" data-name="About Me.txt">
+                                            <span class="os-icon-img os-icon-file">📄</span>
+                                            <span class="os-icon-label">About Me.txt</span>
+                                        </button>
+                                    </div>
+
+                                    <div class="os-window" id="osWindow">
+                                        <div class="os-window-titlebar">
+                                            <span class="os-window-icon" id="winIcon"></span>
+                                            <span class="os-window-title" id="winTitle"></span>
+                                            <div class="os-window-controls">
+                                                <button class="os-win-btn" id="winMinBtn" aria-label="Minimize">–</button>
+                                                <button class="os-win-btn os-win-close" id="winCloseBtn" aria-label="Close">✕</button>
+                                            </div>
+                                        </div>
+                                        <div class="os-window-addr" id="winAddr">
+                                            <span class="ob-lock">🔒</span><span id="winAddrText"></span>
+                                        </div>
+                                        <div class="os-window-body" id="winBody"></div>
+                                    </div>
+
+                                    <div class="os-start-menu" id="startMenu">
+                                        <div class="start-menu-apps">
+                                            <button class="start-app" data-type="scroll"><img src="mylogo.png" alt=""><span>My Portfolio</span></button>
+                                            <button class="start-app" data-type="site" data-url="https://wavify18.netlify.app/" data-name="Wavify"><img src="logos/wavify.png" alt=""><span>Wavify</span></button>
+                                            <button class="start-app" data-type="site" data-url="https://rushobot.onrender.com/" data-name="Rusho.Bot"><img src="logos/R.png" alt=""><span>Rusho.Bot</span></button>
+                                            <button class="start-app" data-type="file" data-url="https://drive.google.com/file/d/1oF2B1ap2t7eguH_3mSvMo_0H1tpLOkJ0/view?usp=sharing" data-name="Eye Pointer"><img src="logos/exe.png" alt=""><span>Eye Pointer</span></button>
+                                            <button class="start-app" data-type="file" data-url="https://drive.google.com/file/d/1hDJE7NqAKrK4h5K5YsDQqcEi_V-6ryej/view?usp=sharing" data-name="Gesture Control"><img src="logos/exe1.png" alt=""><span>Gesture Control</span></button>
+                                            <button class="start-app" data-type="text" data-name="About Me.txt"><span class="start-app-file">📄</span><span>About Me.txt</span></button>
+                                            <button class="start-app" data-type="photos" data-name="Photos"><span class="start-app-file">🖼️</span><span>Photos</span></button>
+                                        </div>
+                                        <div class="start-menu-power">
+                                            <span class="power-user">Rupayan Chattaraj</span>
+                                            <button class="power-btn" id="shutdownBtn" title="Shut down">⏻</button>
+                                        </div>
+                                    </div>
+
+                                    <div class="os-taskbar">
+                                        <button class="tb-start" id="startBtn">
+                                            <svg viewBox="0 0 24 24" width="13" height="13">
+                                                <rect x="2" y="2" width="9" height="9" fill="#00adef"/><rect x="13" y="2" width="9" height="9" fill="#00adef"/>
+                                                <rect x="2" y="13" width="9" height="9" fill="#00adef"/><rect x="13" y="13" width="9" height="9" fill="#00adef"/>
+                                            </svg>
+                                        </button>
+                                        <div class="tb-running" id="tbRunning"></div>
+                                        <div class="tb-clock" id="laptopClock">10:41</div>
+                                    </div>
+
+                                    <div class="os-shutdown-overlay" id="shutdownOverlay">
+                                        <button class="power-on-btn" id="powerOnBtn" aria-label="Power on">⏻</button>
+                                        <span class="shutdown-label">Click to power on</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="screen-glare"></div>
+                        </div>
+                        <div class="lid-face lid-back">
+                            <img src="mylogo.png" alt="" class="lid-back-logo">
+                        </div>
+                    </div>
+                    
+                    <div class="base-slab">
+                        <div class="base-face base-top">
+                            <div class="keyboard-deck">
+                                <div class="keyboard-keys"></div>
+                                <div class="trackpad"></div>
+                            </div>
+                        </div>
+                        <div class="base-face base-bottom">
+                            <div class="base-vents"></div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
     <section id="portfolio-cube-section" aria-label="Portfolio section navigator">
         <div class="cube-topbar" hidden>
             <span class="cube-eyebrow">RUPAYAN CHATTARAJ · PORTFOLIO</span>
@@ -382,118 +493,7 @@
         <div>Communication</div>
     </div>
 </section>
-    <section id="laptop-showcase" class="laptop-showcase">
-    <div class="laptop-stage-wrap" id="laptopStageWrap">
-        <div class="laptop-stage" id="laptopStage">
-            <div class="laptop-rig" id="laptopRig">
-                <div class="laptop-body">
 
-                    <div class="lid-hinge" id="lidHinge">
-                        <div class="lid-face lid-front">
-                            <div class="screen-bezel">
-                                <span class="screen-cam"></span>
-                                <div class="screen-surface" id="screenSurface">
-                                    <div class="os-wallpaper"></div>
-                                    
-                                    <div class="os-desktop" id="osDesktop">
-                                        <button class="os-icon" data-type="scroll">
-                                            <span class="os-icon-img"><img src="mylogo.png" alt=""></span>
-                                            <span class="os-icon-label">My Portfolio</span>
-                                        </button>
-                                        <button class="os-icon" data-type="site" data-url="https://wavify18.netlify.app/" data-name="Wavify">
-                                            <span class="os-icon-img"><img src="logos/wavify.png" alt=""></span>
-                                            <span class="os-icon-label">Wavify</span>
-                                        </button>
-                                        <button class="os-icon" data-type="site" data-url="https://rushobot.onrender.com/" data-name="Rusho.Bot">
-                                            <span class="os-icon-img"><img src="logos/R.png" alt=""></span>
-                                            <span class="os-icon-label">Rusho.Bot</span>
-                                        </button>
-                                        <button class="os-icon" data-type="file" data-url="https://drive.google.com/file/d/1oF2B1ap2t7eguH_3mSvMo_0H1tpLOkJ0/view?usp=sharing" data-name="Eye Pointer">
-                                            <span class="os-icon-img"><img src="logos/exe.png" alt=""></span>
-                                            <span class="os-icon-label">Eye Pointer</span>
-                                        </button>
-                                        <button class="os-icon" data-type="file" data-url="https://drive.google.com/file/d/1hDJE7NqAKrK4h5K5YsDQqcEi_V-6ryej/view?usp=sharing" data-name="Gesture Control">
-                                            <span class="os-icon-img"><img src="logos/exe1.png" alt=""></span>
-                                            <span class="os-icon-label">Gesture Control</span>
-                                        </button>
-                                        <button class="os-icon" data-type="text" data-name="About Me.txt">
-                                            <span class="os-icon-img os-icon-file">📄</span>
-                                            <span class="os-icon-label">About Me.txt</span>
-                                        </button>
-                                    </div>
-
-                                    <div class="os-window" id="osWindow">
-                                        <div class="os-window-titlebar">
-                                            <span class="os-window-icon" id="winIcon"></span>
-                                            <span class="os-window-title" id="winTitle"></span>
-                                            <div class="os-window-controls">
-                                                <button class="os-win-btn" id="winMinBtn" aria-label="Minimize">–</button>
-                                                <button class="os-win-btn os-win-close" id="winCloseBtn" aria-label="Close">✕</button>
-                                            </div>
-                                        </div>
-                                        <div class="os-window-addr" id="winAddr">
-                                            <span class="ob-lock">🔒</span><span id="winAddrText"></span>
-                                        </div>
-                                        <div class="os-window-body" id="winBody"></div>
-                                    </div>
-
-                                    <div class="os-start-menu" id="startMenu">
-                                        <div class="start-menu-apps">
-                                            <button class="start-app" data-type="scroll"><img src="mylogo.png" alt=""><span>My Portfolio</span></button>
-                                            <button class="start-app" data-type="site" data-url="https://wavify18.netlify.app/" data-name="Wavify"><img src="logos/wavify.png" alt=""><span>Wavify</span></button>
-                                            <button class="start-app" data-type="site" data-url="https://rushobot.onrender.com/" data-name="Rusho.Bot"><img src="logos/R.png" alt=""><span>Rusho.Bot</span></button>
-                                            <button class="start-app" data-type="file" data-url="https://drive.google.com/file/d/1oF2B1ap2t7eguH_3mSvMo_0H1tpLOkJ0/view?usp=sharing" data-name="Eye Pointer"><img src="logos/exe.png" alt=""><span>Eye Pointer</span></button>
-                                            <button class="start-app" data-type="file" data-url="https://drive.google.com/file/d/1hDJE7NqAKrK4h5K5YsDQqcEi_V-6ryej/view?usp=sharing" data-name="Gesture Control"><img src="logos/exe1.png" alt=""><span>Gesture Control</span></button>
-                                            <button class="start-app" data-type="text" data-name="About Me.txt"><span class="start-app-file">📄</span><span>About Me.txt</span></button>
-                                            <button class="start-app" data-type="photos" data-name="Photos"><span class="start-app-file">🖼️</span><span>Photos</span></button>
-                                        </div>
-                                        <div class="start-menu-power">
-                                            <span class="power-user">Rupayan Chattaraj</span>
-                                            <button class="power-btn" id="shutdownBtn" title="Shut down">⏻</button>
-                                        </div>
-                                    </div>
-
-                                    <div class="os-taskbar">
-                                        <button class="tb-start" id="startBtn">
-                                            <svg viewBox="0 0 24 24" width="13" height="13">
-                                                <rect x="2" y="2" width="9" height="9" fill="#00adef"/><rect x="13" y="2" width="9" height="9" fill="#00adef"/>
-                                                <rect x="2" y="13" width="9" height="9" fill="#00adef"/><rect x="13" y="13" width="9" height="9" fill="#00adef"/>
-                                            </svg>
-                                        </button>
-                                        <div class="tb-running" id="tbRunning"></div>
-                                        <div class="tb-clock" id="laptopClock">10:41</div>
-                                    </div>
-
-                                    <div class="os-shutdown-overlay" id="shutdownOverlay">
-                                        <button class="power-on-btn" id="powerOnBtn" aria-label="Power on">⏻</button>
-                                        <span class="shutdown-label">Click to power on</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="screen-glare"></div>
-                        </div>
-                        <div class="lid-face lid-back">
-                            <img src="mylogo.png" alt="" class="lid-back-logo">
-                        </div>
-                    </div>
-
-                    <div class="base-slab">
-                        <div class="base-face base-top">
-                            <div class="keyboard-deck">
-                                <div class="keyboard-keys"></div>
-                                <div class="trackpad"></div>
-                            </div>
-                        </div>
-                        <div class="base-face base-bottom">
-                            <div class="base-vents"></div>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
     <section id="experience" class="resume-section">
         <div class="resume-card reveal reveal-up">
             <div class="resume-left">
