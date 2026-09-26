@@ -1,75 +1,3 @@
-(function () {
-    const introEl = document.getElementById('hello-intro');
-    const loadButton = document.getElementById('load-website');
-    if (!introEl) return;
-
-    document.documentElement.style.setProperty('--viewport-height', `${window.innerHeight}px`);
-    window.addEventListener('resize', () => {
-        document.documentElement.style.setProperty('--viewport-height', `${window.innerHeight}px`);
-    });
-
-    document.body.style.overflow = 'hidden';
-    let finished = false;
-
-   function finishIntro() {
-    if (finished) return;
-    finished = true;
-    introEl.classList.add('fade-out');
-    document.body.style.overflow = '';
-    setTimeout(() => introEl.remove(), 1150); // matches the 1.1s CSS transition + buffer
-}
-
-    if (loadButton) {
-        loadButton.addEventListener('click', (e) => {
-            e.stopPropagation();
-            finishIntro();
-            document.getElementById('portfolio-cube-section')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        });
-    }
-
-    window.addEventListener('keydown', e => {
-        if (e.key === ' ' || e.key === 'Enter') finishIntro();
-    });
-    window.addEventListener('wheel', e => { if (e.deltaY > 0) finishIntro(); }, { passive: true });
-
-    let touchStartY = null;
-    window.addEventListener('touchstart', e => { touchStartY = e.touches[0]?.clientY ?? null; }, { passive: true });
-    window.addEventListener('touchend', e => {
-        const endY = e.changedTouches[0]?.clientY;
-        if (touchStartY !== null && endY !== undefined && Math.abs(endY - touchStartY) > 30) finishIntro();
-        touchStartY = null;
-    }, { passive: true });
-})();
-
-/* 3D logo cursor parallax */
-(function () {
-    const wrap = document.getElementById('welcomeLogoWrap');
-    const plate = document.getElementById('welcomeLogo3d');
-    if (!wrap || !plate) return;
-
-    let targetX = 0, targetY = 0, curX = 0, curY = 0;
-    const MAX_TILT = 14;
-
-    window.addEventListener('mousemove', e => {
-        const rect = wrap.getBoundingClientRect();
-        const cx = rect.left + rect.width / 2;
-        const cy = rect.top + rect.height / 2;
-        const dx = (e.clientX - cx) / (window.innerWidth / 2);
-        const dy = (e.clientY - cy) / (window.innerHeight / 2);
-        targetY = Math.max(-1, Math.min(1, dx)) * MAX_TILT;
-        targetX = Math.max(-1, Math.min(1, -dy)) * MAX_TILT;
-    });
-
-    function loop() {
-        curX += (targetX - curX) * 0.08;
-        curY += (targetY - curY) * 0.08;
-        plate.style.transform = `rotateX(${curX}deg) rotateY(${curY}deg)`;
-        requestAnimationFrame(loop);
-    }
-
-    // wait for the entrance flip animation to finish before parallax takes over
-    setTimeout(() => requestAnimationFrame(loop), 1100);
-})();
 VANTA.BIRDS({
     el: "#vanta-birds",
     THREE: THREE,
@@ -1880,8 +1808,6 @@ class CardAurora {
     const stage = document.getElementById('cube-stage');
 
     if (!section || !cube || !stage) return;
-
-    // Remember where the cube lives in the document so we can put it back exactly.
     const homeParent = stage.parentNode;
     const homeNextSibling = stage.nextSibling;
 
@@ -1956,7 +1882,7 @@ let clickedFace = null;
     function dockCube() {
     if (docked) return;
     docked = true;
-    document.body.appendChild(stage); // escape any clipping ancestor so it survives every scroll position
+    document.body.appendChild(stage);
     stage.classList.add('cube-docked');
     setupScrollSpy();
 }
@@ -1965,8 +1891,6 @@ let clickedFace = null;
         docked = false;
         stage.classList.remove('cube-docked');
         if (spyObserver) { spyObserver.disconnect(); spyObserver = null; }
-
-        // Put the cube back exactly where it started in the DOM.
         if (homeNextSibling) {
             homeParent.insertBefore(stage, homeNextSibling);
         } else {
@@ -2000,7 +1924,7 @@ let clickedFace = null;
     stage.addEventListener('dragstart', event => event.preventDefault());
 
     stage.addEventListener('pointerdown', event => {
-    if (docked || !revealed) return; // docked cube doesn't drag; inert until first reveal
+    if (docked || !revealed) return;
     pointer = { x: event.clientX, y: event.clientY, rotationX, rotationY };
     moved = false;
     clickedFace = event.target.closest('.cube-face'); // NEW
@@ -2050,12 +1974,12 @@ let clickedFace = null;
 
     faces.forEach(face => {
         face.addEventListener('click', event => {
-            if (docked) { event.preventDefault(); return; } // stage's own click listener handles undocking
+            if (docked) { event.preventDefault(); return; } 
             if (event.detail === 0) {
-                navigateToFace(face); // keyboard (Tab + Enter) activation
+                navigateToFace(face); 
                 return;
             }
-            event.preventDefault(); // real pointer clicks are handled by pointerup above
+            event.preventDefault(); 
         });
     });
 
@@ -2064,7 +1988,7 @@ const cubeVisibilityObserver = new IntersectionObserver(entries => {
         const scrolledPastTop = entry.boundingClientRect.top < 0;
 
         if (entry.isIntersecting && entry.intersectionRatio > 0.3) {
-            // Section is back in view — restore the cube
+            
             if (docked) undockCube(false);
             if (!revealed) {
                 revealed = true;
@@ -2072,7 +1996,7 @@ const cubeVisibilityObserver = new IntersectionObserver(entries => {
                 setTimeout(() => section.classList.add('cube-intro-faded'), 900);
             }
         } else if (!entry.isIntersecting && scrolledPastTop && revealed) {
-            // Scrolled down past it — dock the mini cube
+            
             if (!docked) dockCube();
         }
     });
@@ -2080,15 +2004,13 @@ const cubeVisibilityObserver = new IntersectionObserver(entries => {
 
 cubeVisibilityObserver.observe(section);
 })();   
-/* 3D laptop: drag-to-orbit + working mini-OS (Start Menu, windows, shutdown) */
+
 (function () {
     const rig = document.getElementById('laptopRig');
     const wrap = document.getElementById('laptopStageWrap');
     const stage = document.getElementById('laptopStage');
     const showcase = document.getElementById('laptop-showcase');
     if (!rig || !wrap || !stage) return;
-
-    /* ---------- Drag-to-orbit ---------- */
     let yaw = -6, pitch = 13;
     let dragging = false, lastX = 0, lastY = 0, velYaw = 0;
 
@@ -2119,23 +2041,25 @@ cubeVisibilityObserver.observe(section);
         requestAnimationFrame(idleLoop);
     })();
 
-    /* ---------- Responsive scale ---------- */
-    function resizeStage() {
+function resizeStage() {
     if (!showcase) return;
-    const available = showcase.clientWidth - 40;
-    const scale = Math.min(1, Math.max(0.38, available / 760));
+    const padding = window.innerWidth <= 600 ? 16 : 40;
+    const available = showcase.clientWidth - padding;
+    const scale = Math.min(1, Math.max(0.32, available / 760));
     wrap.style.transform = `scale(${scale})`;
-    showcase.style.minHeight = (640 * scale + 80) + 'px';   /* was 520 */
+    showcase.style.minHeight = (640 * scale + 60) + 'px';
 }
+window.addEventListener('resize', resizeStage);
+resizeStage();
+window.addEventListener('load', resizeStage);
     window.addEventListener('resize', resizeStage);
     resizeStage();
 
-    /* ---------- Clock ---------- */
     const clockEl = document.getElementById('laptopClock');
     function tick() { if (clockEl) clockEl.textContent = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }); }
     tick(); setInterval(tick, 30000);
 
-    /* ---------- Mini OS ---------- */
+
     const osWindow = document.getElementById('osWindow');
     const winIcon = document.getElementById('winIcon');
     const winTitle = document.getElementById('winTitle');
