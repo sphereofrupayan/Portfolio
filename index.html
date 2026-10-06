@@ -68,77 +68,28 @@
 </div>
 <body>
 
-    
 
 
 
+    <nav class="site-nav" aria-label="Main navigation">
+        <ul>
+            <li class="brand">
+                <a class="brand-link" href="#top" aria-label="Rupayan Chattaraj home">
+                    <img src="mylogo.png" alt="" class="brand-logo">
+                    <span>Rupayan Chattaraj</span>
+                </a>
+            </li>
+            <li class="nav-links">
+                <a href="#about">About</a>
+                <a href="#skills">Skills</a>
+                <a href="#Projects">Projects</a>
+                <a href="#contact">Contact Me</a>
+            </li>
+        </ul>
+    </nav>
 
     <div id="top" class="cover-section">
-        <div id="vanta-birds"></div>
-        <div id="vanta-rings"></div>
-        <canvas id="code-canvas" aria-hidden="true"></canvas>
-
-        <nav>
-            <ul>
-                <li class="brand">
-                    <a class="brand-link" href="#top" aria-label="Rupayan Chattaraj home">
-                        <img src="mylogo.png" alt="" class="brand-logo">
-                        <span>Rupayan Chattaraj</span>
-                    </a>
-                </li>
-                <li class="nav-links">
-                    <a href="#about">About</a>
-                    <a href="#skills">Skills</a>
-                    <a href="#Projects">Projects</a>
-                    <a href="#contact">Contact Me</a>
-                </li>
-            </ul>
-        </nav>
-
-        <section class="hero">
-            <div class="hero-left">
-                <div class="hero-copy-frame bracket-third">
-                    <div class="hero-copy-frame bracket-second">
-                        <div class="hero-copy-frame bracket-first">
-                            <h1>
-                                Hi There,<br>
-                                <span class="hero-name-line">I'm <span>Rupayan Chattaraj</span></span>
-                            </h1>
-                            <p>I am into <span class="highlight">Web Development & Coding</span></p>
-                            <section class="socialmedia">
-                                <a href="#" onclick="copyEmail(event)"><img src="logos/Gmail.png" alt="Gmail"></a>
-                                <a href="https://github.com/sphereofrupayan"><img src="logos/github.png" alt="GitHub"></a>
-                                <a href="https://www.linkedin.com/in/rupayanchattaraj/"><img src="logos/linkedin.png" alt="LinkedIn"></a>
-                                <a href="https://x.com/rupayan_01"><img src="logos/xtwitter.png" alt="Twitter"></a>
-                            </section>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <div class="bottom-info">
-            <div class="bottom-row">
-                <section class="left corner">
-                    <p>Based in Vellore, India</p>
-                </section>
-                <section class="right corner">
-            <div class="corner-divider"></div>
-
-            <p>Full Stack Developer</p>
-            <p>Frontend &amp; Backend Development</p>
-
-        </section>
-            </div>
-            <section class="bottomleft">
-                <h3>Source Link</h3>
-                <a href="https://www.vantajs.com/?effect=birds" target="_blank">Vanta.js</a>
-            </section>
-        </div>
-
-        <hr class="cover-divider">
-    </div>
-        <section id="laptop-showcase" class="laptop-showcase">
+        <section id="laptop-showcase" class="laptop-showcase cover-laptop">
     <div class="laptop-stage-wrap" id="laptopStageWrap">
         <div class="laptop-stage" id="laptopStage">
             <div class="laptop-rig" id="laptopRig">
@@ -250,6 +201,39 @@
         </div>
     </div>
 </section>
+        <section class="hero">
+            <div class="hero-left">
+                <div class="hero-copy-frame bracket-third">
+                    <div class="hero-copy-frame bracket-second">
+                        <div class="hero-copy-frame bracket-first">
+                            <h1>
+                                Hi There,<br>
+                                <span class="hero-name-line">I'm <span>Rupayan Chattaraj</span></span>
+                            </h1>
+                            <p class="hero-role">Developer</p>
+                            <p>I am into <span class="highlight">Web Development & Coding</span></p>
+                            <section class="socialmedia">
+                                <a href="#" onclick="copyEmail(event)"><img src="logos/Gmail.png" alt="Gmail"></a>
+                                <a href="https://github.com/sphereofrupayan"><img src="logos/github.png" alt="GitHub"></a>
+                                <a href="https://www.linkedin.com/in/rupayanchattaraj/"><img src="logos/linkedin.png" alt="LinkedIn"></a>
+                                <a href="https://x.com/rupayan_01"><img src="logos/xtwitter.png" alt="Twitter"></a>
+                            </section>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="bottom-info">
+            <div class="bottom-row">
+                <section class="left corner">
+                    <p>Based in Vellore, India</p>
+                </section>
+            </div>
+        </div>
+
+    </div>
+        
     <section id="portfolio-cube-section" aria-label="Portfolio section navigator">
         <div class="cube-topbar" hidden>
             <span class="cube-eyebrow">RUPAYAN CHATTARAJ · PORTFOLIO</span>
@@ -925,9 +909,6 @@
         <p>© 2026 Rupayan Chattaraj. All Rights Reserved.</p>
     </div>
 </footer>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.birds.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vanta@0.5.24/dist/vanta.rings.min.js"></script>
     <script src="https://unpkg.com/@lottiefiles/dotlottie-wc@0.9.14/dist/dotlottie-wc.js" type="module"></script>
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
     <script src="script.js"></script>
