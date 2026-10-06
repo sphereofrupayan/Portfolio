@@ -1,114 +1,3 @@
-VANTA.BIRDS({
-    el: "#vanta-birds",
-    THREE: THREE,
-    mouseControls: false,
-    touchControls: false,
-    gyroControls: false,
-    backgroundColor: 0x111111,
-    backgroundAlpha: 1.0,
-    color1: 0x00FF7F,
-    color2: 0xFFEC00,
-    colorMode: "variance",
-    birdSize: 0.9,
-    wingSpan: 18,
-    speedLimit: 3.0,
-    speedMultiplier: 0.8,
-    separation: 80,
-    alignment: 20,
-    cohesion: 10,
-    quantity: 3,
-});
-
-VANTA.RINGS({
-    el: "#vanta-rings",
-    THREE: THREE,
-    mouseControls: true,
-    touchControls: true,
-    gyroControls: false,
-    backgroundColor: 0x111111,
-    backgroundAlpha: 0.0,
-    color: 0x1da9c0,
-});
-(function () {
-    const canvas = document.getElementById('code-canvas');
-    if (!canvas || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-
-    const ctx = canvas.getContext('2d');
-    const glyphs = ['</>', '{ }', '=>', '01', 'const', 'npm run', 'git push', '[ ]'];
-    let width = 0;
-    let height = 0;
-    let dpr = 1;
-    let particles = [];
-
-    function resize() {
-        const rect = canvas.getBoundingClientRect();
-        width = rect.width;
-        height = rect.height;
-        dpr = Math.min(window.devicePixelRatio || 1, 2);
-        canvas.width = Math.round(width * dpr);
-        canvas.height = Math.round(height * dpr);
-        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-
-        const count = width < 600 ? 15 : 30;
-        particles = Array.from({ length: count }, (_, index) => ({
-            x: Math.random() * width,
-            band: Math.random() < 0.5 ? 'top' : 'bottom',
-            y: 0,
-            speed: Math.random() * 0.12 + 0.04,
-            drift: Math.random() * 0.5 - 0.25,
-            phase: Math.random() * Math.PI * 2,
-            size: Math.random() * 4 + 11,
-            weight: Math.random() > 0.55 ? 700 : 600,
-            text: glyphs[index % glyphs.length]
-        }));
-        particles.forEach(particle => {
-            particle.y = particle.band === 'top'
-                ? Math.random() * height * 0.12 + height * 0.06
-                : Math.random() * height * 0.12 + height * 0.82;
-        });
-    }
-
-    function draw(timestamp) {
-        ctx.clearRect(0, 0, width, height);
-        const nodes = particles.filter(particle => particle.size > 11);
-
-        nodes.forEach((particle, index) => {
-            const wave = Math.sin(timestamp * 0.0007 + particle.phase);
-            const x = particle.x + wave * 14;
-            const lift = Math.sin(timestamp * 0.00045 + particle.phase) * 9;
-            const y = particle.y - (timestamp * particle.speed * 0.01) % 18 + lift;
-            const alpha = 0.34 + (wave + 1) * 0.12;
-
-            ctx.fillStyle = `rgba(159, 232, 220, ${alpha})`;
-            ctx.font = `${particle.weight} ${particle.size}px Rajdhani, sans-serif`;
-            ctx.shadowColor = 'rgba(159, 232, 220, 0.65)';
-            ctx.shadowBlur = 9;
-            ctx.letterSpacing = '0.08em';
-            ctx.fillText(particle.text, x, y);
-            ctx.shadowBlur = 0;
-
-            if (index > 0 && particle.band === nodes[index - 1].band && Math.abs(x - nodes[index - 1].x) < width * 0.22) {
-                ctx.strokeStyle = `rgba(159, 232, 220, ${alpha * 0.6})`;
-                ctx.lineWidth = 1;
-                ctx.beginPath();
-                ctx.moveTo(x, y - 4);
-                ctx.lineTo(nodes[index - 1].x, nodes[index - 1].y - 4);
-                ctx.stroke();
-
-                ctx.fillStyle = `rgba(255, 255, 255, ${alpha})`;
-                ctx.beginPath();
-                ctx.arc(x, y - 4, 2, 0, Math.PI * 2);
-                ctx.fill();
-            }
-        });
-
-        requestAnimationFrame(draw);
-    }
-
-    resize();
-    window.addEventListener('resize', resize);
-    requestAnimationFrame(draw);
-})();
 (function () {
     const canvas = document.getElementById('orbit-canvas');
     if (!canvas) return;
@@ -586,34 +475,59 @@ document.addEventListener("DOMContentLoaded", () => {
     let sequenceIndex = 0;
     const pointer = { x: 0, y: 0, active: false };
 
-    function buildTargets(text) {
-        offscreen.width = Math.round(width);
-        offscreen.height = Math.round(height);
-        offscreenCtx.clearRect(0, 0, width, height);
-        offscreenCtx.fillStyle = '#fff';
-        const maxFontSize = Math.min(width * 0.52, height * 0.82);
-        offscreenCtx.font = `700 ${maxFontSize}px Orbitron, sans-serif`;
-        const measuredWidth = offscreenCtx.measureText(text).width;
-        const fontSize = measuredWidth > width * 0.84
-            ? maxFontSize * (width * 0.84 / measuredWidth)
-            : maxFontSize;
-        offscreenCtx.font = `700 ${fontSize}px Orbitron, sans-serif`;
-        offscreenCtx.textAlign = 'center';
-        offscreenCtx.textBaseline = 'middle';
-        offscreenCtx.fillText(text, width / 2, height / 2);
-
-        const pixels = offscreenCtx.getImageData(0, 0, Math.round(width), Math.round(height)).data;
-        const targets = [];
-        const step = width < 600 ? 3 : 4;
-        for (let y = 0; y < height; y += step) {
-            for (let x = 0; x < width; x += step) {
-            if (pixels[(y * Math.round(width) + x) * 4 + 3] > 100 && Math.random() < 0.9) {
-                    targets.push({ x, y });
-                }
-            }
-        }
-        return targets;
+function shuffle(arr) {
+    for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
     }
+    return arr;
+}
+
+function buildTargets(text) {
+    const w = Math.round(width), h = Math.round(height);
+    offscreen.width = w;
+    offscreen.height = h;
+    offscreenCtx.clearRect(0, 0, w, h);
+    offscreenCtx.fillStyle = '#fff';
+    offscreenCtx.textAlign = 'center';
+    offscreenCtx.textBaseline = 'alphabetic';
+
+    // fit using the real glyph box, with padding so nothing touches the edge
+    let fontSize = Math.min(w * 0.52, h * 0.82);
+    offscreenCtx.font = `700 ${fontSize}px Orbitron, sans-serif`;
+    let m = offscreenCtx.measureText(text);
+    let tw = m.actualBoundingBoxLeft + m.actualBoundingBoxRight;
+    let th = m.actualBoundingBoxAscent + m.actualBoundingBoxDescent;
+    const scale = Math.min((w * 0.84) / tw, (h * 0.78) / th, 1);
+    fontSize *= scale;
+
+    offscreenCtx.font = `700 ${fontSize}px Orbitron, sans-serif`;
+    m = offscreenCtx.measureText(text);
+    th = m.actualBoundingBoxAscent + m.actualBoundingBoxDescent;
+    const baselineY = (h - th) / 2 + m.actualBoundingBoxAscent; // true vertical centre
+    offscreenCtx.fillText(text, w / 2, baselineY);
+
+    const pixels = offscreenCtx.getImageData(0, 0, w, h).data;
+    const targets = [];
+    const step = width < 600 ? 3 : 4;
+    for (let y = 0; y < h; y += step) {
+        for (let x = 0; x < w; x += step) {
+            if (pixels[(y * w + x) * 4 + 3] > 100) targets.push({ x, y }); // no random drop
+        }
+    }
+    return shuffle(targets); // shuffled, so any leftover is spread evenly, not just the bottom
+}
+function makeParticle(index, rect) {
+    const corner = index % 4;
+    return {
+        x: (corner % 2 === 0 ? -rect.left : window.innerWidth - rect.left) + (Math.random() - 0.5) * 60,
+        y: (corner < 2 ? -rect.top : window.innerHeight - rect.top) + (Math.random() - 0.5) * 60,
+        tx: 0, ty: 0, vx: 0, vy: 0,
+        size: Math.random() * 1.7 + 0.65,
+        color: palette[index % palette.length],
+        phase: Math.random() * Math.PI * 2
+    };
+}
 
     function resize() {
         const rect = stage.getBoundingClientRect();
@@ -2045,15 +1959,13 @@ function resizeStage() {
     if (!showcase) return;
     const padding = window.innerWidth <= 600 ? 16 : 40;
     const available = showcase.clientWidth - padding;
-    const scale = Math.min(1, Math.max(0.32, available / 760));
-    wrap.style.transform = `scale(${scale})`;
-    showcase.style.minHeight = (640 * scale + 60) + 'px';
+    const availableHeight = showcase.clientHeight - 32;
+    const scale = Math.max(0.32, Math.min(1, available / 760, availableHeight / 640));
+    wrap.style.setProperty('--laptop-scale', scale);
 }
 window.addEventListener('resize', resizeStage);
 resizeStage();
 window.addEventListener('load', resizeStage);
-    window.addEventListener('resize', resizeStage);
-    resizeStage();
 
     const clockEl = document.getElementById('laptopClock');
     function tick() { if (clockEl) clockEl.textContent = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }); }
@@ -2295,11 +2207,38 @@ in the navigation bar.`;
             const wide = typeof item === 'object' && item.wide;
             const key = document.createElement('div');
             key.className = 'kbd-key' + (wide ? ' wide' : '');
+            key.dataset.key = label === '' ? ' ' : label.toLowerCase();
             const span = document.createElement('span');
             span.textContent = label;
             key.appendChild(span);
             row.appendChild(key);
+            key.addEventListener('pointerdown', () => key.classList.add('is-pressed'));
+            ['pointerup', 'pointerleave', 'pointercancel'].forEach(eventName => {
+                key.addEventListener(eventName, () => key.classList.remove('is-pressed'));
+            });
         });
         deck.appendChild(row);
+    });
+
+    const keyMap = new Map();
+    deck.querySelectorAll('.kbd-key[data-key]').forEach(key => {
+        const label = key.dataset.key;
+        if (label) keyMap.set(label, key);
+    });
+
+    function isTypingTarget(target) {
+        return target instanceof HTMLElement
+            && (target.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(target.tagName));
+    }
+
+    window.addEventListener('keydown', event => {
+        if (event.repeat || isTypingTarget(event.target)) return;
+        const key = keyMap.get(event.key.toLowerCase());
+        if (key) key.classList.add('is-pressed');
+    });
+
+    window.addEventListener('keyup', event => {
+        const key = keyMap.get(event.key.toLowerCase());
+        if (key) key.classList.remove('is-pressed');
     });
 })();
