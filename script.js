@@ -1,4 +1,69 @@
 (function () {
+    const feedbackToast = document.getElementById('feedback-toast');
+    if (!feedbackToast) return;
+
+    const dismissButton = feedbackToast.querySelector('.feedback-toast-close');
+    const feedbackLink = feedbackToast.querySelector('.feedback-toast-copy a');
+    if (!dismissButton || !feedbackLink) return;
+
+    const DISPLAY_DURATION = 2000;
+    const PROMPT_INTERVAL = 10000;
+    let dismissTimer;
+    let shownAt;
+    let remaining = DISPLAY_DURATION;
+    let isPaused = false;
+
+    function dismiss() {
+        window.clearTimeout(dismissTimer);
+        feedbackToast.classList.remove('is-visible');
+        window.setTimeout(() => {
+            feedbackToast.hidden = true;
+        }, 350);
+    }
+
+    function showPrompt() {
+        window.setTimeout(showPrompt, PROMPT_INTERVAL);
+        if (!feedbackToast.hidden) return;
+
+        feedbackToast.hidden = false;
+        requestAnimationFrame(() => {
+            feedbackToast.classList.add('is-visible');
+            startDismissTimer();
+        });
+    }
+
+    function startDismissTimer() {
+        if (isPaused || feedbackToast.hidden) return;
+        shownAt = Date.now();
+        dismissTimer = window.setTimeout(dismiss, remaining);
+    }
+
+    function pauseDismissTimer() {
+        if (isPaused || feedbackToast.hidden) return;
+        isPaused = true;
+        window.clearTimeout(dismissTimer);
+        remaining = Math.max(0, remaining - (Date.now() - shownAt));
+    }
+
+    function resumeDismissTimer() {
+        if (!isPaused || feedbackToast.matches(':hover') || feedbackToast.contains(document.activeElement)) return;
+        isPaused = false;
+        startDismissTimer();
+    }
+
+    window.setTimeout(showPrompt, PROMPT_INTERVAL);
+
+    dismissButton.addEventListener('click', dismiss);
+    feedbackToast.addEventListener('pointerenter', pauseDismissTimer);
+    feedbackToast.addEventListener('pointerleave', resumeDismissTimer);
+    feedbackToast.addEventListener('focusin', pauseDismissTimer);
+    feedbackToast.addEventListener('focusout', resumeDismissTimer);
+    feedbackToast.addEventListener('keydown', event => {
+        if (event.key === 'Escape') dismiss();
+    });
+})();
+
+(function () {
     const canvas = document.getElementById('orbit-canvas');
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
