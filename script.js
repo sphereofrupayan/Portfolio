@@ -518,6 +518,45 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 });
 
+document.addEventListener("DOMContentLoaded", () => {
+    const carousel = document.querySelector(".leetcode-carousel");
+    if (!carousel) return;
+
+    const cards = Array.from(carousel.querySelectorAll(".leetcode-card"));
+    const dots = Array.from(carousel.querySelectorAll(".leetcode-carousel-dots button"));
+    const prevBtn = carousel.querySelector(".leetcode-carousel-nav.prev");
+    const nextBtn = carousel.querySelector(".leetcode-carousel-nav.next");
+    let currentIndex = cards.findIndex(card => card.classList.contains("is-active"));
+    if (currentIndex < 0) currentIndex = 0;
+    if (!cards.length || dots.length !== cards.length || !prevBtn || !nextBtn) return;
+
+    function showProfile(index) {
+        currentIndex = (index + cards.length) % cards.length;
+        cards.forEach((card, i) => {
+            const isActive = i === currentIndex;
+            card.classList.toggle("is-active", isActive);
+            card.setAttribute("aria-hidden", String(!isActive));
+            dots[i].classList.toggle("active", isActive);
+            dots[i].setAttribute("aria-current", String(isActive));
+        });
+    }
+
+    prevBtn.addEventListener("click", () => showProfile(currentIndex - 1));
+    nextBtn.addEventListener("click", () => showProfile(currentIndex + 1));
+    dots.forEach((dot, i) => dot.addEventListener("click", () => showProfile(i)));
+    carousel.addEventListener("keydown", event => {
+        if (event.key === "ArrowLeft") {
+            event.preventDefault();
+            showProfile(currentIndex - 1);
+        }
+        if (event.key === "ArrowRight") {
+            event.preventDefault();
+            showProfile(currentIndex + 1);
+        }
+    });
+    showProfile(currentIndex);
+});
+
 (function () {
     const canvas = document.getElementById('bubble-canvas');
     const stage = document.querySelector('.magnetic-art-stage');

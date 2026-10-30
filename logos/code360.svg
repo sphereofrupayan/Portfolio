@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" role="img" aria-labelledby="title">
+  <title id="title">Code360</title>
+  <rect width="48" height="48" rx="12" fill="#6b5cff"/>
+  <path d="M21 13a11 11 0 1 0 0 22" fill="none" stroke="#fff" stroke-linecap="round" stroke-width="5"/>
+  <text x="24" y="30" fill="#fff" font-family="Arial,sans-serif" font-size="16" font-weight="700">360</text>
+</svg>

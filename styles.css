@@ -439,6 +439,8 @@ nav ul li.nav-links a:hover,
     position: relative;
     padding: 20px clamp(20px, 6vw, 80px);
     display: flex;
+    flex-direction: column;
+    align-items: center;
     justify-content: center;
     z-index: 2;
     overflow: visible;
@@ -458,8 +460,9 @@ nav ul li.nav-links a:hover,
     z-index: 2;
     width: auto;
     max-width: 100%;
-    display: inline-flex;
+    display: none;
     align-items: center;
+    justify-content: center;
     gap: 14px;
     padding: 14px 22px;
     border-radius: 16px;
@@ -712,6 +715,93 @@ nav ul li.nav-links a:hover,
     }
 }
 
+.leetcode-carousel {
+    position: relative;
+    z-index: 2;
+    width: min(100%, 1100px);
+}
+
+.leetcode-slides {
+    display: flex;
+    justify-content: center;
+    min-height: 100px;
+}
+
+.leetcode-card.is-active {
+    display: inline-flex;
+    animation: leetcodeSlideIn 0.4s cubic-bezier(0.22,1,0.36,1) both;
+}
+
+@keyframes leetcodeSlideIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.leetcode-carousel-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 18px;
+    margin-top: 16px;
+}
+
+.leetcode-carousel-nav {
+    width: 36px;
+    height: 36px;
+    display: grid;
+    place-items: center;
+    border: 1px solid rgba(29,169,192,0.35);
+    border-radius: 50%;
+    background: rgba(255,255,255,0.04);
+    color: #00e5ff;
+    font-size: 1.5rem;
+    line-height: 1;
+    cursor: pointer;
+    transition: background 0.25s ease, transform 0.25s ease;
+}
+
+.leetcode-carousel-nav:hover {
+    background: rgba(29,169,192,0.18);
+    transform: scale(1.08);
+}
+
+.leetcode-carousel-nav:focus-visible,
+.leetcode-carousel-dots button:focus-visible {
+    outline: 2px solid #00e5ff;
+    outline-offset: 3px;
+}
+
+.leetcode-carousel-dots {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+}
+
+.leetcode-carousel-dots button {
+    width: 8px;
+    height: 8px;
+    padding: 0;
+    border: 0;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.3);
+    cursor: pointer;
+    transition: width 0.25s ease, background 0.25s ease;
+}
+
+.leetcode-carousel-dots button.active {
+    width: 24px;
+    background: #00e5ff;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .leetcode-card.is-active,
+    .leetcode-carousel-nav,
+    .leetcode-carousel-dots button {
+        animation: none;
+        transition: none;
+    }
+}
+
 .leetcode-card:hover {
     transform: translateY(-3px);
     border-color: rgba(29,169,192,0.4);
@@ -730,6 +820,26 @@ nav ul li.nav-links a:hover,
     background: linear-gradient(135deg, rgba(29,169,192,0.22), rgba(127,92,255,0.22));
     border: 1px solid rgba(29,169,192,0.35);
     box-shadow: 0 0 16px rgba(29,169,192,0.2);
+}
+
+.leetcode-icon img {
+    display: block;
+    width: 25px;
+    height: 25px;
+    object-fit: contain;
+}
+
+.code360-icon {
+    color: #ffffff;
+    background: linear-gradient(135deg, rgba(105,92,255,0.3), rgba(29,169,192,0.22));
+    border-color: rgba(130,113,255,0.5);
+    box-shadow: 0 0 16px rgba(105,92,255,0.2);
+}
+
+.codechef-icon {
+    background: linear-gradient(135deg, rgba(91,70,56,0.3), rgba(255,255,255,0.08));
+    border-color: rgba(177,143,118,0.5);
+    box-shadow: 0 0 16px rgba(91,70,56,0.2);
 }
 
 .leetcode-content {
@@ -5133,8 +5243,12 @@ nav ul li.nav-links a:hover,
     }
 
     .leetcode-card {
-        width: calc(100% - 32px);
+        width: 100%;
         max-width: 420px;
+    }
+
+    .leetcode-slides {
+        min-height: 180px;
     }
 
     .leetcode-content {
